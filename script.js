@@ -3,6 +3,7 @@ Replace these with your real links.
 */
 const instagramUrl = "https://www.instagram.com/alta.jo/";
 const purchaseUrl = "https://YOUR-BOOK-PURCHASE-LINK.com/";
+
 /*
 Keep every spread from your current site in this array.
 The popup appears when the visitor presses Next after the final spread.
@@ -129,14 +130,14 @@ function restartFromBeginning() {
     hideEndPopup();
 }
 
-previousButton.addEventListener("click", () => {
+function goToPreviousSpread() {
     if (currentSpread > 0) {
         currentSpread -= 1;
         updateBook();
     }
-});
+}
 
-nextButton.addEventListener("click", () => {
+function goToNextSpread() {
     const isLastSpread = currentSpread === spreads.length - 1;
 
     if (isLastSpread) {
@@ -146,7 +147,79 @@ nextButton.addEventListener("click", () => {
 
     currentSpread += 1;
     updateBook();
-});
+}
+
+/*
+SWIPE SUPPORT
+
+Swipe left  = next spread
+Swipe right = previous spread
+*/
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+const minimumSwipeDistance = 50;
+const maximumVerticalMovement = 80;
+
+book.addEventListener(
+    "touchstart",
+    (event) => {
+        const touch = event.changedTouches[0];
+
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    },
+    {
+        passive: true
+    }
+);
+
+book.addEventListener(
+    "touchend",
+    (event) => {
+        const popupIsVisible = endPopup.classList.contains("is-visible");
+
+        if (popupIsVisible) return;
+
+        const touch = event.changedTouches[0];
+
+        const touchEndX = touch.clientX;
+        const touchEndY = touch.clientY;
+
+        const horizontalDistance = touchEndX - touchStartX;
+        const verticalDistance = Math.abs(touchEndY - touchStartY);
+
+        /*
+        Ignore gestures that are mostly vertical,
+        so normal scrolling still works.
+        */
+        if (verticalDistance > maximumVerticalMovement) {
+            return;
+        }
+
+        /*
+        Swipe left = next spread
+        */
+        if (horizontalDistance < -minimumSwipeDistance) {
+            goToNextSpread();
+            return;
+        }
+
+        /*
+        Swipe right = previous spread
+        */
+        if (horizontalDistance > minimumSwipeDistance) {
+            goToPreviousSpread();
+        }
+    },
+    {
+        passive: true
+    }
+);
+
+previousButton.addEventListener("click", goToPreviousSpread);
+nextButton.addEventListener("click", goToNextSpread);
 
 popupClose.addEventListener("click", hideEndPopup);
 restartBook.addEventListener("click", restartFromBeginning);
@@ -167,8 +240,13 @@ document.addEventListener("keydown", (event) => {
 
     if (popupIsVisible) return;
 
-    if (event.key === "ArrowLeft") previousButton.click();
-    if (event.key === "ArrowRight") nextButton.click();
+    if (event.key === "ArrowLeft") {
+        goToPreviousSpread();
+    }
+
+    if (event.key === "ArrowRight") {
+        goToNextSpread();
+    }
 });
 
 updateBook();
