@@ -350,6 +350,7 @@ body.popup-open {
 }
 
 @media (max-width: 700px) {
+
     .site-header {
         position: static;
         padding: 30px 24px 0;
@@ -357,48 +358,72 @@ body.popup-open {
 
     .book-area {
         min-height: auto;
-        gap: 10px;
-        padding: 50px 10px 30px;
+
+        gap: 6px;
+
+        padding:
+            44px 8px 24px;
     }
 
     .book {
-        width: 72vw;
-        aspect-ratio: 1 / 1;
+        width: 82vw;
+
+        aspect-ratio: 2 / 1;
+
+        display: flex;
+
         overflow: visible;
     }
 
     .page {
-        display: none;
-        width: 100%;
+        display: flex;
+
+        width: 50%;
+
         aspect-ratio: 1 / 1;
+    }
+
+    .left-page {
+        border-radius:
+            5px 0 0 5px;
     }
 
     .right-page {
         display: flex;
-        border-radius: 6px;
+
+        border-radius:
+            0 5px 5px 0;
     }
 
     .book::before,
     .book::after {
+        display: block;
+    }
+
+    .left-page::before,
+    .right-page::after {
         display: none;
     }
 
     .arrow-button {
-        width: 38px;
-        height: 38px;
+        width: 30px;
+        height: 30px;
     }
 
     .arrow-button svg {
-        width: 36px;
-        height: 36px;
+        width: 28px;
+        height: 28px;
     }
 
     .page-number {
-        margin-top: 0;
+        margin-top: 14px;
+
+        padding-bottom: 20px;
     }
 
     .end-popup-panel {
-        padding: 46px 24px 34px;
+        padding:
+            46px 24px 34px;
     }
 }
 
