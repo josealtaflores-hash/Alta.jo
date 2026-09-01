@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alta Jo — Bible Book</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div>
+       <h1>JOSE ALTAMIRANO</h1>
+        <p>PHOTOGRAPHY & SCRIPTURE</p>
+    </div>
+
+    <a class="back-link" href="../index.html">← Projects</a>
+</header>
+
+<main class="book-area">
+
+    <button class="arrow-button" id="previous-button" type="button" aria-label="Previous spread">
+        <span aria-hidden="true">←</span>
+    </button>
+
+    <section class="book" id="book" aria-label="Bible photography book preview">
+
+        <div class="page left-page">
+            <img id="left-page-image" src="images/001.jpg" alt="Left page of the book">
+        </div>
+
+        <div class="page right-page">
+            <img id="right-page-image" src="images/002.jpg" alt="Right page of the book">
+        </div>
+
+    </section>
+
+    <button class="arrow-button" id="next-button" type="button" aria-label="Next spread">
+        <span aria-hidden="true">→</span>
+    </button>
+
+</main>
+
+<p class="page-number" id="page-number">1–2</p>
+
+<div class="end-popup" id="end-popup" aria-hidden="true">
+    <div class="end-popup-panel">
+
+        <button class="popup-close" id="popup-close" type="button" aria-label="Close">×</button>
+
+        <p class="popup-eyebrow">THE END</p>
+
+        <h2>Keep the words close.</h2>
+
+        <p class="popup-copy">
+            This preview is only part of the book.
+        </p>
+
+        <div class="popup-links">
+            <a id="instagram-link" class="popup-link" href="https://www.instagram.com/alta.jo/" target="_blank" rel="noopener noreferrer">
+                Follow along on Instagram →
+            </a>
+
+            <a id="purchase-link" class="popup-link popup-link-primary" href="#" target="_blank" rel="noopener noreferrer">
+                Get the book →
+            </a>
+        </div>
+
+        <button class="restart-book" id="restart-book" type="button">
+            Read again
+        </button>
+
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
