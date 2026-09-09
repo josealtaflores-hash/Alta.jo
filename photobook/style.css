@@ -1,0 +1,547 @@
+/* =========================
+   RESET
+   ========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   COLORS
+   ========================= */
+
+:root {
+    --background: #999A96;
+   --text: #202020;
+    --muted: #4f4a45;
+
+    --shelf-line: #666159;
+    --shelf-fill: #9e9a93;
+    --shelf-face: #89857f;
+}
+
+
+html,
+body {
+    min-height: 100%;
+}
+
+
+body {
+    min-height: 100vh;
+
+    background: var(--background);
+    color: var(--text);
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+.site-header {
+    position: absolute;
+
+    top: 48px;
+    left: 55px;
+
+    z-index: 10;
+}
+
+
+.site-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+
+.site-header p {
+    margin-top: 5px;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    letter-spacing: 1.4px;
+}
+
+
+
+/* =========================
+   MAIN AREA
+   ========================= */
+
+.bookshelf-area {
+    width: min(1040px, 88vw);
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-top: 90px;
+}
+
+
+.books {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: flex-end;
+
+    gap: 72px;
+}
+
+
+
+/* =========================
+   BOOK GROUPS
+   ========================= */
+
+.book-item {
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Left book sits slightly higher */
+
+.summer-item {
+    transform: translateY(-10px);
+}
+
+
+/* Right book sits slightly lower */
+
+.light-item {
+    transform: translateY(34px);
+}
+
+
+
+/* =========================
+   BOOK LINKS
+   ========================= */
+
+.book-link {
+    position: relative;
+
+    display: block;
+
+    text-decoration: none;
+
+    transition: transform 0.35s ease;
+}
+
+
+.book-link img {
+    position: relative;
+
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    filter: drop-shadow(
+        0 12px 10px rgba(0, 0, 0, 0.13)
+    );
+
+    transition:
+        transform 0.35s ease,
+        filter 0.35s ease;
+}
+
+
+
+/* =========================
+   BOOK SIZES
+   ========================= */
+
+/* Somewhere to Be */
+
+.summer-book {
+    width: 285px;
+
+    aspect-ratio: 1 / 1;
+}
+
+
+/* Light Between the Buildings */
+
+.light-book {
+    height: 245px;
+
+    aspect-ratio: 2 / 3;
+}
+
+
+
+/* =========================
+   BOOK GLOW
+   ========================= */
+
+.book-glow {
+    position: absolute;
+
+    left: 50%;
+    top: 52%;
+
+    width: 120%;
+    height: 120%;
+
+    transform:
+        translate(-50%, -50%)
+        scale(0.84);
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    filter: blur(40px);
+
+    transition:
+        opacity 0.45s ease,
+        transform 0.45s ease;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* Warm glow */
+
+.summer-book .book-glow {
+    background: rgba(255, 255, 255, 0.42);
+}
+
+
+/* Cooler glow */
+
+.light-book .book-glow {
+    background: rgba(255, 255, 255, 0.42);
+}
+
+
+
+/* Hover */
+
+.book-link:hover {
+    transform: translateY(-6px);
+}
+
+
+.book-link:hover .book-glow {
+    opacity: 1;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1);
+}
+
+
+.book-link:hover img {
+    filter: drop-shadow(
+        0 16px 14px rgba(0, 0, 0, 0.17)
+    );
+}
+
+
+.book-link:active {
+    transform:
+        translateY(-3px)
+        scale(0.99);
+}
+
+
+.book-link:active .book-glow {
+    opacity: 1;
+}
+
+
+.book-link:focus-visible {
+    outline: 1px dashed var(--text);
+
+    outline-offset: 8px;
+}
+
+
+
+/* =========================
+   HAND-DRAWN SHELVES
+   ========================= */
+
+.mini-shelf {
+    position: relative;
+
+    background: #444343;
+
+    border: 1.5px solid var(--shelf-line);
+
+    border-radius: 2px;
+
+    box-sizing: border-box;
+}
+
+
+/* Second imperfect pen line */
+
+.mini-shelf::before {
+    content: "";
+
+    position: absolute;
+
+    top: -2px;
+    left: 1px;
+
+    width: 100%;
+    height: 100%;
+
+    border: 1px solid rgba(102, 95, 87, 0.55);
+
+    border-radius: 3px;
+
+    transform:
+        rotate(-0.35deg)
+        translateX(-1px);
+
+    pointer-events: none;
+}
+
+
+/* Soft shadow underneath */
+
+.mini-shelf::after {
+    content: "";
+
+    position: absolute;
+
+    left: 10%;
+    right: 10%;
+
+    bottom: -7px;
+
+    height: 8px;
+
+    background: rgba(0, 0, 0, 0.08);
+
+    filter: blur(7px);
+
+    pointer-events: none;
+}
+
+
+
+/* Left shelf */
+
+.summer-shelf {
+    width: 360px;
+    height: 11px;
+
+    /* More space between book and shelf */
+    margin-top: 20px;
+
+    transform: rotate(-0.25deg);
+}
+
+
+
+/* Right shelf */
+
+.light-shelf {
+    width: 260px;
+    height: 11px;
+
+    /* Book sits closer to shelf */
+    margin-top: 3px;
+
+    transform: rotate(0.3deg);
+}
+
+
+
+/* Hide old wavy SVG shelf */
+
+.mini-shelf svg {
+    display: none;
+}
+
+
+
+/* =========================
+   BOOK LABELS
+   ========================= */
+
+.book-label {
+    margin-top: 10px;
+
+    text-align: center;
+}
+
+
+.book-title {
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 1.8px;
+
+    line-height: 1.4;
+}
+
+
+.book-year {
+    margin-top: 8px;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+
+    color: var(--muted);
+}
+
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 700px) {
+
+    .site-header {
+        position: static;
+
+        padding:
+            30px
+            24px
+            0;
+    }
+
+
+    .site-header h1 {
+        font-size: 20px;
+    }
+
+
+    .bookshelf-area {
+        min-height: auto;
+
+        width: 94vw;
+
+        padding-top: 130px;
+        padding-bottom: 50px;
+    }
+
+
+    .books {
+        gap: 26px;
+    }
+
+
+    .summer-item {
+        transform: translateY(-4px);
+    }
+
+
+    .light-item {
+        transform: translateY(18px);
+    }
+
+
+    .summer-book {
+        width: 155px;
+    }
+
+
+    .light-book {
+        height: 138px;
+    }
+
+
+    .summer-shelf {
+        width: 185px;
+        height: 9px;
+
+        margin-top: 14px;
+    }
+
+
+    .light-shelf {
+        width: 140px;
+        height: 9px;
+
+        margin-top: 2px;
+    }
+
+
+    .book-glow {
+        filter: blur(26px);
+    }
+
+
+    .book-label {
+        margin-top: 8px;
+    }
+
+
+    .book-title {
+        font-size: 9px;
+
+        letter-spacing: 1.2px;
+    }
+
+
+    .book-year {
+        margin-top: 6px;
+
+        font-size: 8px;
+    }
+}
+
+
+
+/* =========================
+   SMALL PHONES
+   ========================= */
+
+@media (max-width: 390px) {
+
+    .books {
+        gap: 18px;
+    }
+
+
+    .summer-book {
+        width: 142px;
+    }
+
+
+    .light-book {
+        height: 126px;
+    }
+
+
+    .summer-shelf {
+        width: 168px;
+    }
+
+
+    .light-shelf {
+        width: 128px;
+    }
+}
