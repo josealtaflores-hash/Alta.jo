@@ -14,10 +14,13 @@
    ========================= */
 
 :root {
-    --background: #C8C2BA;
-    --text: #202020;
+    --background: #bebebe;
+   --text: #202020;
     --muted: #4f4a45;
-    --shelf-line: #665f57;
+
+    --shelf-line: #666159;
+    --shelf-fill: #9e9a93;
+    --shelf-face: #89857f;
 }
 
 
@@ -182,7 +185,7 @@ body {
 /* Light Between the Buildings */
 
 .light-book {
-    height: 285px;
+    height: 245px;
 
     aspect-ratio: 2 / 3;
 }
@@ -225,14 +228,14 @@ body {
 /* Warm glow */
 
 .summer-book .book-glow {
-    background: rgba(255, 219, 160, 0.34);
+    background: rgba(255, 255, 255, 0.42);
 }
 
 
 /* Cooler glow */
 
 .light-book .book-glow {
-    background: rgba(223, 225, 228, 0.28);
+    background: rgba(255, 255, 255, 0.42);
 }
 
 
@@ -287,7 +290,7 @@ body {
 .mini-shelf {
     position: relative;
 
-    background: transparent;
+    background: #444343;
 
     border: 1.5px solid var(--shelf-line);
 
@@ -466,7 +469,7 @@ body {
 
 
     .light-book {
-        height: 155px;
+        height: 138px;
     }
 
 
@@ -529,7 +532,7 @@ body {
 
 
     .light-book {
-        height: 142px;
+        height: 126px;
     }
 
 
