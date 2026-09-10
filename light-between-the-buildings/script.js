@@ -1,12 +1,11 @@
-/*
-Change this to however many PREVIEW pages you want to show.
-Keep the image filenames sequential:
-001.jpg, 002.jpg, 003.jpg, etc.
-*/
+/* ==================================================
+   LIGHT BETWEEN THE BUILDINGS — BOOK VIEWER
+   ================================================== */
+
 const TOTAL_PAGES = 14;
 
 const instagramUrl = "https://www.instagram.com/alta.jo/";
-const purchaseUrl = "https://YOUR-BOOK-PURCHASE-LINK.com/";
+const purchaseUrl = "#"; // Replace with your final purchase link later.
 
 function pageFile(number) {
     if (number <= 15) {
@@ -21,10 +20,7 @@ const spreads = [];
 for (let page = 1; page <= TOTAL_PAGES; page += 2) {
     spreads.push({
         left: pageFile(page),
-        right:
-            page + 1 <= TOTAL_PAGES
-                ? pageFile(page + 1)
-                : null
+        right: page + 1 <= TOTAL_PAGES ? pageFile(page + 1) : null
     });
 }
 
@@ -40,9 +36,12 @@ const popupClose = document.getElementById("popup-close");
 const restartBook = document.getElementById("restart-book");
 const instagramLink = document.getElementById("instagram-link");
 const purchaseLink = document.getElementById("purchase-link");
+const outsideScrollCue = document.getElementById("outside-scroll-cue");
+const projectEditions = document.querySelector(".project-editions");
 
 let currentSpread = 0;
 let popupTimer;
+let editionsUnlocked = false;
 
 instagramLink.href = instagramUrl;
 purchaseLink.href = purchaseUrl;
@@ -90,8 +89,38 @@ function updateBook() {
     preloadSpread(currentSpread - 1);
 }
 
+function unlockProjectEditions() {
+    if (!projectEditions || editionsUnlocked) return;
+
+    editionsUnlocked = true;
+    projectEditions.classList.add("is-unlocked");
+    projectEditions.setAttribute("aria-hidden", "false");
+
+    if (outsideScrollCue) {
+        outsideScrollCue.classList.add("is-visible");
+        outsideScrollCue.setAttribute("aria-hidden", "false");
+    }
+}
+
+function lockProjectEditions() {
+    if (!projectEditions) return;
+
+    editionsUnlocked = false;
+    projectEditions.classList.remove("is-unlocked");
+    projectEditions.setAttribute("aria-hidden", "true");
+
+    if (outsideScrollCue) {
+        outsideScrollCue.classList.remove("is-visible");
+        outsideScrollCue.setAttribute("aria-hidden", "true");
+    }
+}
+
 function showEndPopup() {
     window.clearTimeout(popupTimer);
+
+    /* The shop becomes part of the page only after the reader
+       presses Next while already on the final spread. */
+    unlockProjectEditions();
 
     book.classList.add("is-ending");
 
@@ -113,10 +142,17 @@ function hideEndPopup() {
     nextButton.focus();
 }
 
+
 function restartFromBeginning() {
     currentSpread = 0;
     updateBook();
+    lockProjectEditions();
     hideEndPopup();
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 function goToPreviousSpread() {
@@ -138,7 +174,51 @@ function goToNextSpread() {
     updateBook();
 }
 
-/* Swipe support */
+/* ==================================================
+   OPTIONAL PRODUCT IMAGES
+   Hide empty product groups until their files exist.
+   ================================================== */
+
+function setupOptionalProductImages() {
+    const optionalSections = document.querySelectorAll("[data-optional-products]");
+
+    optionalSections.forEach((section) => {
+        const articles = [...section.querySelectorAll(".floating-product")];
+
+        if (!articles.length) return;
+
+        const checkSection = () => {
+            const visibleArticles = articles.filter(
+                (article) => !article.classList.contains("is-missing")
+            );
+
+            section.classList.toggle("is-empty", visibleArticles.length === 0);
+        };
+
+        articles.forEach((article) => {
+            const image = article.querySelector("img");
+            if (!image) return;
+
+            const markMissing = () => {
+                article.classList.add("is-missing");
+                checkSection();
+            };
+
+            image.addEventListener("error", markMissing, { once: true });
+
+            if (image.complete && image.naturalWidth === 0) {
+                markMissing();
+            }
+        });
+
+        checkSection();
+    });
+}
+
+/* ==================================================
+   SWIPE SUPPORT
+   ================================================== */
+
 let touchStartX = 0;
 let touchStartY = 0;
 
@@ -159,25 +239,14 @@ book.addEventListener(
 book.addEventListener(
     "touchend",
     (event) => {
-        const popupIsVisible =
-            endPopup.classList.contains("is-visible");
-
+        const popupIsVisible = endPopup.classList.contains("is-visible");
         if (popupIsVisible) return;
 
         const touch = event.changedTouches[0];
+        const horizontalDistance = touch.clientX - touchStartX;
+        const verticalDistance = Math.abs(touch.clientY - touchStartY);
 
-        const touchEndX = touch.clientX;
-        const touchEndY = touch.clientY;
-
-        const horizontalDistance =
-            touchEndX - touchStartX;
-
-        const verticalDistance =
-            Math.abs(touchEndY - touchStartY);
-
-        if (verticalDistance > maximumVerticalMovement) {
-            return;
-        }
+        if (verticalDistance > maximumVerticalMovement) return;
 
         if (horizontalDistance < -minimumSwipeDistance) {
             goToNextSpread();
@@ -204,8 +273,7 @@ endPopup.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-    const popupIsVisible =
-        endPopup.classList.contains("is-visible");
+    const popupIsVisible = endPopup.classList.contains("is-visible");
 
     if (event.key === "Escape" && popupIsVisible) {
         hideEndPopup();
@@ -223,4 +291,6 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
+lockProjectEditions();
+setupOptionalProductImages();
 updateBook();

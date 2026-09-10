@@ -24,8 +24,9 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Keep the page scrollable while the ending popup is visible. */
 body.popup-open {
-    overflow: hidden;
+    overflow: auto;
 }
 
 /* HEADER */
@@ -248,6 +249,82 @@ body.popup-open {
     letter-spacing: 1.2px;
 }
 
+/* OUTSIDE HAND-DRAWN SCROLL CUE */
+
+.outside-scroll-cue {
+    width: 74px;
+    margin: -8px auto 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    color: var(--muted-text);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.45s ease,
+        transform 0.45s ease,
+        visibility 0.45s ease;
+}
+
+.outside-scroll-cue.is-visible {
+    opacity: 0.78;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.outside-scroll-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.outside-scroll-cue svg {
+    width: 50px;
+    height: 50px;
+    overflow: visible;
+
+    animation: scroll-cue-drift 2.4s ease-in-out infinite;
+}
+
+.cue-circle,
+.cue-arrow {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cue-circle-one {
+    stroke-width: 1.25;
+}
+
+.cue-circle-two {
+    stroke-width: 0.7;
+    opacity: 0.32;
+}
+
+.cue-arrow {
+    stroke-width: 1.45;
+}
+
+@keyframes scroll-cue-drift {
+    0%, 100% {
+        transform: translateY(0) rotate(-0.3deg);
+    }
+
+    50% {
+        transform: translateY(4px) rotate(0.3deg);
+    }
+}
+
 /* ENDING */
 
 .book.is-ending {
@@ -261,8 +338,11 @@ body.popup-open {
 }
 
 .end-popup {
-    position: fixed;
-    inset: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
 
     display: flex;
     align-items: center;
@@ -281,6 +361,7 @@ body.popup-open {
         visibility 0.45s ease;
 
     z-index: 1000;
+    touch-action: pan-y;
 }
 
 .end-popup.is-visible {
@@ -365,6 +446,8 @@ body.popup-open {
     line-height: 1.55;
 }
 
+/* The scroll cue now lives outside the popup. */
+
 .popup-links {
     display: grid;
     gap: 11px;
@@ -407,10 +490,13 @@ body.popup-open {
     cursor: pointer;
 }
 
-/* MOBILE */
+
+
+/* ==================================================
+   MOBILE BOOK VIEWER
+   ================================================== */
 
 @media (max-width: 700px) {
-
     .site-header {
         position: static;
         padding: 28px 22px 0;
@@ -418,22 +504,18 @@ body.popup-open {
 
     .book-area {
         min-height: auto;
-
         gap: 6px;
-
         padding: 105px 8px 26px;
     }
 
     .book {
         width: 78vw;
         aspect-ratio: 4 / 3;
-
         display: flex;
     }
 
     .page {
         display: flex;
-
         width: 50%;
         aspect-ratio: 2 / 3;
     }
@@ -441,13 +523,1139 @@ body.popup-open {
     .arrow-button {
         width: 29px;
         height: 29px;
-
         font-size: 13px;
     }
 
     .page-number {
         margin-top: 12px;
-
         padding-bottom: 22px;
+    }
+
+    .end-popup-panel {
+        padding: 46px 28px 34px;
+    }
+
+    .outside-scroll-cue {
+        width: 62px;
+        margin-top: 2px;
+        margin-bottom: 22px;
+    }
+
+    .outside-scroll-cue svg {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+
+/* ==================================================
+   PROJECT EDITIONS
+   Hidden until the reader finishes the book.
+   ================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+.project-editions {
+    display: none;
+    width: 100%;
+    background: var(--background);
+    color: var(--text);
+}
+
+.project-editions.is-unlocked {
+    display: block;
+    /* A deliberate pause after the finished book, without feeling disconnected. */
+    padding-top: 26vh;
+    animation: editions-reveal 0.8s ease both;
+}
+
+@keyframes editions-reveal {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+/* ==================================================
+   GENERAL SHOP SECTIONS
+   ================================================== */
+
+.shop-section {
+    position: relative;
+    width: min(1180px, 90vw);
+    margin: 0 auto;
+    padding: 120px 0 240px;
+}
+
+/* The first section begins a little sooner after the book. */
+.prints-section {
+    padding-top: 80px;
+}
+
+.shop-section.is-empty {
+    display: none;
+}
+
+.section-heading {
+    position: relative;
+    z-index: 5;
+    margin-bottom: 130px;
+}
+
+.section-number {
+    margin-bottom: 10px;
+    font-size: 8px;
+    letter-spacing: 2px;
+    opacity: 0.38;
+}
+
+.section-heading h2 {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2.6px;
+}
+
+
+/* ==================================================
+   FLOATING PRODUCT SYSTEM
+   ================================================== */
+
+.floating-products {
+    position: relative;
+    width: 100%;
+}
+
+.floating-product {
+    position: relative;
+    z-index: 2;
+    width: max-content;
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease;
+}
+
+.floating-product.is-missing {
+    display: none;
+}
+
+.product-image-wrap {
+    position: relative;
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease;
+}
+
+.product-image-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.print-product .product-image-wrap {
+    box-shadow:
+        0 22px 38px rgba(0, 0, 0, 0.32),
+        0 4px 8px rgba(0, 0, 0, 0.20);
+}
+
+.transparent-product {
+    filter: drop-shadow(0 22px 16px rgba(0, 0, 0, 0.24));
+}
+
+.floating-product:hover {
+    transform: translateY(-7px);
+}
+
+.floating-product:hover .product-image-wrap {
+    filter: brightness(1.035);
+}
+
+
+/* ==================================================
+   PRODUCT INFO
+   ================================================== */
+
+.product-info {
+    margin-top: 18px;
+}
+
+.product-name {
+    font-size: 9px;
+    letter-spacing: 1.8px;
+}
+
+.product-details {
+    margin-top: 7px;
+    font-size: 8px;
+    letter-spacing: 1px;
+    opacity: 0.52;
+}
+
+.product-link {
+    margin-top: 15px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+    opacity: 0.55;
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.product-link:hover {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+
+/* ==================================================
+   PRINTS ON FLOATING SHELF
+   ================================================== */
+
+.prints-section {
+    padding-bottom: 180px;
+}
+
+
+.prints-display {
+    width: min(1080px, 94%);
+
+    margin: 0 auto;
+
+    position: relative;
+}
+
+
+/* Three prints grouped together */
+
+.prints-layout {
+    width: 100%;
+
+    min-height: auto;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    gap: clamp(45px, 6vw, 90px);
+
+    padding:
+        30px
+        45px
+        20px;
+}
+
+
+/* reset old absolute positioning */
+
+.print-one,
+.print-two,
+.print-three {
+    position: relative;
+
+    left: auto;
+    right: auto;
+    top: auto;
+}
+
+
+/* =========================
+   INDIVIDUAL PRINT SIZES
+   ========================= */
+
+
+/* Landscape print */
+
+.print-one .product-image-wrap {
+    width: 315px;
+}
+
+
+/* Middle print */
+
+.print-two .product-image-wrap {
+    width: 255px;
+}
+
+
+/* Right print */
+
+.print-three .product-image-wrap {
+    width: 235px;
+}
+
+
+/* Slight handmade placement */
+
+.print-one {
+    transform: rotate(-0.35deg);
+}
+
+
+.print-two {
+    transform:
+        translateY(-20px)
+        rotate(0.25deg);
+}
+
+
+.print-three {
+    transform:
+        translateY(-38px)
+        rotate(-0.2deg);
+}
+
+
+
+/* =========================
+   IMAGE SHADOW
+   ========================= */
+
+.print-product .product-image-wrap {
+    position: relative;
+
+    box-shadow:
+        0 18px 28px rgba(0, 0, 0, 0.28),
+        0 4px 8px rgba(0, 0, 0, 0.18);
+
+    transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+}
+
+
+.print-product:hover .product-image-wrap {
+    box-shadow:
+        0 24px 38px rgba(0, 0, 0, 0.34),
+        0 7px 12px rgba(0, 0, 0, 0.18);
+}
+
+
+
+/* =========================
+   HOVER FLOAT
+   ========================= */
+
+.print-one:hover {
+    transform:
+        rotate(-0.35deg)
+        translateY(-7px);
+}
+
+
+.print-two:hover {
+    transform:
+        translateY(-27px)
+        rotate(0.25deg);
+}
+
+
+.print-three:hover {
+    transform:
+        translateY(-45px)
+        rotate(-0.2deg);
+}
+
+
+
+/* ==================================================
+   HAND-DRAWN 3D SHELF
+   ================================================== */
+
+
+
+/* imperfect second pen line */
+
+
+
+/* front / lower shelf edge */
+
+
+/* ==================================================
+   WEARABLES
+   ================================================== */
+
+.wearables-section {
+    padding-top: 220px;
+}
+
+.wearables-layout {
+    min-height: 820px;
+}
+
+.wearable-product .product-image-wrap {
+    width: 360px;
+}
+
+.shirt-product {
+    position: absolute;
+    left: 7%;
+    top: 20px;
+    transform: rotate(-1deg);
+}
+
+.shirt-product:hover {
+    transform: rotate(-1deg) translateY(-7px);
+}
+
+.hoodie-product {
+    position: absolute;
+    right: 8%;
+    top: 280px;
+    transform: rotate(1.1deg);
+}
+
+.hoodie-product:hover {
+    transform: rotate(1.1deg) translateY(-7px);
+}
+
+
+/* ==================================================
+   OBJECTS
+   ================================================== */
+
+.objects-section {
+    padding-top: 220px;
+}
+
+.objects-layout {
+    min-height: 760px;
+}
+
+.object-product .product-image-wrap {
+    width: 190px;
+}
+
+.object-one {
+    position: absolute;
+    left: 10%;
+    top: 70px;
+    transform: rotate(-6deg);
+}
+
+.object-one:hover {
+    transform: rotate(-6deg) translateY(-7px);
+}
+
+.object-two {
+    position: absolute;
+    left: 42%;
+    top: 350px;
+    transform: rotate(3deg);
+}
+
+.object-two:hover {
+    transform: rotate(3deg) translateY(-7px);
+}
+
+.object-three {
+    position: absolute;
+    right: 9%;
+    top: 30px;
+    transform: rotate(-2deg);
+}
+
+.object-three:hover {
+    transform: rotate(-2deg) translateY(-7px);
+}
+
+
+/* ==================================================
+   PROJECT FOOTER
+   ================================================== */
+
+.project-footer {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 140px 24px 180px;
+    text-align: center;
+}
+
+.project-footer a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: 0.55;
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.project-footer a:hover {
+    opacity: 1;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+}
+
+
+/* ==================================================
+   TABLET
+   ================================================== */
+
+@media (max-width: 900px) {
+    .project-editions.is-unlocked {
+        padding-top: 23vh;
+    }
+
+    .shop-section {
+        width: 88vw;
+        padding-bottom: 190px;
+    }
+
+    .print-product .product-image-wrap {
+        width: 230px;
+    }
+
+    .wearable-product .product-image-wrap {
+        width: 290px;
+    }
+
+    .object-product .product-image-wrap {
+        width: 160px;
+    }
+
+    .prints-layout {
+        min-height: 980px;
+    }
+
+    .wearables-layout {
+        min-height: 700px;
+    }
+}
+
+
+/* ==================================================
+   MOBILE PRODUCTS
+   ================================================== */
+
+@media (max-width: 700px) {
+    .project-editions.is-unlocked {
+        /* Keep some breathing room, but let the prints arrive sooner. */
+        padding-top: 20vh;
+    }
+
+    .shop-section {
+        width: 84vw;
+        padding: 100px 0 170px;
+    }
+
+    .prints-section {
+        padding-top: 70px;
+    }
+
+    .section-heading {
+        margin-bottom: 90px;
+    }
+
+    .prints-layout,
+    .wearables-layout,
+    .objects-layout {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 125px;
+    }
+
+    .floating-product,
+    .print-one,
+    .print-two,
+    .print-three,
+    .shirt-product,
+    .hoodie-product,
+    .object-one,
+    .object-two,
+    .object-three {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+    }
+
+    .print-product .product-image-wrap {
+        width: min(64vw, 255px);
+    }
+
+    .print-one {
+        align-self: flex-start;
+        transform: rotate(-1deg);
+    }
+
+    .print-two {
+        align-self: flex-end;
+        transform: rotate(0.8deg);
+    }
+
+    .print-three {
+        align-self: center;
+        transform: rotate(-0.5deg);
+    }
+
+    .wearable-product .product-image-wrap {
+        width: min(72vw, 290px);
+    }
+
+    .shirt-product {
+        align-self: flex-start;
+        transform: rotate(-0.8deg);
+    }
+
+    .hoodie-product {
+        align-self: flex-end;
+        transform: rotate(0.8deg);
+    }
+
+    .objects-layout {
+        gap: 95px;
+    }
+
+    .object-product .product-image-wrap {
+        width: min(43vw, 170px);
+    }
+
+    .object-one {
+        align-self: flex-start;
+        transform: rotate(-5deg);
+    }
+
+    .object-two {
+        align-self: center;
+        transform: rotate(3deg);
+    }
+
+    .object-three {
+        align-self: flex-end;
+        transform: rotate(-2deg);
+    }
+
+    .product-info {
+        margin-top: 14px;
+    }
+
+    .project-footer {
+        min-height: 52vh;
+        padding: 110px 24px 140px;
+    }
+    /* ==================================================
+   MOBILE PRINT SHELF
+   ================================================== */
+
+.prints-display {
+    width: 100%;
+}
+
+
+.prints-layout {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: flex-end;
+    justify-content: flex-start;
+
+    gap: 24px;
+
+    width: max-content;
+
+    padding:
+        30px
+        24px
+        18px;
+}
+
+
+.prints-section {
+    overflow-x: hidden;
+}
+
+
+.prints-display {
+    overflow-x: auto;
+
+    scrollbar-width: none;
+}
+
+
+.prints-display::-webkit-scrollbar {
+    display: none;
+}
+
+
+.print-product .product-image-wrap {
+    width: auto;
+}
+
+
+.print-one .product-image-wrap {
+    width: 190px;
+}
+
+
+.print-two .product-image-wrap {
+    width: 155px;
+}
+
+
+.print-three .product-image-wrap {
+    width: 145px;
+}
+
+
+.print-one {
+    align-self: flex-end;
+
+    transform: rotate(-0.3deg);
+}
+
+
+.print-two {
+    align-self: flex-end;
+
+    transform:
+        translateY(-12px)
+        rotate(0.25deg);
+}
+
+
+.print-three {
+    align-self: flex-end;
+
+    transform:
+        translateY(-20px)
+        rotate(-0.2deg);
+}
+
+
+}
+
+
+/* ==================================================
+   FINAL PRINT SHELF LAYOUT FIX
+   ================================================== */
+
+/* Keep the three prints together as one display. */
+.prints-display {
+    width: min(1120px, 92vw);
+    margin: 0 auto;
+    position: relative;
+    overflow: visible;
+}
+
+.prints-layout {
+    width: 100%;
+    min-height: 0 !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    gap: clamp(40px, 5vw, 75px);
+    padding: 20px 35px 10px;
+}
+
+.print-one,
+.print-two,
+.print-three {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+}
+
+.print-one {
+    transform: translateY(0) rotate(-0.25deg);
+}
+
+.print-two {
+    transform: translateY(-28px) rotate(0.2deg);
+}
+
+.print-three {
+    transform: translateY(-18px) rotate(-0.2deg);
+}
+
+.print-one:hover {
+    transform: translateY(-7px) rotate(-0.25deg);
+}
+
+.print-two:hover {
+    transform: translateY(-35px) rotate(0.2deg);
+}
+
+.print-three:hover {
+    transform: translateY(-25px) rotate(-0.2deg);
+}
+
+/* Hand-drawn outlined floating shelf. */
+
+
+
+/* Override the older tablet rule that made the print row extremely tall. */
+@media (max-width: 900px) and (min-width: 701px) {
+    .prints-layout {
+        min-height: 0 !important;
+    }
+}
+
+/* On phones, keep the shelf and prints together in a horizontal swipe row. */
+@media (max-width: 700px) {
+    .prints-display {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        scrollbar-width: none;
+        padding-bottom: 12px;
+    }
+
+    .prints-display::-webkit-scrollbar {
+        display: none;
+    }
+
+    .prints-layout {
+        width: max-content !important;
+        min-height: 0 !important;
+        justify-content: flex-start !important;
+        gap: 24px !important;
+        padding: 30px 24px 18px !important;
+    }
+
+}
+
+/* ==================================================
+   REFINED HAND-DRAWN 3D PRINT SHELF
+   ================================================== */
+
+
+/* subtle second pen pass along the TOP edge only */
+
+/* front face of the floating shelf */
+
+@media (max-width: 700px) {
+
+}
+
+/* ==================================================
+   CLEAN HAND-DRAWN 3D PRINT SHELF
+   Single definition — no stacked duplicate outlines
+   ================================================== */
+
+.prints-shelf {
+    display: block !important;
+    position: relative;
+    z-index: 10;
+
+    width: 94% !important;
+    height: 9px !important;
+    margin: 8px auto 0 !important;
+
+    /* top surface */
+    background: #343432 !important;
+    border: 1.25px solid rgba(243, 240, 232, 0.62) !important;
+    border-radius: 1px !important;
+    box-sizing: border-box;
+
+    /* tiny imperfection keeps it from feeling computer-perfect */
+    transform: rotate(0.08deg) skewX(-0.35deg) !important;
+
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.28) !important;
+    filter: none !important;
+}
+
+/* One loose hand-drawn top line — not another rectangle */
+.prints-shelf::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    right: 8px;
+    top: 2px;
+    height: 0;
+
+    border: 0 !important;
+    border-top: 1px solid rgba(243, 240, 232, 0.23) !important;
+
+    transform: rotate(-0.08deg) !important;
+    pointer-events: none;
+}
+
+/* Front face gives the ledge its 3D thickness */
+.prints-shelf::after {
+    content: "";
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 100%;
+    height: 7px;
+
+    background: #242423 !important;
+
+    border: 0 !important;
+    border-left: 1.25px solid rgba(243, 240, 232, 0.48) !important;
+    border-right: 1.25px solid rgba(243, 240, 232, 0.48) !important;
+    border-bottom: 1.25px solid rgba(243, 240, 232, 0.48) !important;
+
+    clip-path: polygon(0 0, 100% 0, 99.45% 100%, 0.55% 100%);
+    transform: rotate(-0.03deg) !important;
+
+    box-shadow: 0 10px 14px rgba(0, 0, 0, 0.20);
+    pointer-events: none;
+}
+
+@media (max-width: 700px) {
+    .prints-shelf {
+        width: 570px !important;
+        height: 8px !important;
+        margin-left: 18px !important;
+        margin-top: 7px !important;
+    }
+
+    .prints-shelf::after {
+        height: 6px;
+    }
+}
+
+
+/* ==================================================
+   PRINT GALLERY V2 — ONE FLOATING HAND-DRAWN SHELF
+   Keeps the shelf directly under the prints and the labels below it.
+   ================================================== */
+
+.print-gallery-v2 {
+    width: min(1040px, 88vw);
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.print-stage-v2 {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.print-visuals-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr 0.88fr 0.84fr;
+    align-items: end;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 12px 34px 0;
+}
+
+.print-visual-v2 {
+    position: relative;
+    justify-self: center;
+    transition: transform .35s ease, filter .35s ease;
+}
+
+.print-visual-v2 img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    box-shadow:
+        0 18px 30px rgba(0, 0, 0, .28),
+        0 4px 8px rgba(0, 0, 0, .18);
+}
+
+.print-visual-one-v2 {
+    width: min(320px, 100%);
+    transform: rotate(-.22deg);
+}
+
+.print-visual-two-v2 {
+    width: min(255px, 100%);
+    transform: rotate(.16deg);
+}
+
+.print-visual-three-v2 {
+    width: min(235px, 100%);
+    transform: rotate(-.15deg);
+}
+
+.print-visual-v2:hover {
+    transform: translateY(-6px) rotate(0deg);
+    filter: brightness(1.025);
+}
+
+/* Simple floating shelf — intentionally minimal. */
+.print-shelf-v2 {
+    position: relative;
+    z-index: 4;
+
+    width: 82%;
+    height: 9px;
+    margin: 12px auto 0;
+
+    background: #3a3a38;
+    border: 1px solid rgba(243, 240, 232, .38);
+    border-radius: 2px;
+    box-sizing: border-box;
+
+    box-shadow: 0 8px 12px rgba(0, 0, 0, .18);
+}
+
+.print-shelf-v2::before,
+.print-shelf-v2::after {
+    content: none;
+    display: none;
+}
+
+.print-meta-row-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr 0.88fr 0.84fr;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 25px 34px 0;
+}
+
+.print-meta-v2 {
+    width: min(320px, 100%);
+    justify-self: center;
+    text-align: left;
+}
+
+.print-meta-v2 .product-link {
+    margin-top: 14px;
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .print-gallery-v2 {
+        width: 92vw;
+    }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        gap: 28px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .print-visual-one-v2 { width: 260px; }
+    .print-visual-two-v2 { width: 215px; }
+    .print-visual-three-v2 { width: 195px; }
+}
+
+@media (max-width: 700px) {
+    .print-gallery-v2 {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        scrollbar-width: none;
+        padding-bottom: 10px;
+    }
+
+    .print-gallery-v2::-webkit-scrollbar {
+        display: none;
+    }
+
+    .print-stage-v2 {
+        width: 700px;
+        padding: 0 16px;
+    }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        grid-template-columns: 230px 175px 165px;
+        gap: 34px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .print-visual-one-v2 { width: 230px; }
+    .print-visual-two-v2 { width: 175px; }
+    .print-visual-three-v2 { width: 165px; }
+
+    .print-shelf-v2 {
+        width: 620px;
+        height: 8px;
+        margin-top: 10px;
+    }
+
+    .print-meta-row-v2 {
+        padding-top: 23px;
+    }
+}
+
+/* ==================================================
+   PRINT SHELF WIDTH — FINAL ADJUSTMENT
+   Extends the simple shelf so all three prints sit over it.
+   ================================================== */
+
+.print-shelf-v2 {
+    width: calc(100% + 140px) !important;
+    max-width: none !important;
+    left: 50% !important;
+    transform: translateX(-50%) rotate(0.04deg) !important;
+    margin-top: 12px !important;
+}
+
+@media (max-width: 700px) {
+    .print-shelf-v2 {
+        width: 670px !important;
+        left: 50% !important;
+        transform: translateX(-50%) rotate(0.04deg) !important;
+    }
+}
+
+
+/* ==================================================
+   PRINT DETAILS ABOVE SHELF — FINAL PLACEMENT
+   Keeps title / size / view link directly under each print,
+   with the shelf acting as the visual base for the whole group.
+   ================================================== */
+
+.print-meta-row-v2 {
+    padding-top: 16px !important;
+    padding-bottom: 0 !important;
+    align-items: start;
+}
+
+.print-meta-v2 {
+    min-height: 62px;
+}
+
+.print-meta-v2 .product-name {
+    margin-top: 0;
+}
+
+.print-meta-v2 .product-details {
+    margin-top: 6px;
+}
+
+.print-meta-v2 .product-link {
+    margin-top: 11px;
+}
+
+.print-shelf-v2 {
+    margin-top: 20px !important;
+}
+
+@media (max-width: 700px) {
+    .print-meta-row-v2 {
+        padding-top: 14px !important;
+    }
+
+    .print-meta-v2 {
+        min-height: 58px;
+    }
+
+    .print-shelf-v2 {
+        margin-top: 18px !important;
     }
 }

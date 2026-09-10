@@ -1,120 +1,187 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jose Altamirano — Documentary Photography</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Somewhere to Be — Jose Altamirano</title>
+<link href="style.css" rel="stylesheet"/>
 </head>
-<body>
-
+<body id="top">
 <header class="site-header">
-
-    <h1>JOSE ALTAMIRANO</h1>
-
-    <p>DOCUMENTARY PHOTOGRAPHY</p>
-
+<h1>JOSE ALTAMIRANO</h1>
+<p>DOCUMENTARY PHOTOGRAPHY</p>
 </header>
-
-<a class="back-link" href="../index.html">
-    ← Projects
-</a>
-
+<a class="back-link" href="../index.html">← Projects</a>
 <main>
-    <section class="book-area" aria-label="Photography book">
-
-        <button class="arrow-button" id="previous-button" type="button" aria-label="Previous spread">
-            <svg viewBox="0 0 60 60" aria-hidden="true">
-                <path class="sketch-circle circle-one" d="M30 5 C45 4, 56 16, 55 30 C55 45, 44 56, 29 55 C14 56, 4 44, 5 29 C4 15, 16 5, 30 5"/>
-                <path class="sketch-circle circle-two" d="M29 7 C43 5, 54 17, 53 31 C54 44, 42 54, 29 53 C16 55, 6 43, 7 30 C5 17, 16 7, 29 7"/>
-                <path class="sketch-arrow" d="M35 20 L24 30 L35 40"/>
-            </svg>
-        </button>
-
-        <div class="book" id="book">
-            <div class="page left-page">
-                <img id="left-page-image" src="images/001.jpg" alt="Left page of the photography book">
-            </div>
-
-            <div class="page right-page">
-                <img id="right-page-image" src="images/002.jpg" alt="Right page of the photography book">
-            </div>
-        </div>
-
-        <button class="arrow-button" id="next-button" type="button" aria-label="Next spread">
-            <svg viewBox="0 0 60 60" aria-hidden="true">
-                <path class="sketch-circle circle-one" d="M30 5 C45 4, 56 16, 55 30 C55 45, 44 56, 29 55 C14 56, 4 44, 5 29 C4 15, 16 5, 30 5"/>
-                <path class="sketch-circle circle-two" d="M29 7 C43 5, 54 17, 53 31 C54 44, 42 54, 29 53 C16 55, 6 43, 7 30 C5 17, 16 7, 29 7"/>
-                <path class="sketch-arrow" d="M25 20 L36 30 L25 40"/>
-            </svg>
-        </button>
-
-    </section>
-
-    <p class="page-number" id="page-number">1–2</p>
-</main>
-
-<<div class="end-popup" id="end-popup" aria-hidden="true">
-
-    <div class="end-popup-panel">
-
-        <button
-            class="popup-close"
-            id="popup-close"
-            type="button"
-            aria-label="Close"
-        >
-            ×
-        </button>
-
-        <p class="popup-eyebrow">
-            THE END
+<section aria-label="Photography book" class="book-area">
+<button aria-label="Previous spread" class="arrow-button" id="previous-button" type="button">
+<svg aria-hidden="true" viewbox="0 0 60 60">
+<path class="sketch-circle circle-one" d="M30 5 C45 4, 56 16, 55 30 C55 45, 44 56, 29 55 C14 56, 4 44, 5 29 C4 15, 16 5, 30 5"></path>
+<path class="sketch-circle circle-two" d="M29 7 C43 5, 54 17, 53 31 C54 44, 42 54, 29 53 C16 55, 6 43, 7 30 C5 17, 16 7, 29 7"></path>
+<path class="sketch-arrow" d="M35 20 L24 30 L35 40"></path>
+</svg>
+</button>
+<div class="book" id="book">
+<div class="page left-page">
+<img alt="Left page of Somewhere to Be" id="left-page-image" src="images/001.jpg"/>
+</div>
+<div class="page right-page">
+<img alt="Right page of Somewhere to Be" id="right-page-image" src="images/002.jpg"/>
+</div>
+</div>
+<button aria-label="Next spread" class="arrow-button" id="next-button" type="button">
+<svg aria-hidden="true" viewbox="0 0 60 60">
+<path class="sketch-circle circle-one" d="M30 5 C45 4, 56 16, 55 30 C55 45, 44 56, 29 55 C14 56, 4 44, 5 29 C4 15, 16 5, 30 5"></path>
+<path class="sketch-circle circle-two" d="M29 7 C43 5, 54 17, 53 31 C54 44, 42 54, 29 53 C16 55, 6 43, 7 30 C5 17, 16 7, 29 7"></path>
+<path class="sketch-arrow" d="M25 20 L36 30 L25 40"></path>
+</svg>
+</button>
+<div aria-hidden="true" class="end-popup" id="end-popup">
+<div class="end-popup-panel">
+<button aria-label="Close" class="popup-close" id="popup-close" type="button">×</button>
+<p class="popup-eyebrow">THE END</p>
+<h2>Keep scrolling.</h2>
+<p class="popup-copy">
+            The book ends here. Keep scrolling for prints, clothing, and objects from the project.
         </p>
-
-        <h2>
-            Thanks for looking.
-        </h2>
-
-        <p class="popup-copy">
-            The book ends here. The photos don't.
-        </p>
-
-        <div class="popup-links">
-
-            <a
-                id="instagram-link"
-                class="popup-link"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+<div class="popup-links">
+<a class="popup-link" href="#" id="instagram-link" rel="noopener noreferrer" target="_blank">
                 Follow along on Instagram →
             </a>
-
-            <a
-                id="purchase-link"
-                class="popup-link popup-link-primary"
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
+<a class="popup-link popup-link-primary" href="#" id="purchase-link" rel="noopener noreferrer" target="_blank">
                 Get the book →
             </a>
-
-        </div>
-
-        <button
-            class="restart-book"
-            id="restart-book"
-            type="button"
-        >
-            Take another look
-        </button>
-
-    </div>
-
+</div>
+<button class="restart-book" id="restart-book" type="button">Take another look</button>
+</div>
+</div></section>
+<p class="page-number" id="page-number">1–2</p>
+</main>
+<!-- Hand-drawn cue appears only after the reader finishes the book. -->
+<div aria-hidden="true" class="outside-scroll-cue" id="outside-scroll-cue">
+<span class="outside-scroll-label">SCROLL</span>
+<svg aria-hidden="true" viewbox="0 0 64 64">
+<path class="cue-circle cue-circle-one" d="M32 5 C47 5, 59 16, 59 31 C59 47, 48 59, 32 59 C16 60, 5 48, 5 32 C5 17, 16 6, 32 5 Z"></path>
+<path class="cue-circle cue-circle-two" d="M31 7 C46 6, 57 18, 57 32 C57 46, 47 57, 32 57 C18 58, 7 47, 7 32 C7 18, 17 8, 31 7 Z"></path>
+<path class="cue-arrow" d="M32 18 C31 25, 33 31, 32 39"></path>
+<path class="cue-arrow" d="M24 34 C27 38, 29 41, 32 45 C35 41, 38 38, 41 34"></path>
+</svg>
 </div>
 
+<!-- ==================================================
+     PROJECT EDITIONS
+     Hidden until Next is pressed while on the final spread.
+     ================================================== -->
+<section aria-hidden="true" class="project-editions">
+<section class="shop-section prints-section" id="prints">
+<header class="section-heading">
+<p class="section-number">01</p>
+<h2>PRINTS</h2>
+</header>
+<div class="print-gallery-v2">
+<div class="print-stage-v2">
+<div class="print-visuals-v2">
+<article class="print-visual-v2 print-visual-one-v2">
+<img alt="Somewhere to Be print 01" src="images/prints/print-01.jpg"/>
+</article>
+<article class="print-visual-v2 print-visual-two-v2">
+<img alt="Somewhere to Be print 02" src="images/prints/print-02.jpg"/>
+</article>
+<article class="print-visual-v2 print-visual-three-v2">
+<img alt="Somewhere to Be print 03" src="images/prints/print-03.jpg"/>
+</article>
+</div>
+<!-- Details stay above the shelf. -->
+<div class="print-meta-row-v2">
+<div class="print-meta-v2">
+<p class="product-name">PRINT 01</p>
+<p class="product-details">8 × 12 / 11 × 14</p>
+<button class="product-link" type="button">VIEW PRINT →</button>
+</div>
+<div class="print-meta-v2">
+<p class="product-name">PRINT 02</p>
+<p class="product-details">8 × 12 / 11 × 14</p>
+<button class="product-link" type="button">VIEW PRINT →</button>
+</div>
+<div class="print-meta-v2">
+<p class="product-name">PRINT 03</p>
+<p class="product-details">8 × 12 / 11 × 14</p>
+<button class="product-link" type="button">VIEW PRINT →</button>
+</div>
+</div>
+<div aria-hidden="true" class="print-shelf-v2"></div>
+</div>
+</div>
+</section>
+<section class="shop-section wearables-section" data-optional-products="">
+<header class="section-heading">
+<p class="section-number">02</p>
+<h2>WEARABLES</h2>
+</header>
+<div class="floating-products wearables-layout">
+<article class="floating-product wearable-product shirt-product">
+<div class="product-image-wrap transparent-product">
+<img alt="Somewhere to Be shirt" src="images/wearables/shirt-01.png"/>
+</div>
+<div class="product-info">
+<p class="product-name">PROJECT TEE</p>
+<p class="product-details">SOMEWHERE TO BE</p>
+<button class="product-link" type="button">VIEW →</button>
+</div>
+</article>
+<article class="floating-product wearable-product hoodie-product">
+<div class="product-image-wrap transparent-product">
+<img alt="Somewhere to Be hoodie" src="images/wearables/hoodie-01.png"/>
+</div>
+<div class="product-info">
+<p class="product-name">PROJECT HOODIE</p>
+<p class="product-details">SOMEWHERE TO BE</p>
+<button class="product-link" type="button">VIEW →</button>
+</div>
+</article>
+</div>
+</section>
+<section class="shop-section objects-section" data-optional-products="">
+<header class="section-heading">
+<p class="section-number">03</p>
+<h2>OBJECTS</h2>
+</header>
+<div class="floating-products objects-layout">
+<article class="floating-product object-product object-one">
+<div class="product-image-wrap transparent-product">
+<img alt="Somewhere to Be sticker" src="images/objects/sticker-01.png"/>
+</div>
+<div class="product-info">
+<p class="product-name">STICKER 01</p>
+<button class="product-link" type="button">VIEW →</button>
+</div>
+</article>
+<article class="floating-product object-product object-two">
+<div class="product-image-wrap transparent-product">
+<img alt="Somewhere to Be sticker" src="images/objects/sticker-02.png"/>
+</div>
+<div class="product-info">
+<p class="product-name">STICKER 02</p>
+<button class="product-link" type="button">VIEW →</button>
+</div>
+</article>
+<article class="floating-product object-product object-three">
+<div class="product-image-wrap transparent-product">
+<img alt="Somewhere to Be sticker" src="images/objects/sticker-03.png"/>
+</div>
+<div class="product-info">
+<p class="product-name">STICKER 03</p>
+<button class="product-link" type="button">VIEW →</button>
+</div>
+</article>
+</div>
+</section>
+<footer class="project-footer">
+<a class="back-to-top" href="#top">↑ BACK TO TOP</a>
+<a class="footer-instagram" href="https://www.instagram.com/alta.jo/" rel="noopener noreferrer" target="_blank">@ALTA.JO ↗</a>
+</footer>
+</section>
 <script src="script.js"></script>
 </body>
 </html>

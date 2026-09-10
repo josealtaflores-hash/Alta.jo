@@ -687,3 +687,536 @@ body.popup-open {
 
     cursor: pointer;
 }
+/* ==================================================
+   SOMEWHERE TO BE — LOWER PROJECT SECTIONS
+   ================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Keep scrolling available while the end popup is open. */
+body.popup-open {
+    overflow: auto !important;
+}
+
+/* Make the popup part of the top viewport rather than pinning it to the screen. */
+.end-popup {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    inset: auto !important;
+    touch-action: pan-y;
+}
+
+/* ==================================================
+   OUTSIDE HAND-DRAWN SCROLL CUE
+   ================================================== */
+
+.outside-scroll-cue {
+    width: 74px;
+    margin: -6px auto 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #675f56;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
+}
+
+.outside-scroll-cue.is-visible {
+    opacity: .72;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.outside-scroll-label {
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.outside-scroll-cue svg {
+    width: 50px;
+    height: 50px;
+    overflow: visible;
+    animation: summer-scroll-cue-drift 2.4s ease-in-out infinite;
+}
+
+.cue-circle,
+.cue-arrow {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cue-circle-one { stroke-width: 1.25; }
+.cue-circle-two { stroke-width: .7; opacity: .32; }
+.cue-arrow { stroke-width: 1.45; }
+
+@keyframes summer-scroll-cue-drift {
+    0%, 100% { transform: translateY(0) rotate(-.3deg); }
+    50% { transform: translateY(4px) rotate(.3deg); }
+}
+
+/* ==================================================
+   PROJECT EDITIONS — HIDDEN UNTIL BOOK IS FINISHED
+   ================================================== */
+
+.project-editions {
+    display: none;
+    width: 100%;
+    background: var(--site-background);
+    color: var(--text-color);
+}
+
+.project-editions.is-unlocked {
+    display: block;
+    padding-top: 26vh;
+    animation: summer-editions-reveal .8s ease both;
+}
+
+@keyframes summer-editions-reveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.shop-section {
+    position: relative;
+    width: min(1180px, 90vw);
+    margin: 0 auto;
+    padding: 110px 0 220px;
+}
+
+.prints-section {
+    padding-top: 75px;
+}
+
+.section-heading {
+    margin-bottom: 95px;
+}
+
+.section-number {
+    margin-bottom: 10px;
+    color: #756d63;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    color: #26221e;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2.6px;
+}
+
+.product-name {
+    color: #302b26;
+    font-size: 9px;
+    letter-spacing: 1.8px;
+}
+
+.product-details {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.product-link {
+    margin-top: 14px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #5d554c;
+    font-family: inherit;
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+    opacity: .72;
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.product-link:hover {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+/* ==================================================
+   PRINTS — GROUPED ON ONE SIMPLE SHELF
+   ================================================== */
+
+.print-gallery-v2 {
+    width: min(1040px, 88vw);
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.print-stage-v2 {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.print-visuals-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr .88fr .84fr;
+    align-items: end;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 12px 34px 0;
+}
+
+.print-visual-v2 {
+    position: relative;
+    justify-self: center;
+    transition: transform .35s ease, filter .35s ease;
+}
+
+.print-visual-v2 img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    box-shadow:
+        0 18px 30px rgba(67, 56, 45, .18),
+        0 4px 8px rgba(67, 56, 45, .10);
+}
+
+.print-visual-one-v2 {
+    width: min(320px, 100%);
+    transform: rotate(-.22deg);
+}
+
+.print-visual-two-v2 {
+    width: min(225px, 100%);
+    transform: rotate(.16deg);
+}
+
+.print-visual-three-v2 {
+    width: min(225px, 100%);
+    transform: rotate(-.15deg);
+}
+
+.print-visual-v2:hover {
+    transform: translateY(-6px) rotate(0deg);
+    filter: brightness(1.015);
+}
+
+/* Print info stays ABOVE the shelf. */
+.print-meta-row-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr .88fr .84fr;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 24px 34px 0;
+}
+
+.print-meta-v2 {
+    width: min(320px, 100%);
+    justify-self: center;
+    text-align: left;
+}
+
+/* Simple shelf: one rectangle, no extra faces or duplicate lines. */
+.print-shelf-v2 {
+    position: relative;
+    z-index: 4;
+    width: 96%;
+    height: 10px;
+    margin: 22px auto 0;
+    background: rgba(87, 78, 68, .08);
+    border: 1.2px solid rgba(76, 68, 59, .54);
+    border-radius: 2px;
+    box-sizing: border-box;
+    transform: rotate(.05deg);
+    box-shadow: 0 8px 12px rgba(67, 56, 45, .10);
+}
+
+.print-shelf-v2::before,
+.print-shelf-v2::after {
+    content: none;
+    display: none;
+}
+
+/* ==================================================
+   WEARABLES / OBJECTS
+   ================================================== */
+
+.floating-products {
+    position: relative;
+    width: 100%;
+}
+
+.floating-product {
+    position: relative;
+    width: max-content;
+    transition: transform .45s ease, filter .45s ease;
+}
+
+.product-image-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.transparent-product {
+    filter: drop-shadow(0 20px 14px rgba(67, 56, 45, .16));
+}
+
+.product-info {
+    margin-top: 18px;
+}
+
+.wearables-layout {
+    min-height: 720px;
+}
+
+.wearable-product .product-image-wrap {
+    width: 350px;
+}
+
+.shirt-product {
+    position: absolute;
+    left: 8%;
+    top: 20px;
+    transform: rotate(-1deg);
+}
+
+.hoodie-product {
+    position: absolute;
+    right: 8%;
+    top: 210px;
+    transform: rotate(1deg);
+}
+
+.objects-layout {
+    min-height: 620px;
+}
+
+.object-product .product-image-wrap {
+    width: 185px;
+}
+
+.object-one {
+    position: absolute;
+    left: 10%;
+    top: 60px;
+    transform: rotate(-5deg);
+}
+
+.object-two {
+    position: absolute;
+    left: 43%;
+    top: 290px;
+    transform: rotate(3deg);
+}
+
+.object-three {
+    position: absolute;
+    right: 10%;
+    top: 30px;
+    transform: rotate(-2deg);
+}
+
+.floating-product:hover {
+    transform: translateY(-7px);
+}
+
+[data-optional-products].is-empty {
+    display: none;
+}
+
+.floating-product.is-missing {
+    display: none;
+}
+
+/* ==================================================
+   PROJECT FOOTER
+   ================================================== */
+
+.project-footer {
+    min-height: 52vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 100px 24px 140px;
+    text-align: center;
+}
+
+.project-footer a {
+    color: #5b534a;
+    text-decoration: none;
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: .68;
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.project-footer a:hover {
+    opacity: 1;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+}
+
+/* ==================================================
+   MOBILE LOWER PROJECT SECTIONS
+   ================================================== */
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .print-gallery-v2 { width: 92vw; }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        gap: 28px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .print-visual-one-v2 { width: 260px; }
+    .print-visual-two-v2 { width: 190px; }
+    .print-visual-three-v2 { width: 190px; }
+}
+
+@media (max-width: 700px) {
+    .outside-scroll-cue {
+        width: 62px;
+        margin-top: 2px;
+        margin-bottom: 22px;
+    }
+
+    .outside-scroll-cue svg {
+        width: 44px;
+        height: 44px;
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 22vh;
+    }
+
+    .shop-section {
+        width: 88vw;
+        padding: 90px 0 145px;
+    }
+
+    .section-heading {
+        margin-bottom: 70px;
+    }
+
+    .print-gallery-v2 {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        scrollbar-width: none;
+        padding-bottom: 10px;
+    }
+
+    .print-gallery-v2::-webkit-scrollbar {
+        display: none;
+    }
+
+    .print-stage-v2 {
+        width: 700px;
+        padding: 0 16px;
+    }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        grid-template-columns: 230px 175px 175px;
+        gap: 34px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .print-visual-one-v2 { width: 230px; }
+    .print-visual-two-v2 { width: 175px; }
+    .print-visual-three-v2 { width: 175px; }
+
+    .print-shelf-v2 {
+        width: 650px;
+        height: 9px;
+        margin-top: 18px;
+    }
+
+    .wearables-layout,
+    .objects-layout {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 100px;
+    }
+
+    .shirt-product,
+    .hoodie-product,
+    .object-one,
+    .object-two,
+    .object-three {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+    }
+
+    .wearable-product .product-image-wrap {
+        width: min(72vw, 290px);
+    }
+
+    .object-product .product-image-wrap {
+        width: min(43vw, 170px);
+    }
+
+    .shirt-product,
+    .object-one { align-self: flex-start; }
+
+    .hoodie-product,
+    .object-three { align-self: flex-end; }
+
+    .object-two { align-self: center; }
+
+    .project-footer {
+        min-height: 46vh;
+        padding: 90px 24px 120px;
+    }
+}
+
+
+/* ==================================================
+   FINAL SUMMER POPUP POSITION FIX
+   Keep the end popup centered over the book area,
+   while still allowing the page to scroll underneath.
+   ================================================== */
+
+.book-area {
+    position: relative;
+}
+
+body.popup-open {
+    overflow: auto !important;
+}
+
+.end-popup {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    z-index: 1000 !important;
+    touch-action: pan-y;
+}
+
+.end-popup-panel {
+    pointer-events: auto;
+    touch-action: pan-y;
+}

@@ -1,58 +1,22 @@
-/*
-Replace these with your real links.
-*/
+/* ==================================================
+   SOMEWHERE TO BE — BOOK VIEWER
+   ================================================== */
+
 const instagramUrl = "https://www.instagram.com/alta.jo/";
 const purchaseUrl = "https://YOUR-BOOK-PURCHASE-LINK.com/";
 
-/*
-Keep every spread from your current site in this array.
-The popup appears when the visitor presses Next after the final spread.
-*/
 const spreads = [
-    {
-        left: "images/001.jpg",
-        right: "images/002.jpg"
-    },
-    {
-        left: "images/003.jpg",
-        right: "images/004.jpg"
-    },
-    {
-        left: "images/005.jpg",
-        right: "images/006.jpg"
-    },
-    {
-        left: "images/007.jpg",
-        right: "images/008.jpg"
-    },
-    {
-        left: "images/009.jpg",
-        right: "images/0010.jpg"
-    },
-    {
-        left: "images/0011.jpg",
-        right: "images/0012.jpg"
-    },
-    {
-        left: "images/0013.jpg",
-        right: "images/0014.jpg"
-    },
-    {
-        left: "images/0015.jpg",
-        right: "images/0016.jpg"
-    },
-    {
-        left: "images/0017.jpg",
-        right: "images/0018.jpg"
-    },
-    {
-        left: "images/0019.jpg",
-        right: "images/0020.jpg"
-    },
-    {
-        left: "images/0021.jpg",
-        right: "images/0022.jpg"
-    }
+    { left: "images/001.jpg", right: "images/002.jpg" },
+    { left: "images/003.jpg", right: "images/004.jpg" },
+    { left: "images/005.jpg", right: "images/006.jpg" },
+    { left: "images/007.jpg", right: "images/008.jpg" },
+    { left: "images/009.jpg", right: "images/0010.jpg" },
+    { left: "images/0011.jpg", right: "images/0012.jpg" },
+    { left: "images/0013.jpg", right: "images/0014.jpg" },
+    { left: "images/0015.jpg", right: "images/0016.jpg" },
+    { left: "images/0017.jpg", right: "images/0018.jpg" },
+    { left: "images/0019.jpg", right: "images/0020.jpg" },
+    { left: "images/0021.jpg", right: "images/0022.jpg" }
 ];
 
 const book = document.getElementById("book");
@@ -67,9 +31,12 @@ const popupClose = document.getElementById("popup-close");
 const restartBook = document.getElementById("restart-book");
 const instagramLink = document.getElementById("instagram-link");
 const purchaseLink = document.getElementById("purchase-link");
+const outsideScrollCue = document.getElementById("outside-scroll-cue");
+const projectEditions = document.querySelector(".project-editions");
 
 let currentSpread = 0;
 let popupTimer;
+let editionsUnlocked = false;
 
 instagramLink.href = instagramUrl;
 purchaseLink.href = purchaseUrl;
@@ -94,15 +61,44 @@ function updateBook() {
     const rightPageNumber = leftPageNumber + 1;
 
     pageNumber.textContent = `${leftPageNumber}–${rightPageNumber}`;
-
     previousButton.disabled = currentSpread === 0;
 
     preloadSpread(currentSpread + 1);
     preloadSpread(currentSpread - 1);
 }
 
+function unlockProjectEditions() {
+    if (!projectEditions || editionsUnlocked) return;
+
+    editionsUnlocked = true;
+    projectEditions.classList.add("is-unlocked");
+    projectEditions.setAttribute("aria-hidden", "false");
+
+    if (outsideScrollCue) {
+        outsideScrollCue.classList.add("is-visible");
+        outsideScrollCue.setAttribute("aria-hidden", "false");
+    }
+}
+
+function lockProjectEditions() {
+    if (!projectEditions) return;
+
+    editionsUnlocked = false;
+    projectEditions.classList.remove("is-unlocked");
+    projectEditions.setAttribute("aria-hidden", "true");
+
+    if (outsideScrollCue) {
+        outsideScrollCue.classList.remove("is-visible");
+        outsideScrollCue.setAttribute("aria-hidden", "true");
+    }
+}
+
 function showEndPopup() {
     window.clearTimeout(popupTimer);
+
+    /* The lower part of the page only exists after Next is pressed
+       while the reader is already on the final spread. */
+    unlockProjectEditions();
 
     book.classList.add("is-ending");
 
@@ -127,7 +123,10 @@ function hideEndPopup() {
 function restartFromBeginning() {
     currentSpread = 0;
     updateBook();
+    lockProjectEditions();
     hideEndPopup();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function goToPreviousSpread() {
@@ -149,85 +148,80 @@ function goToNextSpread() {
     updateBook();
 }
 
-/*
-SWIPE SUPPORT
+/* Hide clothing / object sections until their image files actually exist. */
+function setupOptionalProductImages() {
+    const optionalSections = document.querySelectorAll("[data-optional-products]");
 
-Swipe left  = next spread
-Swipe right = previous spread
-*/
+    optionalSections.forEach((section) => {
+        const articles = [...section.querySelectorAll(".floating-product")];
+        if (!articles.length) return;
 
+        const checkSection = () => {
+            const visibleArticles = articles.filter(
+                (article) => !article.classList.contains("is-missing")
+            );
+            section.classList.toggle("is-empty", visibleArticles.length === 0);
+        };
+
+        articles.forEach((article) => {
+            const image = article.querySelector("img");
+            if (!image) return;
+
+            const markMissing = () => {
+                article.classList.add("is-missing");
+                checkSection();
+            };
+
+            image.addEventListener("error", markMissing, { once: true });
+
+            if (image.complete && image.naturalWidth === 0) {
+                markMissing();
+            }
+        });
+
+        checkSection();
+    });
+}
+
+/* SWIPE SUPPORT */
 let touchStartX = 0;
 let touchStartY = 0;
-
 const minimumSwipeDistance = 50;
 const maximumVerticalMovement = 80;
 
-book.addEventListener(
-    "touchstart",
-    (event) => {
-        const touch = event.changedTouches[0];
+book.addEventListener("touchstart", (event) => {
+    const touch = event.changedTouches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+}, { passive: true });
 
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-    },
-    {
-        passive: true
+book.addEventListener("touchend", (event) => {
+    const popupIsVisible = endPopup.classList.contains("is-visible");
+    if (popupIsVisible) return;
+
+    const touch = event.changedTouches[0];
+    const horizontalDistance = touch.clientX - touchStartX;
+    const verticalDistance = Math.abs(touch.clientY - touchStartY);
+
+    if (verticalDistance > maximumVerticalMovement) return;
+
+    if (horizontalDistance < -minimumSwipeDistance) {
+        goToNextSpread();
+        return;
     }
-);
 
-book.addEventListener(
-    "touchend",
-    (event) => {
-        const popupIsVisible = endPopup.classList.contains("is-visible");
-
-        if (popupIsVisible) return;
-
-        const touch = event.changedTouches[0];
-
-        const touchEndX = touch.clientX;
-        const touchEndY = touch.clientY;
-
-        const horizontalDistance = touchEndX - touchStartX;
-        const verticalDistance = Math.abs(touchEndY - touchStartY);
-
-        /*
-        Ignore gestures that are mostly vertical,
-        so normal scrolling still works.
-        */
-        if (verticalDistance > maximumVerticalMovement) {
-            return;
-        }
-
-        /*
-        Swipe left = next spread
-        */
-        if (horizontalDistance < -minimumSwipeDistance) {
-            goToNextSpread();
-            return;
-        }
-
-        /*
-        Swipe right = previous spread
-        */
-        if (horizontalDistance > minimumSwipeDistance) {
-            goToPreviousSpread();
-        }
-    },
-    {
-        passive: true
+    if (horizontalDistance > minimumSwipeDistance) {
+        goToPreviousSpread();
     }
-);
+}, { passive: true });
 
 previousButton.addEventListener("click", goToPreviousSpread);
 nextButton.addEventListener("click", goToNextSpread);
-
 popupClose.addEventListener("click", hideEndPopup);
 restartBook.addEventListener("click", restartFromBeginning);
 
 endPopup.addEventListener("click", (event) => {
-    if (event.target === endPopup) {
-        hideEndPopup();
-    }
+    if (event.target === endPopup) hideEndPopup();
 });
 
 document.addEventListener("keydown", (event) => {
@@ -240,13 +234,9 @@ document.addEventListener("keydown", (event) => {
 
     if (popupIsVisible) return;
 
-    if (event.key === "ArrowLeft") {
-        goToPreviousSpread();
-    }
-
-    if (event.key === "ArrowRight") {
-        goToNextSpread();
-    }
+    if (event.key === "ArrowLeft") goToPreviousSpread();
+    if (event.key === "ArrowRight") goToNextSpread();
 });
 
+setupOptionalProductImages();
 updateBook();
