@@ -3,16 +3,17 @@
    ================================================== */
 
 const TOTAL_PAGES = 14;
-
 const instagramUrl = "https://www.instagram.com/alta.jo/";
-const purchaseUrl = "#"; // Replace with your final purchase link later.
+
+/* Replace # with your final Blurb / Lulu / direct purchase link when ready. */
+const purchaseUrl = "#";
 
 function pageFile(number) {
-    if (number <= 15) {
+    if (number <= 9) {
         return `images/00${number}.jpg`;
     }
 
-    return `images/${String(number).padStart(4, "0")}.jpg`;
+    return `images/00${number}.jpg`;
 }
 
 const spreads = [];
@@ -30,21 +31,24 @@ const rightPageImage = document.getElementById("right-page-image");
 const previousButton = document.getElementById("previous-button");
 const nextButton = document.getElementById("next-button");
 const pageNumber = document.getElementById("page-number");
-
-const endPopup = document.getElementById("end-popup");
-const popupClose = document.getElementById("popup-close");
-const restartBook = document.getElementById("restart-book");
-const instagramLink = document.getElementById("instagram-link");
-const purchaseLink = document.getElementById("purchase-link");
+const purchaseButton = document.getElementById("mid-book-purchase");
 const outsideScrollCue = document.getElementById("outside-scroll-cue");
 const projectEditions = document.querySelector(".project-editions");
 
 let currentSpread = 0;
-let popupTimer;
 let editionsUnlocked = false;
 
-instagramLink.href = instagramUrl;
-purchaseLink.href = purchaseUrl;
+/* 7 spreads total, so show purchase from spread 4 onward (pages 7–8). */
+const purchaseRevealSpread = Math.floor(spreads.length / 2);
+
+if (purchaseButton) {
+    purchaseButton.href = purchaseUrl;
+
+    if (purchaseUrl === "#") {
+        purchaseButton.setAttribute("aria-disabled", "true");
+        purchaseButton.addEventListener("click", (event) => event.preventDefault());
+    }
+}
 
 function preloadSpread(index) {
     if (index < 0 || index >= spreads.length) return;
@@ -60,6 +64,13 @@ function preloadSpread(index) {
         const rightImage = new Image();
         rightImage.src = spread.right;
     }
+}
+
+function updatePurchaseButton() {
+    if (!purchaseButton) return;
+
+    const shouldShow = currentSpread >= purchaseRevealSpread;
+    purchaseButton.classList.toggle("is-visible", shouldShow);
 }
 
 function updateBook() {
@@ -85,6 +96,7 @@ function updateBook() {
 
     previousButton.disabled = currentSpread === 0;
 
+    updatePurchaseButton();
     preloadSpread(currentSpread + 1);
     preloadSpread(currentSpread - 1);
 }
@@ -115,46 +127,6 @@ function lockProjectEditions() {
     }
 }
 
-function showEndPopup() {
-    window.clearTimeout(popupTimer);
-
-    /* The shop becomes part of the page only after the reader
-       presses Next while already on the final spread. */
-    unlockProjectEditions();
-
-    book.classList.add("is-ending");
-
-    popupTimer = window.setTimeout(() => {
-        endPopup.classList.add("is-visible");
-        endPopup.setAttribute("aria-hidden", "false");
-        document.body.classList.add("popup-open");
-        popupClose.focus();
-    }, 350);
-}
-
-function hideEndPopup() {
-    window.clearTimeout(popupTimer);
-
-    endPopup.classList.remove("is-visible");
-    endPopup.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("popup-open");
-    book.classList.remove("is-ending");
-    nextButton.focus();
-}
-
-
-function restartFromBeginning() {
-    currentSpread = 0;
-    updateBook();
-    lockProjectEditions();
-    hideEndPopup();
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
 function goToPreviousSpread() {
     if (currentSpread > 0) {
         currentSpread -= 1;
@@ -166,7 +138,7 @@ function goToNextSpread() {
     const isLastSpread = currentSpread === spreads.length - 1;
 
     if (isLastSpread) {
-        showEndPopup();
+        unlockProjectEditions();
         return;
     }
 
@@ -239,9 +211,6 @@ book.addEventListener(
 book.addEventListener(
     "touchend",
     (event) => {
-        const popupIsVisible = endPopup.classList.contains("is-visible");
-        if (popupIsVisible) return;
-
         const touch = event.changedTouches[0];
         const horizontalDistance = touch.clientX - touchStartX;
         const verticalDistance = Math.abs(touch.clientY - touchStartY);
@@ -263,25 +232,7 @@ book.addEventListener(
 previousButton.addEventListener("click", goToPreviousSpread);
 nextButton.addEventListener("click", goToNextSpread);
 
-popupClose.addEventListener("click", hideEndPopup);
-restartBook.addEventListener("click", restartFromBeginning);
-
-endPopup.addEventListener("click", (event) => {
-    if (event.target === endPopup) {
-        hideEndPopup();
-    }
-});
-
 document.addEventListener("keydown", (event) => {
-    const popupIsVisible = endPopup.classList.contains("is-visible");
-
-    if (event.key === "Escape" && popupIsVisible) {
-        hideEndPopup();
-        return;
-    }
-
-    if (popupIsVisible) return;
-
     if (event.key === "ArrowLeft") {
         goToPreviousSpread();
     }
@@ -290,6 +241,12 @@ document.addEventListener("keydown", (event) => {
         goToNextSpread();
     }
 });
+
+if (outsideScrollCue) {
+    outsideScrollCue.addEventListener("click", () => {
+        unlockProjectEditions();
+    });
+}
 
 lockProjectEditions();
 setupOptionalProductImages();

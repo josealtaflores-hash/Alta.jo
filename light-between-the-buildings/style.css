@@ -1659,3 +1659,93 @@ html {
         margin-top: 18px !important;
     }
 }
+
+/* ==================================================
+   MID-BOOK PURCHASE BUTTON + CLEAN ENDING CUE
+   Matches the updated Summer book behavior.
+   ================================================== */
+
+.end-popup {
+    display: none !important;
+}
+
+.mid-book-purchase {
+    width: fit-content;
+    margin: -10px auto 18px;
+    padding: 10px 16px;
+    display: block;
+
+    border: 1px solid rgba(243, 240, 232, 0.38);
+    background: transparent;
+    color: var(--text);
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    letter-spacing: 1.35px;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    pointer-events: none;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        background-color .2s ease,
+        color .2s ease,
+        visibility .35s ease;
+}
+
+.mid-book-purchase.is-visible {
+    opacity: .82;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.mid-book-purchase.is-visible:hover {
+    opacity: 1;
+    background: var(--paper);
+    color: var(--ink);
+}
+
+.mid-book-purchase[aria-disabled="true"] {
+    cursor: default;
+}
+
+.outside-scroll-cue {
+    text-decoration: none;
+    pointer-events: none;
+}
+
+.outside-scroll-cue.is-visible {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+@media (min-width: 701px) {
+    .page-number {
+        margin-top: -88px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 10px auto 18px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .page-number {
+        margin-top: 4px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 10px auto 16px !important;
+        padding: 9px 13px;
+        font-size: 8px;
+        letter-spacing: 1.15px;
+    }
+}

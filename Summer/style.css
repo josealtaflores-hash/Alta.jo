@@ -1220,3 +1220,105 @@ body.popup-open {
     pointer-events: auto;
     touch-action: pan-y;
 }
+
+
+/* ==================================================
+   CLEAN BOOK PURCHASE + END SCROLL FLOW
+   ================================================== */
+
+/* The old end popup is no longer used. */
+.end-popup {
+    display: none !important;
+}
+
+/* Mid-book purchase button: hidden for the first half of the book. */
+.mid-book-purchase {
+    width: fit-content;
+    margin: -12px auto 22px;
+    padding: 10px 16px;
+    display: block;
+
+    border: 1px solid rgba(74, 71, 65, .42);
+    background: transparent;
+    color: #4a4741;
+
+    font-size: 9px;
+    letter-spacing: 1.35px;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    pointer-events: none;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        background-color .2s ease,
+        color .2s ease,
+        visibility .35s ease;
+}
+
+.mid-book-purchase.is-visible {
+    opacity: .82;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.mid-book-purchase.is-visible:hover {
+    opacity: 1;
+    background: #2b2723;
+    color: var(--book-paper);
+}
+
+.mid-book-purchase[aria-disabled="true"] {
+    cursor: default;
+}
+
+/* The hand-drawn cue is the only ending message. */
+.outside-scroll-cue {
+    text-decoration: none;
+    pointer-events: none;
+}
+
+.outside-scroll-cue.is-visible {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .mid-book-purchase {
+        margin: -8px auto 18px;
+        padding: 9px 13px;
+        font-size: 8px;
+        letter-spacing: 1.15px;
+    }
+}
+
+/* ==================================================
+   FINAL POSITION TWEAK — BRING PURCHASE AREA CLOSER
+   ================================================== */
+
+@media (min-width: 701px) {
+    .page-number {
+        margin-top: -105px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 12px auto 18px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .page-number {
+        margin-top: 4px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 10px auto 16px !important;
+    }
+}
