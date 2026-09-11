@@ -278,3 +278,76 @@ document.addEventListener("keydown", (event) => {
         closePrintPreview();
     }
 });
+
+/* ==================================================
+   TEE PREVIEW — FRONT + BACK
+   ================================================== */
+
+const teePreviewModal = document.getElementById("tee-preview-modal");
+const teePreviewTriggers = document.querySelectorAll("[data-tee-preview]");
+const teePreviewCloseButtons = document.querySelectorAll("[data-tee-close]");
+const summerTeeMainImage = document.getElementById("summer-tee-main-image");
+const summerWearablesSection = document.getElementById("wearables");
+
+function setupSummerTeeAvailability() {
+    if (!summerTeeMainImage || !summerWearablesSection) return;
+
+    const showSection = () => {
+        summerWearablesSection.classList.remove("is-empty");
+        summerWearablesSection.setAttribute("aria-hidden", "false");
+    };
+
+    const hideSection = () => {
+        summerWearablesSection.classList.add("is-empty");
+        summerWearablesSection.setAttribute("aria-hidden", "true");
+    };
+
+    summerTeeMainImage.addEventListener("load", showSection, { once: true });
+    summerTeeMainImage.addEventListener("error", hideSection, { once: true });
+
+    if (summerTeeMainImage.complete) {
+        if (summerTeeMainImage.naturalWidth > 0) showSection();
+        else hideSection();
+    }
+}
+
+function openTeePreview() {
+    if (!teePreviewModal || summerWearablesSection?.classList.contains("is-empty")) return;
+
+    teePreviewModal.classList.add("is-visible");
+    teePreviewModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("tee-preview-open");
+}
+
+function closeTeePreview() {
+    if (!teePreviewModal) return;
+
+    teePreviewModal.classList.remove("is-visible");
+    teePreviewModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("tee-preview-open");
+}
+
+teePreviewTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", openTeePreview);
+
+    if (trigger.matches("[role='button']")) {
+        trigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openTeePreview();
+            }
+        });
+    }
+});
+
+teePreviewCloseButtons.forEach((button) => {
+    button.addEventListener("click", closeTeePreview);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && teePreviewModal?.classList.contains("is-visible")) {
+        closeTeePreview();
+    }
+});
+
+setupSummerTeeAvailability();

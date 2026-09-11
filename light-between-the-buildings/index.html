@@ -105,34 +105,26 @@
         </div>
     </section>
 
-    <section class="shop-section wearables-section" data-optional-products>
+    <section class="shop-section wearables-section" id="wearables">
         <header class="section-heading">
             <p class="section-number">02</p>
             <h2>WEARABLES</h2>
         </header>
 
-        <div class="floating-products wearables-layout">
-            <article class="floating-product wearable-product shirt-product">
-                <div class="product-image-wrap transparent-product">
-                    <img src="images/wearables/shirt-01.png" alt="Light Between the Buildings shirt">
-                </div>
-                <div class="product-info">
-                    <p class="product-name">PROJECT TEE</p>
-                    <p class="product-details">LIGHT BETWEEN THE BUILDINGS</p>
-                    <button class="product-link" type="button">VIEW →</button>
-                </div>
-            </article>
+        <div class="wearable-gallery-v2">
+            <div class="wearable-stage-v2">
+                <article class="wearable-visual-v2" data-tee-preview role="button" tabindex="0" aria-label="View project tee front and back">
+                    <img src="images/wearables/shirt-back.png" alt="Light Between the Buildings project tee back">
+                </article>
 
-            <article class="floating-product wearable-product hoodie-product">
-                <div class="product-image-wrap transparent-product">
-                    <img src="images/wearables/hoodie-01.png" alt="Light Between the Buildings hoodie">
+                <div class="wearable-meta-v2">
+                    <p class="product-name">PROJECT TEE</p>
+                    <p class="product-details">FRONT / BACK</p>
+                    <button class="product-link" type="button" data-tee-preview>VIEW TEE →</button>
                 </div>
-                <div class="product-info">
-                    <p class="product-name">PROJECT HOODIE</p>
-                    <p class="product-details">LIGHT BETWEEN THE BUILDINGS</p>
-                    <button class="product-link" type="button">VIEW →</button>
-                </div>
-            </article>
+
+                <div class="wearable-shelf-v2" aria-hidden="true"></div>
+            </div>
         </div>
     </section>
 
@@ -203,6 +195,44 @@
 
     <button class="print-preview-close-cue" type="button" aria-label="Close print preview" data-print-close>
         <span class="print-preview-close-label">CLOSE</span>
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path class="preview-close-circle preview-close-circle-one" d="M32 5 C47 5, 59 16, 59 31 C59 47, 48 59, 32 59 C16 60, 5 48, 5 32 C5 17, 16 6, 32 5 Z"></path>
+            <path class="preview-close-circle preview-close-circle-two" d="M31 7 C46 6, 57 18, 57 32 C57 46, 47 57, 32 57 C18 58, 7 47, 7 32 C7 18, 17 8, 31 7 Z"></path>
+            <path class="preview-close-x" d="M23 23 C27 27, 31 31, 41 41"></path>
+            <path class="preview-close-x" d="M41 23 C36 28, 31 33, 23 41"></path>
+        </svg>
+    </button>
+</div>
+
+
+<div class="tee-preview-modal" id="tee-preview-modal" aria-hidden="true">
+    <button class="tee-preview-backdrop" type="button" aria-label="Close tee preview" data-tee-close></button>
+
+    <div class="tee-preview-dialog" role="dialog" aria-modal="true" aria-labelledby="tee-preview-title">
+        <div class="tee-preview-images">
+            <figure class="tee-preview-side">
+                <img src="images/wearables/shirt-front.png" alt="Project tee front">
+                <figcaption>FRONT</figcaption>
+            </figure>
+
+            <figure class="tee-preview-side">
+                <img src="images/wearables/shirt-back.png" alt="Project tee back">
+                <figcaption>BACK</figcaption>
+            </figure>
+        </div>
+
+        <div class="tee-preview-info">
+            <div>
+                <p class="tee-preview-title" id="tee-preview-title">PROJECT TEE</p>
+                <p class="tee-preview-project">LIGHT BETWEEN THE BUILDINGS</p>
+            </div>
+
+            <a class="tee-preview-next" href="wearables/project-tee.html">VIEW TEE PAGE →</a>
+        </div>
+    </div>
+
+    <button class="tee-preview-close-cue" type="button" aria-label="Close tee preview" data-tee-close>
+        <span class="tee-preview-close-label">CLOSE</span>
         <svg viewBox="0 0 64 64" aria-hidden="true">
             <path class="preview-close-circle preview-close-circle-one" d="M32 5 C47 5, 59 16, 59 31 C59 47, 48 59, 32 59 C16 60, 5 48, 5 32 C5 17, 16 6, 32 5 Z"></path>
             <path class="preview-close-circle preview-close-circle-two" d="M31 7 C46 6, 57 18, 57 32 C57 46, 47 57, 32 57 C18 58, 7 47, 7 32 C7 18, 17 8, 31 7 Z"></path>

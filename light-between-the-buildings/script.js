@@ -33,6 +33,9 @@ const printPreviewTitle = document.getElementById("print-preview-title");
 const printPreviewNext = document.getElementById("print-preview-next");
 const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
 const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
+const teePreviewModal = document.getElementById("tee-preview-modal");
+const teePreviewTriggers = document.querySelectorAll("[data-tee-preview]");
+const teePreviewCloseButtons = document.querySelectorAll("[data-tee-close]");
 
 const printPreviews = [
     {
@@ -223,6 +226,22 @@ function closePrintPreview() {
     document.body.classList.remove("print-preview-open");
 }
 
+function openTeePreview() {
+    if (!teePreviewModal) return;
+
+    teePreviewModal.classList.add("is-visible");
+    teePreviewModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-preview-open");
+}
+
+function closeTeePreview() {
+    if (!teePreviewModal) return;
+
+    teePreviewModal.classList.remove("is-visible");
+    teePreviewModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-preview-open");
+}
+
 let touchStartX = 0;
 let touchStartY = 0;
 const minimumSwipeDistance = 50;
@@ -274,6 +293,10 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && printPreviewModal?.classList.contains("is-visible")) {
         closePrintPreview();
     }
+
+    if (event.key === "Escape" && teePreviewModal?.classList.contains("is-visible")) {
+        closeTeePreview();
+    }
 });
 
 if (outsideScrollCue) {
@@ -299,6 +322,23 @@ printPreviewTriggers.forEach((trigger) => {
 
 printPreviewCloseButtons.forEach((button) => {
     button.addEventListener("click", closePrintPreview);
+});
+
+teePreviewTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", openTeePreview);
+
+    if (trigger.matches("[role='button']")) {
+        trigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openTeePreview();
+            }
+        });
+    }
+});
+
+teePreviewCloseButtons.forEach((button) => {
+    button.addEventListener("click", closeTeePreview);
 });
 
 lockProjectEditions();
