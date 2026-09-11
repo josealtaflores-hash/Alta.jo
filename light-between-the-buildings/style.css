@@ -1749,3 +1749,50 @@ html {
         letter-spacing: 1.15px;
     }
 }
+
+/* ==================================================
+   FINAL SPACING TWEAK — BRING PRINTS CLOSER TO BOOK
+   Keeps breathing room without the oversized empty gap.
+   ================================================== */
+
+@media (min-width: 901px) {
+    .project-editions.is-unlocked {
+        padding-top: 8vh !important;
+    }
+
+    .prints-section {
+        padding-top: 42px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 72px !important;
+    }
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .project-editions.is-unlocked {
+        padding-top: 8vh !important;
+    }
+
+    .prints-section {
+        padding-top: 44px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 68px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .project-editions.is-unlocked {
+        padding-top: 6vh !important;
+    }
+
+    .prints-section {
+        padding-top: 38px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 58px !important;
+    }
+}
