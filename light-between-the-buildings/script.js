@@ -3,21 +3,13 @@
    ================================================== */
 
 const TOTAL_PAGES = 14;
-const instagramUrl = "https://www.instagram.com/alta.jo/";
-
-/* Replace # with your final Blurb / Lulu / direct purchase link when ready. */
 const purchaseUrl = "#";
 
 function pageFile(number) {
-    if (number <= 9) {
-        return `images/00${number}.jpg`;
-    }
-
-    return `images/00${number}.jpg`;
+    return number <= 9 ? `images/00${number}.jpg` : `images/00${number}.jpg`;
 }
 
 const spreads = [];
-
 for (let page = 1; page <= TOTAL_PAGES; page += 2) {
     spreads.push({
         left: pageFile(page),
@@ -34,6 +26,31 @@ const pageNumber = document.getElementById("page-number");
 const purchaseButton = document.getElementById("mid-book-purchase");
 const outsideScrollCue = document.getElementById("outside-scroll-cue");
 const projectEditions = document.querySelector(".project-editions");
+
+const printPreviewModal = document.getElementById("print-preview-modal");
+const printPreviewImage = document.getElementById("print-preview-image");
+const printPreviewTitle = document.getElementById("print-preview-title");
+const printPreviewNext = document.getElementById("print-preview-next");
+const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
+const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
+
+const printPreviews = [
+    {
+        title: "PRINT 01",
+        image: "images/prints/print-01.jpg",
+        page: "prints/print-01.html"
+    },
+    {
+        title: "PRINT 02",
+        image: "images/prints/print-02.jpg",
+        page: "prints/print-02.html"
+    },
+    {
+        title: "PRINT 03",
+        image: "images/prints/print-03.jpg",
+        page: "prints/print-03.html"
+    }
+];
 
 let currentSpread = 0;
 let editionsUnlocked = false;
@@ -146,11 +163,6 @@ function goToNextSpread() {
     updateBook();
 }
 
-/* ==================================================
-   OPTIONAL PRODUCT IMAGES
-   Hide empty product groups until their files exist.
-   ================================================== */
-
 function setupOptionalProductImages() {
     const optionalSections = document.querySelectorAll("[data-optional-products]");
 
@@ -187,13 +199,32 @@ function setupOptionalProductImages() {
     });
 }
 
-/* ==================================================
-   SWIPE SUPPORT
-   ================================================== */
+function openPrintPreview(index) {
+    if (!printPreviewModal) return;
+
+    const print = printPreviews[index];
+    if (!print) return;
+
+    printPreviewImage.src = print.image;
+    printPreviewImage.alt = `${print.title} larger preview`;
+    printPreviewTitle.textContent = print.title;
+    printPreviewNext.href = print.page;
+
+    printPreviewModal.classList.add("is-visible");
+    printPreviewModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-preview-open");
+}
+
+function closePrintPreview() {
+    if (!printPreviewModal) return;
+
+    printPreviewModal.classList.remove("is-visible");
+    printPreviewModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-preview-open");
+}
 
 let touchStartX = 0;
 let touchStartY = 0;
-
 const minimumSwipeDistance = 50;
 const maximumVerticalMovement = 80;
 
@@ -201,7 +232,6 @@ book.addEventListener(
     "touchstart",
     (event) => {
         const touch = event.changedTouches[0];
-
         touchStartX = touch.clientX;
         touchStartY = touch.clientY;
     },
@@ -240,6 +270,10 @@ document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowRight") {
         goToNextSpread();
     }
+
+    if (event.key === "Escape" && printPreviewModal?.classList.contains("is-visible")) {
+        closePrintPreview();
+    }
 });
 
 if (outsideScrollCue) {
@@ -247,6 +281,25 @@ if (outsideScrollCue) {
         unlockProjectEditions();
     });
 }
+
+printPreviewTriggers.forEach((trigger) => {
+    const index = Number(trigger.dataset.printPreview);
+
+    trigger.addEventListener("click", () => openPrintPreview(index));
+
+    if (trigger.matches("[role='button']")) {
+        trigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openPrintPreview(index);
+            }
+        });
+    }
+});
+
+printPreviewCloseButtons.forEach((button) => {
+    button.addEventListener("click", closePrintPreview);
+});
 
 lockProjectEditions();
 setupOptionalProductImages();

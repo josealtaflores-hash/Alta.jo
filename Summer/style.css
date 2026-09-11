@@ -1369,3 +1369,381 @@ body.popup-open {
         margin-bottom: 58px !important;
     }
 }
+
+/* ==================================================
+   BOOK-TOP PURCHASE BUTTON
+   ================================================== */
+
+.book-area {
+    position: relative;
+}
+
+.book-column {
+    width: min(1000px, 76vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.book-column .book {
+    width: 100% !important;
+}
+
+.purchase-slot {
+    min-height: 42px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.mid-book-purchase {
+    margin: 0 !important;
+    padding: 9px 16px;
+}
+
+.page-number {
+    margin-top: 23px !important;
+    padding-bottom: 0 !important;
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .book-column {
+        width: 78vw;
+    }
+}
+
+@media (max-width: 700px) {
+    .book-column {
+        width: 82vw;
+    }
+
+    .purchase-slot {
+        min-height: 34px;
+        margin-bottom: 8px;
+    }
+
+    .mid-book-purchase {
+        margin: 0 !important;
+        padding: 8px 12px;
+    }
+
+    .page-number {
+        margin-top: 18px !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+/* ==================================================
+   LARGE PRINT PREVIEW MODAL
+   ================================================== */
+
+.print-visual-v2[data-print-preview],
+.product-link[data-print-preview] {
+    cursor: pointer;
+}
+
+.print-visual-v2[data-print-preview]:focus-visible {
+    outline: 1px dashed rgba(74, 71, 65, .75);
+    outline-offset: 8px;
+}
+
+.print-preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 28px;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity .28s ease, visibility .28s ease;
+}
+
+.print-preview-modal.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.print-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(243, 237, 226, .86);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    cursor: pointer;
+}
+
+.print-preview-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(760px, 90vw);
+    max-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 34px 34px 26px;
+
+    background: rgba(248, 246, 240, .96);
+    border: 1px solid rgba(74, 71, 65, .16);
+    box-shadow:
+        0 26px 60px rgba(55, 45, 35, .17),
+        0 5px 14px rgba(55, 45, 35, .08);
+}
+
+.print-preview-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 3;
+
+    width: 36px;
+    height: 36px;
+
+    border: 0;
+    background: transparent;
+    color: #49433c;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.print-preview-image-wrap {
+    width: 100%;
+    min-height: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.print-preview-image-wrap img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 66vh;
+
+    object-fit: contain;
+
+    box-shadow:
+        0 20px 42px rgba(60, 48, 38, .17),
+        0 4px 10px rgba(60, 48, 38, .08);
+}
+
+.print-preview-info {
+    width: 100%;
+    max-width: 620px;
+
+    margin-top: 22px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.print-preview-title {
+    color: #302b26;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+}
+
+.print-preview-sizes {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.print-preview-next {
+    flex-shrink: 0;
+    color: #4d463f;
+    font-size: 9px;
+    letter-spacing: 1.3px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(77, 70, 63, .35);
+    padding-bottom: 3px;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.print-preview-next:hover {
+    opacity: .62;
+    transform: translateX(2px);
+}
+
+body.print-preview-open {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .print-preview-modal {
+        padding: 16px;
+    }
+
+    .print-preview-dialog {
+        width: 94vw;
+        max-height: 88vh;
+        padding: 42px 18px 20px;
+    }
+
+    .print-preview-image-wrap img {
+        max-height: 58vh;
+    }
+
+    .print-preview-info {
+        margin-top: 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .print-preview-next {
+        font-size: 8px;
+    }
+}
+
+/* ==================================================
+   PRINT PREVIEW — BOTTOM HAND-DRAWN CLOSE CUE
+   ================================================== */
+
+/* The old top-right X is no longer used. */
+.print-preview-close {
+    display: none !important;
+}
+
+/* Stack the preview card and the close cue vertically. */
+.print-preview-modal {
+    flex-direction: column;
+    gap: 14px;
+}
+
+.print-preview-dialog {
+    max-height: 82vh;
+}
+
+.print-preview-image-wrap img {
+    max-height: 59vh;
+}
+
+.print-preview-close-cue {
+    position: relative;
+    z-index: 2;
+
+    width: 74px;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    border: 0;
+    background: transparent;
+    color: #655e56;
+
+    cursor: pointer;
+
+    opacity: .72;
+    transition:
+        opacity .22s ease,
+        transform .22s ease;
+}
+
+.print-preview-close-cue:hover {
+    opacity: 1;
+    transform: translateY(2px);
+}
+
+.print-preview-close-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.print-preview-close-cue svg {
+    width: 52px;
+    height: 52px;
+    overflow: visible;
+}
+
+.preview-close-circle,
+.preview-close-x {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.preview-close-circle {
+    stroke-width: 1.45;
+}
+
+.preview-close-circle-one {
+    opacity: .82;
+}
+
+.preview-close-circle-two {
+    opacity: .28;
+}
+
+.preview-close-x {
+    stroke-width: 1.65;
+    opacity: .82;
+}
+
+.print-preview-close-cue:focus-visible {
+    outline: 1px dashed rgba(74, 71, 65, .7);
+    outline-offset: 5px;
+}
+
+@media (max-width: 700px) {
+    .print-preview-modal {
+        gap: 10px;
+    }
+
+    .print-preview-dialog {
+        max-height: 80vh;
+        padding-top: 20px;
+    }
+
+    .print-preview-image-wrap img {
+        max-height: 52vh;
+    }
+
+    .print-preview-close-cue svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* ==================================================
+   FINAL FINE TUNE — PURCHASE BUTTON POSITION
+   ================================================== */
+
+.purchase-slot {
+    transform: translateY(-10px);
+}
+
+@media (max-width: 700px) {
+    .purchase-slot {
+        transform: translateY(-6px);
+    }
+}

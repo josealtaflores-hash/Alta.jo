@@ -200,3 +200,81 @@ document.addEventListener("keydown", (event) => {
 setupOptionalProductImages();
 lockProjectEditions();
 updateBook();
+
+/* ==================================================
+   PRINT PREVIEW MODAL
+   ================================================== */
+
+const printPreviewModal = document.getElementById("print-preview-modal");
+const printPreviewImage = document.getElementById("print-preview-image");
+const printPreviewTitle = document.getElementById("print-preview-title");
+const printPreviewNext = document.getElementById("print-preview-next");
+const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
+const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
+
+const printPreviews = [
+    {
+        title: "PRINT 01",
+        image: "images/prints/print-01.jpg",
+        page: "prints/print-01.html"
+    },
+    {
+        title: "PRINT 02",
+        image: "images/prints/print-02.jpg",
+        page: "prints/print-02.html"
+    },
+    {
+        title: "PRINT 03",
+        image: "images/prints/print-03.jpg",
+        page: "prints/print-03.html"
+    }
+];
+
+function openPrintPreview(index) {
+    if (!printPreviewModal) return;
+
+    const print = printPreviews[index];
+    if (!print) return;
+
+    printPreviewImage.src = print.image;
+    printPreviewImage.alt = `${print.title} larger preview`;
+    printPreviewTitle.textContent = print.title;
+    printPreviewNext.href = print.page;
+
+    printPreviewModal.classList.add("is-visible");
+    printPreviewModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-preview-open");
+}
+
+function closePrintPreview() {
+    if (!printPreviewModal) return;
+
+    printPreviewModal.classList.remove("is-visible");
+    printPreviewModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-preview-open");
+}
+
+printPreviewTriggers.forEach((trigger) => {
+    const index = Number(trigger.dataset.printPreview);
+
+    trigger.addEventListener("click", () => openPrintPreview(index));
+
+    if (trigger.matches("[role='button']")) {
+        trigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openPrintPreview(index);
+            }
+        });
+    }
+});
+
+printPreviewCloseButtons.forEach((button) => {
+    button.addEventListener("click", closePrintPreview);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && printPreviewModal?.classList.contains("is-visible")) {
+        closePrintPreview();
+    }
+});
