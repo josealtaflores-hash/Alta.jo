@@ -2033,3 +2033,68 @@ body.tee-preview-open {
         height: 48px;
     }
 }
+
+
+/* ==================================================
+   WEARABLES — NUMBERED TWO-SHIRT DISPLAY
+   ================================================== */
+
+.wearable-gallery-v2 {
+    width: min(900px, 86vw);
+}
+
+.wearable-products-v2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(42px, 7vw, 92px);
+    align-items: end;
+}
+
+.wearable-item-v2 {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wearable-item-v2.is-missing {
+    display: none;
+}
+
+.wearable-visual-v2 {
+    width: min(300px, 31vw);
+}
+
+.wearable-meta-v2 {
+    width: min(300px, 31vw);
+    margin-top: 20px;
+}
+
+.wearable-shelf-v2 {
+    width: min(800px, 82vw);
+    margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+    .wearable-gallery-v2 {
+        width: 92vw;
+    }
+
+    .wearable-products-v2 {
+        gap: 18px;
+    }
+
+    .wearable-visual-v2,
+    .wearable-meta-v2 {
+        width: min(40vw, 190px);
+    }
+
+    .wearable-meta-v2 {
+        margin-top: 14px;
+    }
+
+    .wearable-shelf-v2 {
+        width: 88vw;
+        margin-top: 18px;
+    }
+}

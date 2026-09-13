@@ -280,39 +280,84 @@ document.addEventListener("keydown", (event) => {
 });
 
 /* ==================================================
-   TEE PREVIEW — FRONT + BACK
+   TEE PREVIEW — NUMBERED SHIRTS
    ================================================== */
 
 const teePreviewModal = document.getElementById("tee-preview-modal");
 const teePreviewTriggers = document.querySelectorAll("[data-tee-preview]");
 const teePreviewCloseButtons = document.querySelectorAll("[data-tee-close]");
-const summerTeeMainImage = document.getElementById("summer-tee-main-image");
 const summerWearablesSection = document.getElementById("wearables");
+const teePreviewFront = document.getElementById("tee-preview-front");
+const teePreviewBack = document.getElementById("tee-preview-back");
+const teePreviewTitle = document.getElementById("tee-preview-title");
 
 function setupSummerTeeAvailability() {
-    if (!summerTeeMainImage || !summerWearablesSection) return;
+    if (!summerWearablesSection) return;
 
-    const showSection = () => {
-        summerWearablesSection.classList.remove("is-empty");
-        summerWearablesSection.setAttribute("aria-hidden", "false");
-    };
-
-    const hideSection = () => {
+    const items = [...summerWearablesSection.querySelectorAll("[data-tee-item]")];
+    if (!items.length) {
         summerWearablesSection.classList.add("is-empty");
         summerWearablesSection.setAttribute("aria-hidden", "true");
+        return;
+    }
+
+    let resolved = 0;
+
+    const finishCheck = () => {
+        resolved += 1;
+        if (resolved < items.length) return;
+
+        const visibleItems = items.filter((item) => !item.classList.contains("is-missing"));
+        const hasAny = visibleItems.length > 0;
+        summerWearablesSection.classList.toggle("is-empty", !hasAny);
+        summerWearablesSection.setAttribute("aria-hidden", hasAny ? "false" : "true");
     };
 
-    summerTeeMainImage.addEventListener("load", showSection, { once: true });
-    summerTeeMainImage.addEventListener("error", hideSection, { once: true });
+    items.forEach((item) => {
+        const image = item.querySelector(".summer-tee-main-image");
+        if (!image) {
+            item.classList.add("is-missing");
+            finishCheck();
+            return;
+        }
 
-    if (summerTeeMainImage.complete) {
-        if (summerTeeMainImage.naturalWidth > 0) showSection();
-        else hideSection();
-    }
+        const ok = () => {
+            item.classList.remove("is-missing");
+            finishCheck();
+        };
+
+        const fail = () => {
+            item.classList.add("is-missing");
+            finishCheck();
+        };
+
+        if (image.complete) {
+            image.naturalWidth > 0 ? ok() : fail();
+        } else {
+            image.addEventListener("load", ok, { once: true });
+            image.addEventListener("error", fail, { once: true });
+        }
+    });
 }
 
-function openTeePreview() {
+function openTeePreview(trigger) {
     if (!teePreviewModal || summerWearablesSection?.classList.contains("is-empty")) return;
+
+    const front = trigger?.dataset?.teeFront;
+    const back = trigger?.dataset?.teeBack;
+    const title = trigger?.dataset?.teeTitle || "PROJECT TEE";
+
+    if (front && teePreviewFront) {
+        teePreviewFront.src = front;
+        teePreviewFront.alt = `${title} front`;
+    }
+
+    if (back && teePreviewBack) {
+        teePreviewBack.src = back;
+        teePreviewBack.alt = `${title} back`;
+    }
+
+    if (teePreviewTitle) teePreviewTitle.textContent = title;
 
     teePreviewModal.classList.add("is-visible");
     teePreviewModal.setAttribute("aria-hidden", "false");
@@ -328,13 +373,13 @@ function closeTeePreview() {
 }
 
 teePreviewTriggers.forEach((trigger) => {
-    trigger.addEventListener("click", openTeePreview);
+    trigger.addEventListener("click", () => openTeePreview(trigger));
 
     if (trigger.matches("[role='button']")) {
         trigger.addEventListener("keydown", (event) => {
             if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
-                openTeePreview();
+                openTeePreview(trigger);
             }
         });
     }
