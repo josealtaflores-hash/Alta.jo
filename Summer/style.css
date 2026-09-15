@@ -787,11 +787,117 @@ body.popup-open {
     to { opacity: 1; }
 }
 
+/* ==================================================
+   ABOUT THIS BOOK
+   ================================================== */
+
+.about-book-block {
+    width: min(560px, 82vw);
+    margin: 0 auto 110px;
+    text-align: left;
+}
+
+.about-book-label {
+    margin: 0 0 26px;
+    color: rgba(29, 29, 29, 0.58);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.about-book-copy {
+    color: rgba(29, 29, 29, 0.78);
+    font-size: 13px;
+    line-height: 1.85;
+}
+
+.about-book-copy p {
+    margin: 0 0 22px;
+}
+
+.about-book-copy p:last-child {
+    margin-bottom: 0;
+}
+
+/* ==================================================
+   FREE DIGITAL EDITION
+   ================================================== */
+
+.free-pdf-block {
+    width: min(540px, 82vw);
+    margin: 0 auto 150px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(29, 29, 29, 0.14);
+    text-align: left;
+}
+
+.free-pdf-label {
+    margin: 0 0 12px;
+    color: rgba(29, 29, 29, 0.58);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.free-pdf-copy {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.7;
+    color: rgba(29, 29, 29, 0.72);
+}
+
+.free-pdf-link {
+    display: inline-block;
+    margin-top: 22px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(29, 29, 29, 0.35);
+    color: var(--text-color);
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    text-decoration: none;
+    transition: opacity .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.free-pdf-link:hover {
+    opacity: .72;
+    border-bottom-color: var(--text-color);
+    transform: translateX(3px);
+}
+
 .shop-section {
     position: relative;
     width: min(1180px, 90vw);
     margin: 0 auto;
     padding: 110px 0 220px;
+}
+
+/* ==================================================
+   WHOLE-SECTION SCROLL REVEAL
+   Keeps the SCROLL cue unchanged; only the shop sections
+   softly appear when they enter the viewport.
+   ================================================== */
+
+.prints-section.section-scroll-reveal,
+.wearables-section.section-scroll-reveal,
+.objects-section.section-scroll-reveal {
+    opacity: 0;
+    transform: translateY(54px);
+    filter: blur(3px);
+    transition:
+        opacity 1.15s ease,
+        transform 1.15s cubic-bezier(.22, .61, .36, 1),
+        filter .95s ease;
+    will-change: opacity, transform, filter;
+}
+
+.prints-section.section-scroll-reveal.is-revealed,
+.wearables-section.section-scroll-reveal.is-revealed,
+.objects-section.section-scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
 }
 
 .prints-section {
@@ -2096,5 +2202,39 @@ body.tee-preview-open {
     .wearable-shelf-v2 {
         width: 88vw;
         margin-top: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .about-book-block {
+        width: 84vw;
+        margin-bottom: 88px;
+    }
+
+    .about-book-label {
+        margin-bottom: 22px;
+    }
+
+    .about-book-copy {
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .about-book-copy p {
+        margin-bottom: 18px;
+    }
+
+    .free-pdf-block {
+        width: 84vw;
+        margin-bottom: 105px;
+        padding-top: 26px;
+    }
+
+    .free-pdf-copy {
+        font-size: 11px;
+    }
+
+    .free-pdf-link {
+        font-size: 8px;
     }
 }

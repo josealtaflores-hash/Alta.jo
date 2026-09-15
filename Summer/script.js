@@ -2,8 +2,8 @@
    SOMEWHERE TO BE — BOOK VIEWER
    ================================================== */
 
-/* Replace # with your Blurb/Lulu/direct purchase link when ready. */
-const purchaseUrl = "#";
+/* Free digital edition download. */
+const purchaseUrl = "downloads/somewhere-to-be.pdf";
 
 const spreads = [
     { left: "images/001.jpg", right: "images/002.jpg" },
@@ -160,6 +160,39 @@ function setupOptionalProductImages() {
     });
 }
 
+
+function setupSectionScrollReveal() {
+    const sections = document.querySelectorAll(
+        ".prints-section, .wearables-section, .objects-section"
+    );
+
+    if (!sections.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        sections.forEach((section) => section.classList.add("is-revealed"));
+        return;
+    }
+
+    sections.forEach((section) => section.classList.add("section-scroll-reveal"));
+
+    const sectionObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            });
+        },
+        {
+            threshold: 0.14,
+            rootMargin: "0px 0px -8% 0px"
+        }
+    );
+
+    sections.forEach((section) => sectionObserver.observe(section));
+}
+
 /* SWIPE SUPPORT */
 let touchStartX = 0;
 let touchStartY = 0;
@@ -198,6 +231,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 setupOptionalProductImages();
+setupSectionScrollReveal();
 lockProjectEditions();
 updateBook();
 
