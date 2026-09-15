@@ -334,11 +334,151 @@ body {
     to { opacity: 1; }
 }
 
+/* ==================================================
+   A NOTE ON THIS ZINE
+   ================================================== */
+
+.zine-note {
+    width: min(540px, 82vw);
+    margin: 0 auto;
+    padding: 88px 0 150px;
+    color: var(--text);
+    text-align: left;
+}
+
+.zine-note-label {
+    margin: 0 0 46px;
+    color: var(--muted-text);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.zine-note-text,
+.zine-note-ending {
+    margin: 0 0 34px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.85;
+    letter-spacing: .01em;
+}
+
+.zine-note-ending {
+    margin-top: 50px;
+    margin-bottom: 0;
+}
+
+.zine-download {
+    margin-top: 78px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(243, 240, 232, 0.16);
+
+    /* Slow reveal as the reader scrolls down to the free PDF. */
+    opacity: 0;
+    transform: translateY(42px);
+    filter: blur(4px);
+    transition:
+        opacity 1.25s ease,
+        transform 1.25s cubic-bezier(.22, .61, .36, 1),
+        filter 1.05s ease;
+}
+
+.zine-download.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.zine-download-label,
+.zine-download-copy,
+.zine-download-link {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+        opacity .8s ease,
+        transform .8s ease;
+}
+
+.zine-download.is-revealed .zine-download-label {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .15s;
+}
+
+.zine-download.is-revealed .zine-download-copy {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .32s;
+}
+
+.zine-download.is-revealed .zine-download-link {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .5s;
+}
+
+.zine-download-label {
+    margin: 0 0 12px;
+    color: var(--muted-text);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.zine-download-copy {
+    margin: 0 0 24px;
+    color: var(--muted-text);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.zine-download-link {
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(243, 240, 232, 0.45);
+    color: var(--text);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: opacity .2s ease, border-color .2s ease;
+}
+
+.zine-download-link:hover {
+    border-bottom-color: var(--text);
+    opacity: .78;
+}
+
 .shop-section {
     position: relative;
     width: min(1180px, 90vw);
     margin: 0 auto;
     padding: 110px 0 220px;
+}
+
+/* Whole-section scroll reveal for the zine note, PRINTS and WEARABLES.
+   Applied by JavaScript so the content stays visible if JS is unavailable. */
+.zine-note.section-scroll-reveal,
+.prints-section.section-scroll-reveal,
+.wearables-section.section-scroll-reveal {
+    opacity: 0;
+    transform: translateY(54px);
+    filter: blur(3px);
+    transition:
+        opacity 1.15s ease,
+        transform 1.15s cubic-bezier(.22, .61, .36, 1),
+        filter .95s ease;
+    will-change: opacity, transform, filter;
+}
+
+.zine-note.section-scroll-reveal.is-revealed,
+.prints-section.section-scroll-reveal.is-revealed,
+.wearables-section.section-scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
 }
 
 .prints-section {
@@ -839,6 +979,39 @@ body.print-preview-open {
         padding-top: 6vh;
     }
 
+    .zine-note {
+        width: 84vw;
+        padding: 68px 0 105px;
+    }
+
+    .zine-note-label {
+        margin-bottom: 36px;
+        font-size: 8px;
+    }
+
+    .zine-note-text,
+    .zine-note-ending {
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .zine-note-ending {
+        margin-top: 42px;
+    }
+
+    .zine-download {
+        margin-top: 58px;
+        padding-top: 26px;
+    }
+
+    .zine-download-copy {
+        font-size: 11px;
+    }
+
+    .zine-download-link {
+        font-size: 8px;
+    }
+
     .shop-section {
         width: 88vw;
         padding: 90px 0 145px;
@@ -1247,5 +1420,26 @@ body.print-preview-open {
     .tee-preview-close-cue svg {
         width: 48px;
         height: 48px;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .zine-download,
+    .zine-download-label,
+    .zine-download-copy,
+    .zine-download-link,
+    .zine-note.section-scroll-reveal,
+    .prints-section.section-scroll-reveal,
+    .wearables-section.section-scroll-reveal {
+        transition: none !important;
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .zine-note.section-scroll-reveal,
+    .prints-section.section-scroll-reveal,
+    .wearables-section.section-scroll-reveal {
+        opacity: 1 !important;
     }
 }

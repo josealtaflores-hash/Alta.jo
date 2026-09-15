@@ -3,7 +3,7 @@
    ================================================== */
 
 const TOTAL_PAGES = 14;
-const purchaseUrl = "#";
+const purchaseUrl = "downloads/the-light-between-the-buildings.pdf";
 
 function pageFile(number) {
     return number <= 9 ? `images/00${number}.jpg` : `images/00${number}.jpg`;
@@ -26,6 +26,7 @@ const pageNumber = document.getElementById("page-number");
 const purchaseButton = document.getElementById("mid-book-purchase");
 const outsideScrollCue = document.getElementById("outside-scroll-cue");
 const projectEditions = document.querySelector(".project-editions");
+const zineDownload = document.querySelector(".zine-download");
 
 const printPreviewModal = document.getElementById("print-preview-modal");
 const printPreviewImage = document.getElementById("print-preview-image");
@@ -202,6 +203,61 @@ function setupOptionalProductImages() {
     });
 }
 
+function setupSectionScrollReveal() {
+    const sections = document.querySelectorAll(".zine-note, .prints-section, .wearables-section");
+    if (!sections.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        sections.forEach((section) => section.classList.add("is-revealed"));
+        return;
+    }
+
+    sections.forEach((section) => section.classList.add("section-scroll-reveal"));
+
+    const sectionObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            });
+        },
+        {
+            threshold: 0.14,
+            rootMargin: "0px 0px -8% 0px"
+        }
+    );
+
+    sections.forEach((section) => sectionObserver.observe(section));
+}
+
+function setupZineDownloadReveal() {
+    if (!zineDownload) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        zineDownload.classList.add("is-revealed");
+        return;
+    }
+
+    const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                zineDownload.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+            });
+        },
+        {
+            threshold: 0.28,
+            rootMargin: "0px 0px -10% 0px"
+        }
+    );
+
+    revealObserver.observe(zineDownload);
+}
+
 function openPrintPreview(index) {
     if (!printPreviewModal) return;
 
@@ -343,4 +399,6 @@ teePreviewCloseButtons.forEach((button) => {
 
 lockProjectEditions();
 setupOptionalProductImages();
+setupZineDownloadReveal();
+setupSectionScrollReveal();
 updateBook();
