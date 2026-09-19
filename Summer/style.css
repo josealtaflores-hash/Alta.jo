@@ -793,7 +793,7 @@ body.popup-open {
 
 .about-book-block {
     width: min(560px, 82vw);
-    margin: 0 auto 110px;
+    margin: 0 auto 52px;
     text-align: left;
 }
 
@@ -825,15 +825,15 @@ body.popup-open {
    ================================================== */
 
 .free-pdf-block {
-    width: min(540px, 82vw);
-    margin: 0 auto 150px;
-    padding-top: 30px;
+    width: min(560px, 82vw);
+    margin: 0 auto 135px;
+    padding-top: 28px;
     border-top: 1px solid rgba(29, 29, 29, 0.14);
     text-align: left;
 }
 
 .free-pdf-label {
-    margin: 0 0 12px;
+    margin: 0 0 24px;
     color: rgba(29, 29, 29, 0.58);
     font-size: 8px;
     font-weight: 400;
@@ -841,26 +841,43 @@ body.popup-open {
     text-transform: uppercase;
 }
 
-.free-pdf-copy {
-    margin: 0;
-    font-size: 12px;
-    line-height: 1.7;
-    color: rgba(29, 29, 29, 0.72);
+.book-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px;
 }
 
-.free-pdf-link {
+.book-option-title {
+    margin: 0 0 10px;
+    color: rgba(29, 29, 29, 0.72);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.35px;
+    text-transform: uppercase;
+}
+
+.free-pdf-copy {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(29, 29, 29, 0.7);
+}
+
+.free-pdf-link,
+.physical-book-link {
     display: inline-block;
-    margin-top: 22px;
+    margin-top: 18px;
     padding-bottom: 4px;
     border-bottom: 1px solid rgba(29, 29, 29, 0.35);
     color: var(--text-color);
     font-size: 8px;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.25px;
     text-decoration: none;
     transition: opacity .25s ease, border-color .25s ease, transform .25s ease;
 }
 
-.free-pdf-link:hover {
+.free-pdf-link:hover,
+.physical-book-link:hover {
     opacity: .72;
     border-bottom-color: var(--text-color);
     transform: translateX(3px);
@@ -2208,7 +2225,7 @@ body.tee-preview-open {
 @media (max-width: 700px) {
     .about-book-block {
         width: 84vw;
-        margin-bottom: 88px;
+        margin-bottom: 44px;
     }
 
     .about-book-label {
@@ -2227,14 +2244,20 @@ body.tee-preview-open {
     .free-pdf-block {
         width: 84vw;
         margin-bottom: 105px;
-        padding-top: 26px;
+        padding-top: 24px;
+    }
+
+    .book-options {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
 
     .free-pdf-copy {
         font-size: 11px;
     }
 
-    .free-pdf-link {
+    .free-pdf-link,
+    .physical-book-link {
         font-size: 8px;
     }
 }

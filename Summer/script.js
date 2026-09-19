@@ -2,8 +2,8 @@
    SOMEWHERE TO BE — BOOK VIEWER
    ================================================== */
 
-/* Free digital edition download. */
-const purchaseUrl = "downloads/somewhere-to-be.pdf";
+/* Mid-book CTA for the printed edition on Blurb. */
+const purchaseUrl = "https://www.blurb.com/bookstore/invited/11046856/078c89bf5e12986d4794da893e44dfa9be1e446a";
 
 const spreads = [
     { left: "images/001.jpg", right: "images/002.jpg" },
