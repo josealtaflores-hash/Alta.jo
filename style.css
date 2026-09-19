@@ -1,547 +1,550 @@
-/* =========================
-   RESET
-   ========================= */
+/* ---------------------------------
+   BASE
+---------------------------------- */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-
-/* =========================
-   COLORS
-   ========================= */
+html {
+  scroll-behavior: smooth;
+}
 
 :root {
-    --background: #bebebe;
-   --text: #202020;
-    --muted: #4f4a45;
+  --background: #aaa9a4;
+  --text: #202020;
+  --muted: rgba(32, 32, 32, 0.56);
+  --line: rgba(32, 32, 32, 0.55);
 
-    --shelf-line: #666159;
-    --shelf-fill: #9e9a93;
-    --shelf-face: #89857f;
+  --summer-bg: #e7dfd2;
+  --summer-accent: #a74b3c;
+
+  --light-bg: #262626;
+  --light-text: #f3f0e8;
 }
-
-
-html,
-body {
-    min-height: 100%;
-}
-
 
 body {
-    min-height: 100vh;
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
 
-    background: var(--background);
-    color: var(--text);
-
-    font-family: Arial, Helvetica, sans-serif;
+  transition:
+    background-color 0.9s ease,
+    color 0.9s ease;
 }
 
 
-
-/* =========================
+/* ---------------------------------
    HEADER
-   ========================= */
+---------------------------------- */
 
 .site-header {
-    position: absolute;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
 
-    top: 48px;
-    left: 55px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 
-    z-index: 10;
+  padding: 28px 34px;
+  pointer-events: none;
+}
+
+.site-header a {
+  pointer-events: auto;
+}
+
+.brand-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.site-role {
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  opacity: 0.48;
+  white-space: nowrap;
+}
+
+.site-name {
+  color: inherit;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+}
+
+.site-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.site-nav a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  opacity: 0.62;
+  transition: opacity 0.3s ease;
+}
+
+.site-nav a:hover {
+  opacity: 1;
 }
 
 
-.site-header h1 {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-
-.site-header p {
-    margin-top: 5px;
-
-    font-size: 10px;
-    font-weight: 400;
-
-    letter-spacing: 1.4px;
-}
-
-
-
-/* =========================
-   MAIN AREA
-   ========================= */
-
-.bookshelf-area {
-    width: min(1040px, 88vw);
-    min-height: 100vh;
-
-    margin: 0 auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding-top: 90px;
-}
-
+/* ---------------------------------
+   BOOKS
+---------------------------------- */
 
 .books {
-    width: 100%;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: flex-end;
-
-    gap: 72px;
+  width: 100%;
+  padding: 145px 6vw 75px;
 }
 
 
+/* ---------------------------------
+   EACH PROJECT
+---------------------------------- */
 
-/* =========================
-   BOOK GROUPS
-   ========================= */
+.project {
+  position: relative;
+  width: min(720px, 82vw);
+  margin-bottom: 52px;
 
-.book-item {
-    display: flex;
+  opacity: 0;
+  transform: translateY(20px);
 
-    flex-direction: column;
-    align-items: center;
+  animation:
+    projectEnter
+    1s
+    cubic-bezier(.22, .61, .36, 1)
+    forwards;
+}
+
+.project:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.project-summer {
+  margin-left: 13vw;
+}
+
+.project-light {
+  margin-left: auto;
+  margin-right: 13vw;
+  width: min(560px, 72vw);
 }
 
 
-/* Left book sits slightly higher */
+/* ---------------------------------
+   PROJECT META
+---------------------------------- */
 
-.summer-item {
-    transform: translateY(-10px);
+.project-meta {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  margin-bottom: 25px;
+
+  transition:
+    color 0.7s ease,
+    transform 0.5s ease;
+}
+
+.project-number {
+  font-size: 9px;
+  line-height: 1.2;
+  opacity: 0.48;
+  padding-top: 2px;
+}
+
+.project-meta h1 {
+  margin: 0 0 7px;
+  max-width: 340px;
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.project-meta p {
+  margin: 0;
+  font-size: 8px;
+  letter-spacing: 0.13em;
+  opacity: 0.48;
 }
 
 
-/* Right book sits slightly lower */
-
-.light-item {
-    transform: translateY(34px);
-}
-
-
-
-/* =========================
-   BOOK LINKS
-   ========================= */
+/* ---------------------------------
+   BOOK LINK
+---------------------------------- */
 
 .book-link {
-    position: relative;
-
-    display: block;
-
-    text-decoration: none;
-
-    transition: transform 0.35s ease;
+  position: relative;
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 
 
-.book-link img {
-    position: relative;
+/* ---------------------------------
+   BOOK OBJECT
+---------------------------------- */
 
-    z-index: 2;
+.book-wrap {
+  position: relative;
+  width: 340px;
+  margin-left: 74px;
 
-    width: 100%;
-    height: 100%;
+  transform-style: preserve-3d;
 
-    display: block;
+  transition:
+    transform 0.45s
+    cubic-bezier(.22, .61, .36, 1);
+}
 
-    object-fit: contain;
+.book-wrap.smaller {
+  width: 235px;
+  margin-left: 105px;
+}
 
-    filter: drop-shadow(
-        0 12px 10px rgba(0, 0, 0, 0.13)
-    );
+.book {
+  display: block;
+  width: 100%;
+  height: auto;
 
-    transition:
-        transform 0.35s ease,
-        filter 0.35s ease;
+  box-shadow:
+    0 7px 11px rgba(0, 0, 0, 0.08),
+    0 25px 35px rgba(0, 0, 0, 0.10);
+
+  transition:
+    box-shadow 0.45s ease,
+    filter 0.45s ease;
+
+  will-change: transform;
+}
+
+.project.is-hovering .book-wrap {
+  transform:
+    translateY(-11px)
+    rotate(var(--rotate, 0deg));
+}
+
+.project.is-hovering .book {
+  box-shadow:
+    0 13px 18px rgba(0, 0, 0, 0.09),
+    0 36px 50px rgba(0, 0, 0, 0.15);
 }
 
 
+/* ---------------------------------
+   SHELF
+---------------------------------- */
 
-/* =========================
-   BOOK SIZES
-   ========================= */
+.shelf {
+  position: relative;
+  height: 28px;
 
-/* Somewhere to Be */
+  /* gives the book a little air above the shelf */
+  margin-top: 18px;
+}
 
-.summer-book {
-    width: 285px;
+/* Keep each shelf only a little wider than the book itself. */
+.project-summer .shelf {
+  width: 390px;
+  margin-left: 49px;
+}
 
-    aspect-ratio: 1 / 1;
+.project-light .shelf {
+  width: 285px;
+  margin-left: 80px;
+}
+
+/*
+  Uneven double stroke. The SVG is used only as a mask,
+  so it automatically follows the current project color.
+*/
+.shelf span {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  display: block;
+  width: 100%;
+  height: 13px;
+
+  background: currentColor;
+  opacity: 0.52;
+
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 22'%3E%3Cpath d='M3 9 C75 6 122 11 191 8 S310 7 382 10 S505 6 577 8 S701 11 773 8 S907 7 997 10' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M8 14 C90 12 145 16 220 13 S352 15 427 12 S557 16 632 13 S760 14 835 12 S930 15 994 13' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 22'%3E%3Cpath d='M3 9 C75 6 122 11 191 8 S310 7 382 10 S505 6 577 8 S701 11 773 8 S907 7 997 10' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M8 14 C90 12 145 16 220 13 S352 15 427 12 S557 16 632 13 S760 14 835 12 S930 15 994 13' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+
+  transform: scaleX(0) rotate(-0.12deg);
+  transform-origin: left center;
+
+  animation:
+    drawShelf
+    1.1s
+    cubic-bezier(.22, .61, .36, 1)
+    forwards;
+
+  animation-delay: 0.45s;
+}
+
+/* small imperfect pencil-like continuation */
+.shelf::after {
+  content: "";
+
+  position: absolute;
+  left: 3%;
+  top: 11px;
+
+  width: 94%;
+  height: 1px;
+
+  background: currentColor;
+  opacity: 0.13;
+
+  transform: rotate(0.18deg);
+  transform-origin: center;
+}
+
+/* ---------------------------------
+   VIEW PROJECT
+---------------------------------- */
+
+.view-project {
+  margin-top: 11px;
+  margin-left: 74px;
+
+  font-size: 9px;
+  letter-spacing: 0.14em;
+
+  opacity: 0;
+  transform: translateY(7px);
+
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+
+.project-light .view-project {
+  margin-left: 105px;
+}
+
+.project.is-hovering .view-project {
+  opacity: 0.75;
+  transform: translateY(0);
 }
 
 
-/* Light Between the Buildings */
+/* ---------------------------------
+   PROJECT HOVER DETAILS
+---------------------------------- */
 
-.light-book {
-    height: 245px;
+.project-summer.is-hovering .project-number {
+  color: var(--summer-accent);
+  opacity: 1;
+}
 
-    aspect-ratio: 2 / 3;
+.project.is-hovering .project-meta {
+  transform: translateY(-2px);
 }
 
 
+/* ---------------------------------
+   FOOTER
+---------------------------------- */
 
-/* =========================
-   BOOK GLOW
-   ========================= */
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 
-.book-glow {
-    position: absolute;
+  padding: 0 34px 32px;
 
-    left: 50%;
-    top: 52%;
+  font-size: 8px;
+  letter-spacing: 0.13em;
 
-    width: 120%;
-    height: 120%;
+  opacity: 0.45;
 
-    transform:
-        translate(-50%, -50%)
-        scale(0.84);
+  transition: color 0.7s ease;
+}
 
-    border-radius: 50%;
+.site-footer p {
+  margin: 0;
+}
 
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+/* ---------------------------------
+   THEME STATES
+---------------------------------- */
+
+body.theme-summer {
+  background: var(--summer-bg);
+  color: #2a2926;
+}
+
+body.theme-light {
+  background: var(--light-bg);
+  color: var(--light-text);
+}
+
+body.theme-light .book {
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.25),
+    0 35px 55px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ---------------------------------
+   ANIMATIONS
+---------------------------------- */
+
+@keyframes projectEnter {
+  from {
     opacity: 0;
+    transform: translateY(20px);
+  }
 
-    filter: blur(40px);
-
-    transition:
-        opacity 0.45s ease,
-        transform 0.45s ease;
-
-    pointer-events: none;
-
-    z-index: 0;
-}
-
-
-/* Warm glow */
-
-.summer-book .book-glow {
-    background: rgba(255, 255, 255, 0.42);
-}
-
-
-/* Cooler glow */
-
-.light-book .book-glow {
-    background: rgba(255, 255, 255, 0.42);
-}
-
-
-
-/* Hover */
-
-.book-link:hover {
-    transform: translateY(-6px);
-}
-
-
-.book-link:hover .book-glow {
+  to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    transform:
-        translate(-50%, -50%)
-        scale(1);
+@keyframes drawShelf {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
 }
 
 
-.book-link:hover img {
-    filter: drop-shadow(
-        0 16px 14px rgba(0, 0, 0, 0.17)
-    );
-}
-
-
-.book-link:active {
-    transform:
-        translateY(-3px)
-        scale(0.99);
-}
-
-
-.book-link:active .book-glow {
-    opacity: 1;
-}
-
-
-.book-link:focus-visible {
-    outline: 1px dashed var(--text);
-
-    outline-offset: 8px;
-}
-
-
-
-/* =========================
-   HAND-DRAWN SHELVES
-   ========================= */
-
-.mini-shelf {
-    position: relative;
-
-    background: #444343;
-
-    border: 1.5px solid var(--shelf-line);
-
-    border-radius: 2px;
-
-    box-sizing: border-box;
-}
-
-
-/* Second imperfect pen line */
-
-.mini-shelf::before {
-    content: "";
-
-    position: absolute;
-
-    top: -2px;
-    left: 1px;
-
-    width: 100%;
-    height: 100%;
-
-    border: 1px solid rgba(102, 95, 87, 0.55);
-
-    border-radius: 3px;
-
-    transform:
-        rotate(-0.35deg)
-        translateX(-1px);
-
-    pointer-events: none;
-}
-
-
-/* Soft shadow underneath */
-
-.mini-shelf::after {
-    content: "";
-
-    position: absolute;
-
-    left: 10%;
-    right: 10%;
-
-    bottom: -7px;
-
-    height: 8px;
-
-    background: rgba(0, 0, 0, 0.08);
-
-    filter: blur(7px);
-
-    pointer-events: none;
-}
-
-
-
-/* Left shelf */
-
-.summer-shelf {
-    width: 360px;
-    height: 11px;
-
-    /* More space between book and shelf */
-    margin-top: 20px;
-
-    transform: rotate(-0.25deg);
-}
-
-
-
-/* Right shelf */
-
-.light-shelf {
-    width: 260px;
-    height: 11px;
-
-    /* Book sits closer to shelf */
-    margin-top: 3px;
-
-    transform: rotate(0.3deg);
-}
-
-
-
-/* Hide old wavy SVG shelf */
-
-.mini-shelf svg {
-    display: none;
-}
-
-
-
-/* =========================
-   BOOK LABELS
-   ========================= */
-
-.book-label {
-    margin-top: 10px;
-
-    text-align: center;
-}
-
-
-.book-title {
-    font-size: 11px;
-    font-weight: 500;
-
-    letter-spacing: 1.8px;
-
-    line-height: 1.4;
-}
-
-
-.book-year {
-    margin-top: 8px;
-
-    font-size: 9px;
-
-    letter-spacing: 2px;
-
-    color: var(--muted);
-}
-
-
-
-/* =========================
+/* ---------------------------------
    MOBILE
-   ========================= */
+---------------------------------- */
 
 @media (max-width: 700px) {
 
-    .site-header {
-        position: static;
+  .site-header {
+    padding: 23px 20px;
+  }
 
-        padding:
-            30px
-            24px
-            0;
-    }
+  .site-nav {
+    gap: 13px;
+  }
 
+  .brand-block {
+    gap: 4px;
+  }
 
-    .site-header h1 {
-        font-size: 20px;
-    }
+  .site-role {
+    font-size: 7px;
+    letter-spacing: 0.11em;
+  }
 
+  .site-nav a {
+    font-size: 8px;
+  }
 
-    .bookshelf-area {
-        min-height: auto;
+  .books {
+    padding: 125px 20px 80px;
+  }
 
-        width: 94vw;
+  .project,
+  .project-light {
+    width: 100%;
 
-        padding-top: 130px;
-        padding-bottom: 50px;
-    }
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 64px;
+  }
 
+  .project-light {
+    padding-left: 8vw;
+  }
 
-    .books {
-        gap: 26px;
-    }
+  .project-meta {
+    margin-bottom: 19px;
+  }
 
+  .book-wrap {
+    width: min(68vw, 305px);
+    margin-left: 7vw;
+  }
 
-    .summer-item {
-        transform: translateY(-4px);
-    }
+  .book-wrap.smaller {
+    width: min(52vw, 235px);
+    margin-left: 15vw;
+  }
 
+  .shelf {
+    margin-top: 16px;
+  }
 
-    .light-item {
-        transform: translateY(18px);
-    }
+  .project-summer .shelf {
+    width: calc(min(68vw, 305px) + 42px);
+    margin-left: calc(7vw - 21px);
+  }
 
+  .project-light .shelf {
+    width: calc(min(52vw, 235px) + 42px);
+    margin-left: calc(15vw - 21px);
+  }
 
-    .summer-book {
-        width: 155px;
-    }
+  .view-project {
+    margin-left: 7vw;
+  }
 
+  .project-light .view-project {
+    margin-left: 15vw;
+  }
 
-    .light-book {
-        height: 138px;
-    }
+  .view-project {
+    opacity: 0.52;
+    transform: none;
+  }
 
-
-    .summer-shelf {
-        width: 185px;
-        height: 9px;
-
-        margin-top: 14px;
-    }
-
-
-    .light-shelf {
-        width: 140px;
-        height: 9px;
-
-        margin-top: 2px;
-    }
-
-
-    .book-glow {
-        filter: blur(26px);
-    }
-
-
-    .book-label {
-        margin-top: 8px;
-    }
-
-
-    .book-title {
-        font-size: 9px;
-
-        letter-spacing: 1.2px;
-    }
-
-
-    .book-year {
-        margin-top: 6px;
-
-        font-size: 8px;
-    }
+  .site-footer {
+    padding: 0 20px 24px;
+    gap: 20px;
+  }
 }
 
 
+/* ---------------------------------
+   REDUCED MOTION
+---------------------------------- */
 
-/* =========================
-   SMALL PHONES
-   ========================= */
+@media (prefers-reduced-motion: reduce) {
 
-@media (max-width: 390px) {
-
-    .books {
-        gap: 18px;
-    }
-
-
-    .summer-book {
-        width: 142px;
-    }
-
-
-    .light-book {
-        height: 126px;
-    }
-
-
-    .summer-shelf {
-        width: 168px;
-    }
-
-
-    .light-shelf {
-        width: 128px;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
