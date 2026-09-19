@@ -136,124 +136,163 @@ projects.forEach((project) => {
    MOBILE SCROLL THEMES
 ---------------------------------- */
 
+let activeMobileProject = null;
+let mobileScrollTicking = false;
+
+/*
+  A project has to be meaningfully closer to the center
+  before it takes over the page theme. This "dead zone"
+  keeps the background from flipping too quickly while
+  casually scrolling between the two books.
+*/
+const MOBILE_THEME_HANDOFF = 110;
+
+
+function updateMobileTheme() {
+
+  if (!mobileQuery.matches) {
+    return;
+  }
+
+  const viewportCenter =
+    window.innerHeight / 2;
+
+  const projectData =
+    [...projects].map((project) => {
+
+      const rect =
+        project.getBoundingClientRect();
+
+      const center =
+        rect.top +
+        rect.height / 2;
+
+      return {
+        project,
+        distance:
+          Math.abs(
+            center -
+            viewportCenter
+          )
+      };
+    });
+
+
+  projectData.sort(
+    (a, b) =>
+      a.distance -
+      b.distance
+  );
+
+
+  const closest =
+    projectData[0];
+
+
+  /*
+    First load: use the project nearest the middle
+    of the screen.
+  */
+  if (!activeMobileProject) {
+
+    activeMobileProject =
+      closest.project;
+
+    setTheme(
+      activeMobileProject.dataset.theme
+    );
+
+    return;
+  }
+
+
+  const activeData =
+    projectData.find(
+      (item) =>
+        item.project ===
+        activeMobileProject
+    );
+
+
+  /*
+    Do not hand the background to the next project
+    until it is clearly more central than the current one.
+    This makes the current color hold longer.
+  */
+  if (
+    closest.project !==
+      activeMobileProject &&
+    closest.distance +
+      MOBILE_THEME_HANDOFF <
+      activeData.distance
+  ) {
+
+    activeMobileProject =
+      closest.project;
+
+    setTheme(
+      activeMobileProject.dataset.theme
+    );
+  }
+}
+
+
+function handleMobileScroll() {
+
+  if (!mobileQuery.matches) {
+    return;
+  }
+
+  if (mobileScrollTicking) {
+    return;
+  }
+
+  mobileScrollTicking = true;
+
+  requestAnimationFrame(() => {
+
+    updateMobileTheme();
+
+    mobileScrollTicking = false;
+  });
+}
+
+
 function enableMobileThemes() {
 
   clearHoverStates();
 
-  if (mobileObserver) {
-    mobileObserver.disconnect();
-  }
+  activeMobileProject = null;
 
-  /*
-    The center band of the screen decides which project owns
-    the background color. As you swipe from one book to the
-    next, the background smoothly transitions with you.
-  */
-  mobileObserver =
-    new IntersectionObserver(
-      (entries) => {
+  updateMobileTheme();
 
-        const visible =
-          entries
-            .filter(
-              (entry) =>
-                entry.isIntersecting
-            )
-            .sort(
-              (a, b) =>
-                b.intersectionRatio -
-                a.intersectionRatio
-            );
-
-        if (!visible.length) {
-          return;
-        }
-
-        const activeProject =
-          visible[0].target;
-
-        setTheme(
-          activeProject.dataset.theme
-        );
-      },
-      {
-        root: null,
-
-        /*
-          Only the middle section of the viewport counts.
-          This prevents the color from changing too early.
-        */
-        rootMargin:
-          "-32% 0px -32% 0px",
-
-        threshold:
-          [0, 0.15, 0.35, 0.6, 0.85]
-      }
-    );
-
-
-  projects.forEach(
-    (project) =>
-      mobileObserver.observe(project)
+  window.addEventListener(
+    "scroll",
+    handleMobileScroll,
+    { passive: true }
   );
 
-
-  /*
-    Pick the project closest to the viewport center on load,
-    so refreshing halfway down the page gets the right color.
-  */
-  requestAnimationFrame(() => {
-
-    const viewportCenter =
-      window.innerHeight / 2;
-
-    let closestProject = null;
-    let closestDistance = Infinity;
-
-    projects.forEach(
-      (project) => {
-
-        const rect =
-          project.getBoundingClientRect();
-
-        const projectCenter =
-          rect.top +
-          rect.height / 2;
-
-        const distance =
-          Math.abs(
-            projectCenter -
-            viewportCenter
-          );
-
-        if (
-          distance <
-          closestDistance
-        ) {
-          closestDistance =
-            distance;
-
-          closestProject =
-            project;
-        }
-      }
-    );
-
-    if (closestProject) {
-      setTheme(
-        closestProject.dataset.theme
-      );
-    }
-  });
+  window.addEventListener(
+    "resize",
+    handleMobileScroll,
+    { passive: true }
+  );
 }
 
 
 function disableMobileThemes() {
 
-  if (mobileObserver) {
-    mobileObserver.disconnect();
-    mobileObserver = null;
-  }
+  window.removeEventListener(
+    "scroll",
+    handleMobileScroll
+  );
+
+  window.removeEventListener(
+    "resize",
+    handleMobileScroll
+  );
+
+  activeMobileProject = null;
 
   setTheme(null);
 }
