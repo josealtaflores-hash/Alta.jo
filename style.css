@@ -448,6 +448,12 @@ body.theme-light .book {
 
 @media (max-width: 700px) {
 
+  body {
+    transition:
+      background-color 0.85s cubic-bezier(.22, .61, .36, 1),
+      color 0.7s ease;
+  }
+
   .site-header {
     padding: 23px 20px;
   }
