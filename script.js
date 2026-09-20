@@ -1,443 +1,366 @@
-/* ==================================================
-   SOMEWHERE TO BE — BOOK VIEWER
-   ================================================== */
+const projects =
+  document.querySelectorAll(".project");
 
-/* Mid-book CTA for the printed edition on Blurb. */
-const purchaseUrl = "https://www.blurb.com/bookstore/invited/11046856/078c89bf5e12986d4794da893e44dfa9be1e446a";
+const body =
+  document.body;
 
-const spreads = [
-    { left: "images/001.jpg", right: "images/002.jpg" },
-    { left: "images/003.jpg", right: "images/004.jpg" },
-    { left: "images/005.jpg", right: "images/006.jpg" },
-    { left: "images/007.jpg", right: "images/008.jpg" },
-    { left: "images/009.jpg", right: "images/0010.jpg" },
-    { left: "images/0011.jpg", right: "images/0012.jpg" },
-    { left: "images/0013.jpg", right: "images/0014.jpg" },
-    { left: "images/0015.jpg", right: "images/0016.jpg" },
-    { left: "images/0017.jpg", right: "images/0018.jpg" },
-    { left: "images/0019.jpg", right: "images/0020.jpg" },
-    { left: "images/0021.jpg", right: "images/0022.jpg" }
-];
+const mobileQuery =
+  window.matchMedia("(max-width: 700px)");
 
-const book = document.getElementById("book");
-const leftPageImage = document.getElementById("left-page-image");
-const rightPageImage = document.getElementById("right-page-image");
-const previousButton = document.getElementById("previous-button");
-const nextButton = document.getElementById("next-button");
-const pageNumber = document.getElementById("page-number");
-const purchaseButton = document.getElementById("mid-book-purchase");
-const outsideScrollCue = document.getElementById("outside-scroll-cue");
-const projectEditions = document.querySelector(".project-editions");
+let mobileObserver = null;
 
-let currentSpread = 0;
-let editionsUnlocked = false;
 
-/* Show GET A COPY beginning with pages 5–6. */
-const purchaseRevealSpread = 2;
+/* ---------------------------------
+   HELPERS
+---------------------------------- */
 
-/* Unlock the SCROLL cue and the project/shop area beginning with pages 11–12. */
-const scrollRevealSpread = 5;
+function setTheme(theme) {
+  body.classList.remove(
+    "theme-summer",
+    "theme-light"
+  );
 
-if (purchaseButton) {
-    purchaseButton.href = purchaseUrl;
-
-    if (purchaseUrl === "#") {
-        purchaseButton.setAttribute("aria-disabled", "true");
-        purchaseButton.addEventListener("click", (event) => event.preventDefault());
-    }
-}
-
-function preloadSpread(index) {
-    if (index < 0 || index >= spreads.length) return;
-
-    const leftImage = new Image();
-    const rightImage = new Image();
-
-    leftImage.src = spreads[index].left;
-    rightImage.src = spreads[index].right;
-}
-
-function updatePurchaseButton() {
-    if (!purchaseButton) return;
-
-    const shouldShow = currentSpread >= purchaseRevealSpread;
-    purchaseButton.classList.toggle("is-visible", shouldShow);
-}
-
-function updateBook() {
-    const spread = spreads[currentSpread];
-
-    leftPageImage.src = spread.left;
-    rightPageImage.src = spread.right;
-
-    const leftPageNumber = currentSpread * 2 + 1;
-    const rightPageNumber = leftPageNumber + 1;
-
-    pageNumber.textContent = `${leftPageNumber}–${rightPageNumber}`;
-    previousButton.disabled = currentSpread === 0;
-
-    updatePurchaseButton();
-
-    /*
-      Once pages 11–12 are reached, make the lower project area available
-      and reveal the hand-drawn SCROLL cue. It stays available afterward.
-    */
-    if (currentSpread >= scrollRevealSpread) {
-        unlockProjectEditions();
-    }
-
-    preloadSpread(currentSpread + 1);
-    preloadSpread(currentSpread - 1);
-}
-
-function unlockProjectEditions() {
-    if (!projectEditions || editionsUnlocked) return;
-
-    editionsUnlocked = true;
-    projectEditions.classList.add("is-unlocked");
-    projectEditions.setAttribute("aria-hidden", "false");
-
-    if (outsideScrollCue) {
-        outsideScrollCue.classList.add("is-visible");
-        outsideScrollCue.setAttribute("aria-hidden", "false");
-    }
-}
-
-function lockProjectEditions() {
-    if (!projectEditions) return;
-
-    editionsUnlocked = false;
-    projectEditions.classList.remove("is-unlocked");
-    projectEditions.setAttribute("aria-hidden", "true");
-
-    if (outsideScrollCue) {
-        outsideScrollCue.classList.remove("is-visible");
-        outsideScrollCue.setAttribute("aria-hidden", "true");
-    }
-}
-
-function goToPreviousSpread() {
-    if (currentSpread > 0) {
-        currentSpread -= 1;
-        updateBook();
-    }
-}
-
-function goToNextSpread() {
-    const isLastSpread = currentSpread === spreads.length - 1;
-
-    /* On the final spread, one more Next press reveals the rest of the project. */
-    if (isLastSpread) {
-        unlockProjectEditions();
-        return;
-    }
-
-    currentSpread += 1;
-    updateBook();
-}
-
-/* Hide clothing / object sections until their image files actually exist. */
-function setupOptionalProductImages() {
-    const optionalSections = document.querySelectorAll("[data-optional-products]");
-
-    optionalSections.forEach((section) => {
-        const articles = [...section.querySelectorAll(".floating-product")];
-        if (!articles.length) return;
-
-        const checkSection = () => {
-            const visibleArticles = articles.filter(
-                (article) => !article.classList.contains("is-missing")
-            );
-            section.classList.toggle("is-empty", visibleArticles.length === 0);
-        };
-
-        articles.forEach((article) => {
-            const image = article.querySelector("img");
-            if (!image) return;
-
-            const markMissing = () => {
-                article.classList.add("is-missing");
-                checkSection();
-            };
-
-            image.addEventListener("error", markMissing, { once: true });
-
-            if (image.complete && image.naturalWidth === 0) {
-                markMissing();
-            }
-        });
-
-        checkSection();
-    });
+  if (theme) {
+    body.classList.add(
+      `theme-${theme}`
+    );
+  }
 }
 
 
-function setupSectionScrollReveal() {
-    const sections = document.querySelectorAll(
-        ".prints-section, .wearables-section, .objects-section"
+function clearHoverStates() {
+  projects.forEach((project) => {
+    project.classList.remove(
+      "is-hovering"
     );
 
-    if (!sections.length) return;
+    const bookWrap =
+      project.querySelector(".book-wrap");
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        sections.forEach((section) => section.classList.add("is-revealed"));
+    bookWrap.style.setProperty(
+      "--rotate",
+      "0deg"
+    );
+  });
+}
+
+
+/* ---------------------------------
+   DESKTOP HOVER
+---------------------------------- */
+
+projects.forEach((project) => {
+
+  const bookWrap =
+    project.querySelector(".book-wrap");
+
+  const theme =
+    project.dataset.theme;
+
+
+  project.addEventListener(
+    "mouseenter",
+    () => {
+
+      if (mobileQuery.matches) {
         return;
+      }
+
+      project.classList.add(
+        "is-hovering"
+      );
+
+      setTheme(theme);
     }
+  );
 
-    sections.forEach((section) => section.classList.add("section-scroll-reveal"));
 
-    const sectionObserver = new IntersectionObserver(
-        (entries, observer) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
+  project.addEventListener(
+    "mouseleave",
+    () => {
 
-                entry.target.classList.add("is-revealed");
-                observer.unobserve(entry.target);
-            });
-        },
-        {
-            threshold: 0.14,
-            rootMargin: "0px 0px -8% 0px"
-        }
+      if (mobileQuery.matches) {
+        return;
+      }
+
+      project.classList.remove(
+        "is-hovering"
+      );
+
+      setTheme(null);
+
+      bookWrap.style.setProperty(
+        "--rotate",
+        "0deg"
+      );
+    }
+  );
+
+
+  /* ---------------------------------
+     VERY SUBTLE BOOK TILT
+  ---------------------------------- */
+
+  project.addEventListener(
+    "mousemove",
+    (event) => {
+
+      if (mobileQuery.matches) {
+        return;
+      }
+
+      const rect =
+        project.getBoundingClientRect();
+
+      const position =
+        (
+          event.clientX -
+          rect.left
+        ) /
+        rect.width;
+
+      const rotation =
+        (position - 0.5) * 2.2;
+
+      bookWrap.style.setProperty(
+        "--rotate",
+        `${rotation}deg`
+      );
+    }
+  );
+
+});
+
+
+/* ---------------------------------
+   MOBILE SCROLL THEMES
+---------------------------------- */
+
+let activeMobileProject = null;
+let mobileScrollTicking = false;
+
+/*
+  A project has to be meaningfully closer to the center
+  before it takes over the page theme. This "dead zone"
+  keeps the background from flipping too quickly while
+  casually scrolling between the two books.
+*/
+const MOBILE_THEME_HANDOFF = 145;
+
+/*
+  Light Between the Building should take over later on mobile.
+  Requiring a larger advantage before switching to the dark theme
+  keeps the Somewhere to Be color on screen longer.
+*/
+const MOBILE_LIGHT_HANDOFF = 265;
+
+/*
+  Keep the original neutral homepage color visible at the very top
+  before the first book takes over. The amount scales a little with
+  screen height so it feels natural on different phones.
+*/
+function getMobileTopNeutralZone() {
+  return Math.min(
+    130,
+    Math.max(
+      90,
+      window.innerHeight * 0.14
+    )
+  );
+}
+
+
+function updateMobileTheme() {
+
+  if (!mobileQuery.matches) {
+    return;
+  }
+
+  /*
+    At the very top, keep the normal gray homepage background.
+    The Summer theme only starts after the user has intentionally
+    begun scrolling into the first project.
+  */
+  if (
+    window.scrollY <
+    getMobileTopNeutralZone()
+  ) {
+    activeMobileProject = null;
+    setTheme(null);
+    return;
+  }
+
+  const viewportCenter =
+    window.innerHeight / 2;
+
+  const projectData =
+    [...projects].map((project) => {
+
+      const rect =
+        project.getBoundingClientRect();
+
+      const center =
+        rect.top +
+        rect.height / 2;
+
+      return {
+        project,
+        distance:
+          Math.abs(
+            center -
+            viewportCenter
+          )
+      };
+    });
+
+
+  projectData.sort(
+    (a, b) =>
+      a.distance -
+      b.distance
+  );
+
+
+  const closest =
+    projectData[0];
+
+
+  /*
+    First load: use the project nearest the middle
+    of the screen.
+  */
+  if (!activeMobileProject) {
+
+    activeMobileProject =
+      closest.project;
+
+    setTheme(
+      activeMobileProject.dataset.theme
     );
 
-    sections.forEach((section) => sectionObserver.observe(section));
+    return;
+  }
+
+
+  const activeData =
+    projectData.find(
+      (item) =>
+        item.project ===
+        activeMobileProject
+    );
+
+
+  /*
+    Do not hand the background to the next project
+    until it is clearly more central than the current one.
+    This makes the current color hold longer.
+  */
+  if (
+    closest.project !==
+      activeMobileProject
+  ) {
+
+    const handoffDistance =
+      closest.project.dataset.theme === "light"
+        ? MOBILE_LIGHT_HANDOFF
+        : MOBILE_THEME_HANDOFF;
+
+    if (
+      closest.distance +
+        handoffDistance <
+        activeData.distance
+    ) {
+
+      activeMobileProject =
+        closest.project;
+
+      setTheme(
+        activeMobileProject.dataset.theme
+      );
+    }
+  }
 }
 
-/* SWIPE SUPPORT */
-let touchStartX = 0;
-let touchStartY = 0;
-const minimumSwipeDistance = 50;
-const maximumVerticalMovement = 80;
 
-book.addEventListener("touchstart", (event) => {
-    const touch = event.changedTouches[0];
-    touchStartX = touch.clientX;
-    touchStartY = touch.clientY;
-}, { passive: true });
+function handleMobileScroll() {
 
-book.addEventListener("touchend", (event) => {
-    const touch = event.changedTouches[0];
-    const horizontalDistance = touch.clientX - touchStartX;
-    const verticalDistance = Math.abs(touch.clientY - touchStartY);
+  if (!mobileQuery.matches) {
+    return;
+  }
 
-    if (verticalDistance > maximumVerticalMovement) return;
+  if (mobileScrollTicking) {
+    return;
+  }
 
-    if (horizontalDistance < -minimumSwipeDistance) {
-        goToNextSpread();
-        return;
-    }
+  mobileScrollTicking = true;
 
-    if (horizontalDistance > minimumSwipeDistance) {
-        goToPreviousSpread();
-    }
-}, { passive: true });
+  requestAnimationFrame(() => {
 
-previousButton.addEventListener("click", goToPreviousSpread);
-nextButton.addEventListener("click", goToNextSpread);
+    updateMobileTheme();
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowLeft") goToPreviousSpread();
-    if (event.key === "ArrowRight") goToNextSpread();
-});
-
-setupOptionalProductImages();
-setupSectionScrollReveal();
-lockProjectEditions();
-updateBook();
-
-/* ==================================================
-   PRINT PREVIEW MODAL
-   ================================================== */
-
-const printPreviewModal = document.getElementById("print-preview-modal");
-const printPreviewImage = document.getElementById("print-preview-image");
-const printPreviewTitle = document.getElementById("print-preview-title");
-const printPreviewNext = document.getElementById("print-preview-next");
-const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
-const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
-
-const printPreviews = [
-    {
-        title: "PRINT 01",
-        image: "images/prints/print-01.jpg",
-        page: "prints/print-01.html"
-    },
-    {
-        title: "PRINT 02",
-        image: "images/prints/print-02.jpg",
-        page: "prints/print-02.html"
-    },
-    {
-        title: "PRINT 03",
-        image: "images/prints/print-03.jpg",
-        page: "prints/print-03.html"
-    }
-];
-
-function openPrintPreview(index) {
-    if (!printPreviewModal) return;
-
-    const print = printPreviews[index];
-    if (!print) return;
-
-    printPreviewImage.src = print.image;
-    printPreviewImage.alt = `${print.title} larger preview`;
-    printPreviewTitle.textContent = print.title;
-    printPreviewNext.href = print.page;
-
-    printPreviewModal.classList.add("is-visible");
-    printPreviewModal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("print-preview-open");
+    mobileScrollTicking = false;
+  });
 }
 
-function closePrintPreview() {
-    if (!printPreviewModal) return;
 
-    printPreviewModal.classList.remove("is-visible");
-    printPreviewModal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("print-preview-open");
+function enableMobileThemes() {
+
+  clearHoverStates();
+
+  activeMobileProject = null;
+
+  updateMobileTheme();
+
+  window.addEventListener(
+    "scroll",
+    handleMobileScroll,
+    { passive: true }
+  );
+
+  window.addEventListener(
+    "resize",
+    handleMobileScroll,
+    { passive: true }
+  );
 }
 
-printPreviewTriggers.forEach((trigger) => {
-    const index = Number(trigger.dataset.printPreview);
 
-    trigger.addEventListener("click", () => openPrintPreview(index));
+function disableMobileThemes() {
 
-    if (trigger.matches("[role='button']")) {
-        trigger.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                openPrintPreview(index);
-            }
-        });
-    }
-});
+  window.removeEventListener(
+    "scroll",
+    handleMobileScroll
+  );
 
-printPreviewCloseButtons.forEach((button) => {
-    button.addEventListener("click", closePrintPreview);
-});
+  window.removeEventListener(
+    "resize",
+    handleMobileScroll
+  );
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && printPreviewModal?.classList.contains("is-visible")) {
-        closePrintPreview();
-    }
-});
+  activeMobileProject = null;
 
-/* ==================================================
-   TEE PREVIEW — NUMBERED SHIRTS
-   ================================================== */
-
-const teePreviewModal = document.getElementById("tee-preview-modal");
-const teePreviewTriggers = document.querySelectorAll("[data-tee-preview]");
-const teePreviewCloseButtons = document.querySelectorAll("[data-tee-close]");
-const summerWearablesSection = document.getElementById("wearables");
-const teePreviewFront = document.getElementById("tee-preview-front");
-const teePreviewBack = document.getElementById("tee-preview-back");
-const teePreviewTitle = document.getElementById("tee-preview-title");
-
-function setupSummerTeeAvailability() {
-    if (!summerWearablesSection) return;
-
-    const items = [...summerWearablesSection.querySelectorAll("[data-tee-item]")];
-    if (!items.length) {
-        summerWearablesSection.classList.add("is-empty");
-        summerWearablesSection.setAttribute("aria-hidden", "true");
-        return;
-    }
-
-    let resolved = 0;
-
-    const finishCheck = () => {
-        resolved += 1;
-        if (resolved < items.length) return;
-
-        const visibleItems = items.filter((item) => !item.classList.contains("is-missing"));
-        const hasAny = visibleItems.length > 0;
-        summerWearablesSection.classList.toggle("is-empty", !hasAny);
-        summerWearablesSection.setAttribute("aria-hidden", hasAny ? "false" : "true");
-    };
-
-    items.forEach((item) => {
-        const image = item.querySelector(".summer-tee-main-image");
-        if (!image) {
-            item.classList.add("is-missing");
-            finishCheck();
-            return;
-        }
-
-        const ok = () => {
-            item.classList.remove("is-missing");
-            finishCheck();
-        };
-
-        const fail = () => {
-            item.classList.add("is-missing");
-            finishCheck();
-        };
-
-        if (image.complete) {
-            image.naturalWidth > 0 ? ok() : fail();
-        } else {
-            image.addEventListener("load", ok, { once: true });
-            image.addEventListener("error", fail, { once: true });
-        }
-    });
+  setTheme(null);
 }
 
-function openTeePreview(trigger) {
-    if (!teePreviewModal || summerWearablesSection?.classList.contains("is-empty")) return;
 
-    const front = trigger?.dataset?.teeFront;
-    const back = trigger?.dataset?.teeBack;
-    const title = trigger?.dataset?.teeTitle || "PROJECT TEE";
+/* ---------------------------------
+   MODE SWITCHING
+---------------------------------- */
 
-    if (front && teePreviewFront) {
-        teePreviewFront.src = front;
-        teePreviewFront.alt = `${title} front`;
-    }
+function syncInteractionMode() {
 
-    if (back && teePreviewBack) {
-        teePreviewBack.src = back;
-        teePreviewBack.alt = `${title} back`;
-    }
-
-    if (teePreviewTitle) teePreviewTitle.textContent = title;
-
-    teePreviewModal.classList.add("is-visible");
-    teePreviewModal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("tee-preview-open");
+  if (mobileQuery.matches) {
+    enableMobileThemes();
+  } else {
+    disableMobileThemes();
+  }
 }
 
-function closeTeePreview() {
-    if (!teePreviewModal) return;
 
-    teePreviewModal.classList.remove("is-visible");
-    teePreviewModal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("tee-preview-open");
-}
+syncInteractionMode();
 
-teePreviewTriggers.forEach((trigger) => {
-    trigger.addEventListener("click", () => openTeePreview(trigger));
 
-    if (trigger.matches("[role='button']")) {
-        trigger.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                openTeePreview(trigger);
-            }
-        });
-    }
-});
-
-teePreviewCloseButtons.forEach((button) => {
-    button.addEventListener("click", closeTeePreview);
-});
-
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && teePreviewModal?.classList.contains("is-visible")) {
-        closeTeePreview();
-    }
-});
-
-setupSummerTeeAvailability();
+mobileQuery.addEventListener(
+  "change",
+  syncInteractionMode
+);
