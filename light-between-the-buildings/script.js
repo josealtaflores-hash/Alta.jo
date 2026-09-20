@@ -1,5 +1,5 @@
 /* ==================================================
-   LIGHT BETWEEN THE BUILDINGS — BOOK VIEWER
+   LIGHT BETWEEN THE BUILDING — BOOK VIEWER
    ================================================== */
 
 const TOTAL_PAGES = 14;
@@ -59,8 +59,11 @@ const printPreviews = [
 let currentSpread = 0;
 let editionsUnlocked = false;
 
-/* 7 spreads total, so show purchase from spread 4 onward (pages 7–8). */
-const purchaseRevealSpread = Math.floor(spreads.length / 2);
+/* Show the mid-book copy/download CTA beginning with pages 3–4. */
+const purchaseRevealSpread = 1;
+
+/* Reveal SCROLL and unlock the lower zine/shop area at pages 7–8. */
+const scrollRevealSpread = 3;
 
 if (purchaseButton) {
     purchaseButton.href = purchaseUrl;
@@ -118,6 +121,16 @@ function updateBook() {
     previousButton.disabled = currentSpread === 0;
 
     updatePurchaseButton();
+
+    /*
+      Once pages 7–8 are reached, reveal the SCROLL cue and make
+      the note / prints / wearables area available below the book.
+      It stays unlocked after that point.
+    */
+    if (currentSpread >= scrollRevealSpread) {
+        unlockProjectEditions();
+    }
+
     preloadSpread(currentSpread + 1);
     preloadSpread(currentSpread - 1);
 }
