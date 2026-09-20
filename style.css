@@ -521,17 +521,24 @@ body.theme-light .book {
 
     margin-left: 0;
     margin-right: 0;
-    margin-bottom: 64px;
+    margin-bottom: 112px;
+    padding-left: 0;
   }
 
   .project-light {
-    padding-left: 8vw;
+    margin-top: 34px;
   }
 
   .project-meta {
-    margin-bottom: 19px;
+    margin-bottom: 24px;
+    margin-left: 7vw;
   }
 
+  /*
+    Mobile alignment:
+    both books share the same left edge for a cleaner vertical rhythm.
+    Light Between the Buildings stays intentionally smaller.
+  */
   .book-wrap {
     width: min(68vw, 305px);
     margin-left: 7vw;
@@ -539,11 +546,11 @@ body.theme-light .book {
 
   .book-wrap.smaller {
     width: min(52vw, 235px);
-    margin-left: 15vw;
+    margin-left: 7vw;
   }
 
   .shelf {
-    margin-top: 16px;
+    margin-top: 18px;
   }
 
   .project-summer .shelf {
@@ -553,15 +560,12 @@ body.theme-light .book {
 
   .project-light .shelf {
     width: calc(min(52vw, 235px) + 42px);
-    margin-left: calc(15vw - 21px);
+    margin-left: calc(7vw - 21px);
   }
 
-  .view-project {
-    margin-left: 7vw;
-  }
-
+  .view-project,
   .project-light .view-project {
-    margin-left: 15vw;
+    margin-left: 7vw;
   }
 
   .view-project {

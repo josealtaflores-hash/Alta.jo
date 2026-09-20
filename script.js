@@ -155,16 +155,24 @@ const MOBILE_THEME_HANDOFF = 145;
 const MOBILE_LIGHT_HANDOFF = 265;
 
 /*
-  Keep the original neutral homepage color visible at the very top
-  before the first book takes over. The amount scales a little with
-  screen height so it feels natural on different phones.
+  On mobile, keep the original neutral gray only while the user
+  is essentially still at the header. As soon as they begin moving
+  into the first project, Somewhere to Be takes over the background.
 */
+const mobileHeader =
+  document.querySelector(".site-header");
+
 function getMobileTopNeutralZone() {
-  return Math.min(
-    130,
-    Math.max(
-      90,
-      window.innerHeight * 0.14
+
+  if (!mobileHeader) {
+    return 48;
+  }
+
+  return Math.max(
+    42,
+    Math.min(
+      64,
+      mobileHeader.offsetHeight + 6
     )
   );
 }
