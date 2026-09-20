@@ -1,5 +1,5 @@
 /* ==================================================
-   LIGHT BETWEEN THE BUILDING — BOOK VIEWER
+   LIGHT BETWEEN THE BUILDINGS — BOOK VIEWER
    ================================================== */
 
 const TOTAL_PAGES = 14;
