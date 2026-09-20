@@ -145,12 +145,41 @@ let mobileScrollTicking = false;
   keeps the background from flipping too quickly while
   casually scrolling between the two books.
 */
-const MOBILE_THEME_HANDOFF = 110;
+const MOBILE_THEME_HANDOFF = 145;
+
+/*
+  Keep the original neutral homepage color visible at the very top
+  before the first book takes over. The amount scales a little with
+  screen height so it feels natural on different phones.
+*/
+function getMobileTopNeutralZone() {
+  return Math.min(
+    130,
+    Math.max(
+      90,
+      window.innerHeight * 0.14
+    )
+  );
+}
 
 
 function updateMobileTheme() {
 
   if (!mobileQuery.matches) {
+    return;
+  }
+
+  /*
+    At the very top, keep the normal gray homepage background.
+    The Summer theme only starts after the user has intentionally
+    begun scrolling into the first project.
+  */
+  if (
+    window.scrollY <
+    getMobileTopNeutralZone()
+  ) {
+    activeMobileProject = null;
+    setTheme(null);
     return;
   }
 

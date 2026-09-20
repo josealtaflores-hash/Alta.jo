@@ -465,8 +465,8 @@ body.theme-light .book {
 
   body {
     transition:
-      background-color 1.35s cubic-bezier(.22, .61, .36, 1),
-      color 1.1s ease;
+      background-color 1.5s cubic-bezier(.22, .61, .36, 1),
+      color 1.2s ease;
   }
 
   .site-header {
