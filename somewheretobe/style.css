@@ -1,0 +1,2491 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --site-background: #f3ede2;
+    --book-paper: #f8f6f0;
+    --text-color: #1d1d1d;
+    --arrow-color: #4a4741;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--site-background);
+    color: var(--text-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body.popup-open {
+    overflow: hidden;
+}
+
+.site-header {
+    position: absolute;
+    top: 48px;
+    left: 55px;
+    z-index: 20;
+}
+
+.site-header h1 {
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+.site-header p {
+    margin-top: 5px;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+}
+
+.back-link {
+    position: absolute;
+
+    top: 50px;
+    right: 55px;
+
+    color: #4a4741;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+    text-decoration: none;
+
+    z-index: 20;
+
+    transition: opacity 0.2s ease;
+}
+
+.back-link:hover {
+    opacity: 0.55;
+}
+.book-area {
+    min-height: 92vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 120px 30px 30px;
+}
+
+.book {
+    width: min(1000px, 76vw);
+    aspect-ratio: 2 / 1;
+    display: flex;
+    position: relative;
+    isolation: isolate;
+    background-color: var(--book-paper);
+    border-radius: 6px;
+    overflow: visible;
+    box-shadow:
+        0 18px 28px rgba(35, 30, 25, 0.18),
+        0 4px 8px rgba(35, 30, 25, 0.08);
+    transition:
+        opacity 0.45s ease,
+        transform 0.45s ease,
+        filter 0.45s ease;
+}
+
+.book.is-ending {
+    opacity: 0;
+    transform: scale(0.97);
+    filter: blur(2px);
+}
+
+.book::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 12px;
+    transform: translateX(-50%);
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(150, 150, 150, 0.04) 25%,
+        rgba(40, 40, 40, 0.12) 50%,
+        rgba(150, 150, 150, 0.04) 75%,
+        rgba(255, 255, 255, 0.12) 100%
+    );
+    pointer-events: none;
+    z-index: 9;
+}
+
+.book::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1px;
+    transform: translateX(-50%);
+    background-color: rgba(25, 25, 25, 0.18);
+    box-shadow:
+        -1px 0 2px rgba(255, 255, 255, 0.28),
+        1px 0 2px rgba(0, 0, 0, 0.08);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.page {
+    width: 50%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: var(--book-paper);
+    overflow: hidden;
+    z-index: 2;
+}
+
+.left-page {
+    border-radius: 6px 0 0 6px;
+    box-shadow: inset -7px 0 12px rgba(60, 55, 48, 0.025);
+}
+
+.right-page {
+    border-radius: 0 6px 6px 0;
+    box-shadow: inset 7px 0 12px rgba(60, 55, 48, 0.025);
+}
+
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    image-rendering: auto;
+}
+
+.arrow-button {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.arrow-button svg {
+    width: 44px;
+    height: 44px;
+    overflow: visible;
+}
+
+.sketch-circle,
+.sketch-arrow {
+    fill: none;
+    stroke: var(--arrow-color);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sketch-circle { stroke-width: 1.7; }
+.sketch-arrow { stroke-width: 2; }
+.circle-one { opacity: 0.85; }
+.circle-two { opacity: 0.3; }
+
+#previous-button {
+    transform: rotate(-3deg) translateY(2px);
+}
+
+#next-button {
+    transform: rotate(2deg) translateY(-1px);
+}
+
+#previous-button:hover {
+    transform: rotate(-5deg) translateY(2px) scale(1.06);
+    opacity: 0.72;
+}
+
+#next-button:hover {
+    transform: rotate(4deg) translateY(-1px) scale(1.06);
+    opacity: 0.72;
+}
+
+.arrow-button:focus-visible {
+    outline: 1px dashed var(--arrow-color);
+    outline-offset: 5px;
+}
+
+.arrow-button:disabled {
+    opacity: 0.25;
+    cursor: default;
+}
+
+.page-number {
+    margin-top: -50px;
+    padding-bottom: 30px;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.end-popup {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background-color: rgba(31, 28, 24, 0);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.4s ease,
+        visibility 0.4s ease,
+        background-color 0.4s ease;
+    z-index: 100;
+}
+
+.end-popup.is-visible {
+    opacity: 1;
+    visibility: visible;
+    background-color: rgba(31, 28, 24, 0.55);
+}
+
+.end-popup-panel {
+    width: min(520px, 92vw);
+    position: relative;
+    padding: 52px 48px 44px;
+    background-color: var(--book-paper);
+    border-radius: 4px;
+    text-align: center;
+    box-shadow:
+        0 28px 70px rgba(20, 18, 15, 0.25),
+        0 4px 16px rgba(20, 18, 15, 0.1);
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+    transition:
+        opacity 0.4s ease 0.12s,
+        transform 0.4s ease 0.12s;
+}
+
+.end-popup.is-visible .end-popup-panel {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.popup-close {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    background: transparent;
+    color: #46413a;
+    font-size: 29px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.popup-eyebrow {
+    margin-bottom: 15px;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.end-popup-panel h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(28px, 4vw, 39px);
+    font-weight: 400;
+    line-height: 1.15;
+}
+
+.popup-copy {
+    max-width: 390px;
+    margin: 19px auto 30px;
+    color: #5d574f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.popup-links {
+    display: grid;
+    gap: 12px;
+}
+
+.popup-link {
+    display: block;
+    padding: 15px 20px;
+    border: 1px solid #37332e;
+    color: #27231f;
+    background-color: transparent;
+    font-size: 12px;
+    letter-spacing: 0.7px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.popup-link:hover {
+    transform: translateY(-1px);
+}
+
+.popup-link-primary {
+    background-color: #27231f;
+    color: var(--book-paper);
+}
+
+.popup-link:not(.popup-link-primary):hover {
+    background-color: rgba(39, 35, 31, 0.05);
+}
+
+.popup-link-primary:hover {
+    background-color: #403a33;
+}
+
+.restart-book {
+    margin-top: 25px;
+    border: none;
+    border-bottom: 1px solid rgba(39, 35, 31, 0.55);
+    background: transparent;
+    color: #4d473f;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .book-area { gap: 18px; }
+    .book { width: 78vw; }
+}
+
+@media (max-width: 700px) {
+
+    .site-header {
+        position: static;
+        padding: 30px 24px 0;
+    }
+
+    .back-link {
+    top: 32px;
+    right: 24px;
+
+    font-size: 9px;
+    }
+    
+    .book-area {
+        min-height: auto;
+
+        gap: 6px;
+
+        padding:
+            135px 8px 24px;
+    }
+
+    .book {
+        width: 82vw;
+
+        aspect-ratio: 2 / 1;
+
+        display: flex;
+
+        overflow: visible;
+    }
+
+    .page {
+        display: flex;
+
+        width: 50%;
+
+        aspect-ratio: 1 / 1;
+    }
+
+    .left-page {
+        border-radius:
+            5px 0 0 5px;
+    }
+
+    .right-page {
+        display: flex;
+
+        border-radius:
+            0 5px 5px 0;
+    }
+
+    .book::before,
+    .book::after {
+        display: block;
+    }
+
+    .left-page::before,
+    .right-page::after {
+        display: none;
+    }
+
+    .arrow-button {
+        width: 30px;
+        height: 30px;
+    }
+
+    .arrow-button svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .page-number {
+        margin-top: 14px;
+
+        padding-bottom: 20px;
+    }
+
+    .end-popup-panel {
+        padding:
+            46px 24px 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+/* =========================
+   END OF BOOK TRANSITION
+   ========================= */
+
+.book {
+    transition:
+        transform 0.6s ease,
+        opacity 0.6s ease,
+        filter 0.6s ease;
+}
+
+.book.book-ending {
+    transform:
+        scale(0.86)
+        rotate(-0.6deg);
+
+    opacity: 0;
+
+    filter: blur(1px);
+}
+
+
+/* =========================
+   END POPUP
+   ========================= */
+
+.end-popup {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+        rgba(31, 28, 24, 0);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.45s ease,
+        background 0.45s ease,
+        visibility 0.45s ease;
+
+    z-index: 1000;
+}
+
+
+.end-popup.is-visible {
+    opacity: 1;
+
+    visibility: visible;
+
+    background:
+        rgba(31, 28, 24, 0.48);
+}
+
+
+.end-popup-panel {
+    width: min(520px, 92vw);
+
+    padding:
+        50px 44px 40px;
+
+    position: relative;
+
+    background:
+        #f8f6f0;
+
+    text-align: center;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 28px 70px rgba(20, 18, 15, 0.22);
+
+    opacity: 0;
+
+    transform:
+        translateY(18px)
+        scale(0.97);
+
+    transition:
+        opacity 0.4s ease 0.15s,
+        transform 0.4s ease 0.15s;
+}
+
+
+.end-popup.is-visible
+.end-popup-panel {
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+.popup-close {
+    position: absolute;
+
+    top: 14px;
+    right: 17px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    color: #4a4741;
+
+    cursor: pointer;
+}
+
+
+.popup-eyebrow {
+    margin-bottom: 14px;
+
+    font-size: 10px;
+
+    letter-spacing: 2px;
+}
+
+
+.end-popup-panel h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(28px, 4vw, 38px);
+
+    font-weight: 400;
+}
+
+
+.popup-copy {
+    margin:
+        18px auto 28px;
+
+    max-width: 380px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 16px;
+
+    line-height: 1.5;
+
+    color: #5d574f;
+}
+
+
+.popup-links {
+    display: grid;
+
+    gap: 12px;
+}
+
+
+.popup-link {
+    display: block;
+
+    padding:
+        14px 18px;
+
+    border:
+        1px solid #37332e;
+
+    color: #27231f;
+
+    text-decoration: none;
+
+    text-transform: uppercase;
+
+    font-size: 12px;
+
+    letter-spacing: 0.7px;
+}
+
+
+.popup-link-primary {
+    background:
+        #27231f;
+
+    color:
+        #f8f6f0;
+}
+
+
+.restart-book {
+    margin-top: 24px;
+
+    border: none;
+
+    border-bottom:
+        1px solid rgba(39, 35, 31, 0.5);
+
+    background: transparent;
+
+    color: #4d473f;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+/* ==================================================
+   SOMEWHERE TO BE — LOWER PROJECT SECTIONS
+   ================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Keep scrolling available while the end popup is open. */
+body.popup-open {
+    overflow: auto !important;
+}
+
+/* Make the popup part of the top viewport rather than pinning it to the screen. */
+.end-popup {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    inset: auto !important;
+    touch-action: pan-y;
+}
+
+/* ==================================================
+   OUTSIDE HAND-DRAWN SCROLL CUE
+   ================================================== */
+
+.outside-scroll-cue {
+    width: 74px;
+    margin: -6px auto 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #675f56;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
+}
+
+.outside-scroll-cue.is-visible {
+    opacity: .72;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.outside-scroll-label {
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.outside-scroll-cue svg {
+    width: 50px;
+    height: 50px;
+    overflow: visible;
+    animation: summer-scroll-cue-drift 2.4s ease-in-out infinite;
+}
+
+.cue-circle,
+.cue-arrow {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cue-circle-one { stroke-width: 1.25; }
+.cue-circle-two { stroke-width: .7; opacity: .32; }
+.cue-arrow { stroke-width: 1.45; }
+
+@keyframes summer-scroll-cue-drift {
+    0%, 100% { transform: translateY(0) rotate(-.3deg); }
+    50% { transform: translateY(4px) rotate(.3deg); }
+}
+
+/* ==================================================
+   PROJECT EDITIONS — HIDDEN UNTIL BOOK IS FINISHED
+   ================================================== */
+
+.project-editions {
+    display: none;
+    width: 100%;
+    background: var(--site-background);
+    color: var(--text-color);
+}
+
+.project-editions.is-unlocked {
+    display: block;
+    padding-top: 26vh;
+    animation: summer-editions-reveal .8s ease both;
+}
+
+@keyframes summer-editions-reveal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ==================================================
+   ABOUT THIS BOOK
+   ================================================== */
+
+.about-book-block {
+    width: min(560px, 82vw);
+    margin: 0 auto 52px;
+    text-align: left;
+}
+
+.about-book-label {
+    margin: 0 0 26px;
+    color: rgba(29, 29, 29, 0.58);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.about-book-copy {
+    color: rgba(29, 29, 29, 0.78);
+    font-size: 13px;
+    line-height: 1.85;
+}
+
+.about-book-copy p {
+    margin: 0 0 22px;
+}
+
+.about-book-copy p:last-child {
+    margin-bottom: 0;
+}
+
+/* ==================================================
+   FREE DIGITAL EDITION
+   ================================================== */
+
+.free-pdf-block {
+    width: min(560px, 82vw);
+    margin: 0 auto 135px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(29, 29, 29, 0.14);
+    text-align: left;
+}
+
+.free-pdf-label {
+    margin: 0 0 24px;
+    color: rgba(29, 29, 29, 0.58);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.book-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 44px;
+}
+
+.book-option-title {
+    margin: 0 0 10px;
+    color: rgba(29, 29, 29, 0.72);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.35px;
+    text-transform: uppercase;
+}
+
+.free-pdf-copy {
+    margin: 0;
+    font-size: 11px;
+    line-height: 1.7;
+    color: rgba(29, 29, 29, 0.7);
+}
+
+.free-pdf-link,
+.physical-book-link {
+    display: inline-block;
+    margin-top: 18px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(29, 29, 29, 0.35);
+    color: var(--text-color);
+    font-size: 8px;
+    letter-spacing: 1.25px;
+    text-decoration: none;
+    transition: opacity .25s ease, border-color .25s ease, transform .25s ease;
+}
+
+.free-pdf-link:hover,
+.physical-book-link:hover {
+    opacity: .72;
+    border-bottom-color: var(--text-color);
+    transform: translateX(3px);
+}
+
+.shop-section {
+    position: relative;
+    width: min(1180px, 90vw);
+    margin: 0 auto;
+    padding: 110px 0 220px;
+}
+
+/* ==================================================
+   WHOLE-SECTION SCROLL REVEAL
+   Keeps the SCROLL cue unchanged; only the shop sections
+   softly appear when they enter the viewport.
+   ================================================== */
+
+.prints-section.section-scroll-reveal,
+.wearables-section.section-scroll-reveal,
+.objects-section.section-scroll-reveal {
+    opacity: 0;
+    transform: translateY(54px);
+    filter: blur(3px);
+    transition:
+        opacity 1.15s ease,
+        transform 1.15s cubic-bezier(.22, .61, .36, 1),
+        filter .95s ease;
+    will-change: opacity, transform, filter;
+}
+
+.prints-section.section-scroll-reveal.is-revealed,
+.wearables-section.section-scroll-reveal.is-revealed,
+.objects-section.section-scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+.prints-section {
+    padding-top: 75px;
+}
+
+.section-heading {
+    margin-bottom: 95px;
+}
+
+.section-number {
+    margin-bottom: 10px;
+    color: #756d63;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    color: #26221e;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 2.6px;
+}
+
+.product-name {
+    color: #302b26;
+    font-size: 9px;
+    letter-spacing: 1.8px;
+}
+
+.product-details {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.product-link {
+    margin-top: 14px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #5d554c;
+    font-family: inherit;
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+    opacity: .72;
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.product-link:hover {
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+/* ==================================================
+   PRINTS — GROUPED ON ONE SIMPLE SHELF
+   ================================================== */
+
+.print-gallery-v2 {
+    width: min(1040px, 88vw);
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.print-stage-v2 {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.print-visuals-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr .88fr .84fr;
+    align-items: end;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 12px 34px 0;
+}
+
+.print-visual-v2 {
+    position: relative;
+    justify-self: center;
+    transition: transform .35s ease, filter .35s ease;
+}
+
+.print-visual-v2 img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    box-shadow:
+        0 18px 30px rgba(67, 56, 45, .18),
+        0 4px 8px rgba(67, 56, 45, .10);
+}
+
+.print-visual-one-v2 {
+    width: min(320px, 100%);
+    transform: rotate(-.22deg);
+}
+
+.print-visual-two-v2 {
+    width: min(225px, 100%);
+    transform: rotate(.16deg);
+}
+
+.print-visual-three-v2 {
+    width: min(225px, 100%);
+    transform: rotate(-.15deg);
+}
+
+.print-visual-v2:hover {
+    transform: translateY(-6px) rotate(0deg);
+    filter: brightness(1.015);
+}
+
+/* Print info stays ABOVE the shelf. */
+.print-meta-row-v2 {
+    display: grid;
+    grid-template-columns: 1.18fr .88fr .84fr;
+    gap: clamp(34px, 4.5vw, 64px);
+    padding: 24px 34px 0;
+}
+
+.print-meta-v2 {
+    width: min(320px, 100%);
+    justify-self: center;
+    text-align: left;
+}
+
+/* Simple shelf: one rectangle, no extra faces or duplicate lines. */
+.print-shelf-v2 {
+    position: relative;
+    z-index: 4;
+    width: 96%;
+    height: 10px;
+    margin: 22px auto 0;
+    background: rgba(87, 78, 68, .08);
+    border: 1.2px solid rgba(76, 68, 59, .54);
+    border-radius: 2px;
+    box-sizing: border-box;
+    transform: rotate(.05deg);
+    box-shadow: 0 8px 12px rgba(67, 56, 45, .10);
+}
+
+.print-shelf-v2::before,
+.print-shelf-v2::after {
+    content: none;
+    display: none;
+}
+
+/* ==================================================
+   WEARABLES / OBJECTS
+   ================================================== */
+
+.floating-products {
+    position: relative;
+    width: 100%;
+}
+
+.floating-product {
+    position: relative;
+    width: max-content;
+    transition: transform .45s ease, filter .45s ease;
+}
+
+.product-image-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.transparent-product {
+    filter: drop-shadow(0 20px 14px rgba(67, 56, 45, .16));
+}
+
+.product-info {
+    margin-top: 18px;
+}
+
+.wearables-layout {
+    min-height: 720px;
+}
+
+.wearable-product .product-image-wrap {
+    width: 350px;
+}
+
+.shirt-product {
+    position: absolute;
+    left: 8%;
+    top: 20px;
+    transform: rotate(-1deg);
+}
+
+.hoodie-product {
+    position: absolute;
+    right: 8%;
+    top: 210px;
+    transform: rotate(1deg);
+}
+
+.objects-layout {
+    min-height: 620px;
+}
+
+.object-product .product-image-wrap {
+    width: 185px;
+}
+
+.object-one {
+    position: absolute;
+    left: 10%;
+    top: 60px;
+    transform: rotate(-5deg);
+}
+
+.object-two {
+    position: absolute;
+    left: 43%;
+    top: 290px;
+    transform: rotate(3deg);
+}
+
+.object-three {
+    position: absolute;
+    right: 10%;
+    top: 30px;
+    transform: rotate(-2deg);
+}
+
+.floating-product:hover {
+    transform: translateY(-7px);
+}
+
+[data-optional-products].is-empty {
+    display: none;
+}
+
+.floating-product.is-missing {
+    display: none;
+}
+
+/* ==================================================
+   PROJECT FOOTER
+   ================================================== */
+
+.project-footer {
+    min-height: 52vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 100px 24px 140px;
+    text-align: center;
+}
+
+.project-footer a {
+    color: #5b534a;
+    text-decoration: none;
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: .68;
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.project-footer a:hover {
+    opacity: 1;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+}
+
+/* ==================================================
+   MOBILE LOWER PROJECT SECTIONS
+   ================================================== */
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .print-gallery-v2 { width: 92vw; }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        gap: 28px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .print-visual-one-v2 { width: 260px; }
+    .print-visual-two-v2 { width: 190px; }
+    .print-visual-three-v2 { width: 190px; }
+}
+
+@media (max-width: 700px) {
+    .outside-scroll-cue {
+        width: 62px;
+        margin-top: 2px;
+        margin-bottom: 22px;
+    }
+
+    .outside-scroll-cue svg {
+        width: 44px;
+        height: 44px;
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 22vh;
+    }
+
+    .shop-section {
+        width: 88vw;
+        padding: 90px 0 145px;
+    }
+
+    .section-heading {
+        margin-bottom: 70px;
+    }
+
+    .print-gallery-v2 {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        scrollbar-width: none;
+        padding-bottom: 10px;
+    }
+
+    .print-gallery-v2::-webkit-scrollbar {
+        display: none;
+    }
+
+    .print-stage-v2 {
+        width: 700px;
+        padding: 0 16px;
+    }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        grid-template-columns: 230px 175px 175px;
+        gap: 34px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .print-visual-one-v2 { width: 230px; }
+    .print-visual-two-v2 { width: 175px; }
+    .print-visual-three-v2 { width: 175px; }
+
+    .print-shelf-v2 {
+        width: 650px;
+        height: 9px;
+        margin-top: 18px;
+    }
+
+    .wearables-layout,
+    .objects-layout {
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 100px;
+    }
+
+    .shirt-product,
+    .hoodie-product,
+    .object-one,
+    .object-two,
+    .object-three {
+        position: relative;
+        left: auto;
+        right: auto;
+        top: auto;
+    }
+
+    .wearable-product .product-image-wrap {
+        width: min(72vw, 290px);
+    }
+
+    .object-product .product-image-wrap {
+        width: min(43vw, 170px);
+    }
+
+    .shirt-product,
+    .object-one { align-self: flex-start; }
+
+    .hoodie-product,
+    .object-three { align-self: flex-end; }
+
+    .object-two { align-self: center; }
+
+    .project-footer {
+        min-height: 46vh;
+        padding: 90px 24px 120px;
+    }
+}
+
+
+/* ==================================================
+   FINAL SUMMER POPUP POSITION FIX
+   Keep the end popup centered over the book area,
+   while still allowing the page to scroll underneath.
+   ================================================== */
+
+.book-area {
+    position: relative;
+}
+
+body.popup-open {
+    overflow: auto !important;
+}
+
+.end-popup {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    z-index: 1000 !important;
+    touch-action: pan-y;
+}
+
+.end-popup-panel {
+    pointer-events: auto;
+    touch-action: pan-y;
+}
+
+
+/* ==================================================
+   CLEAN BOOK PURCHASE + END SCROLL FLOW
+   ================================================== */
+
+/* The old end popup is no longer used. */
+.end-popup {
+    display: none !important;
+}
+
+/* Mid-book purchase button: hidden for the first half of the book. */
+.mid-book-purchase {
+    width: fit-content;
+    margin: -12px auto 22px;
+    padding: 10px 16px;
+    display: block;
+
+    border: 1px solid rgba(74, 71, 65, .42);
+    background: transparent;
+    color: #4a4741;
+
+    font-size: 9px;
+    letter-spacing: 1.35px;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    pointer-events: none;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        background-color .2s ease,
+        color .2s ease,
+        visibility .35s ease;
+}
+
+.mid-book-purchase.is-visible {
+    opacity: .82;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.mid-book-purchase.is-visible:hover {
+    opacity: 1;
+    background: #2b2723;
+    color: var(--book-paper);
+}
+
+.mid-book-purchase[aria-disabled="true"] {
+    cursor: default;
+}
+
+/* The hand-drawn cue is the only ending message. */
+.outside-scroll-cue {
+    text-decoration: none;
+    pointer-events: none;
+}
+
+.outside-scroll-cue.is-visible {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+@media (max-width: 700px) {
+    .mid-book-purchase {
+        margin: -8px auto 18px;
+        padding: 9px 13px;
+        font-size: 8px;
+        letter-spacing: 1.15px;
+    }
+}
+
+/* ==================================================
+   FINAL POSITION TWEAK — BRING PURCHASE AREA CLOSER
+   ================================================== */
+
+@media (min-width: 701px) {
+    .page-number {
+        margin-top: -105px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 12px auto 18px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .page-number {
+        margin-top: 4px !important;
+        padding-bottom: 0 !important;
+    }
+
+    .mid-book-purchase {
+        margin: 10px auto 16px !important;
+    }
+}
+
+/* ==================================================
+   FINAL SPACING TWEAK — BRING PRINTS CLOSER TO BOOK
+   Keeps breathing room without the oversized empty gap.
+   ================================================== */
+
+@media (min-width: 901px) {
+    .project-editions.is-unlocked {
+        padding-top: 8vh !important;
+    }
+
+    .prints-section {
+        padding-top: 42px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 72px !important;
+    }
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .project-editions.is-unlocked {
+        padding-top: 8vh !important;
+    }
+
+    .prints-section {
+        padding-top: 44px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 68px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .project-editions.is-unlocked {
+        padding-top: 6vh !important;
+    }
+
+    .prints-section {
+        padding-top: 38px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 58px !important;
+    }
+}
+
+/* ==================================================
+   BOOK-TOP PURCHASE BUTTON
+   ================================================== */
+
+.book-area {
+    position: relative;
+}
+
+.book-column {
+    width: min(1000px, 76vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.book-column .book {
+    width: 100% !important;
+}
+
+.purchase-slot {
+    min-height: 42px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.mid-book-purchase {
+    margin: 0 !important;
+    padding: 9px 16px;
+}
+
+.page-number {
+    margin-top: 23px !important;
+    padding-bottom: 0 !important;
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .book-column {
+        width: 78vw;
+    }
+}
+
+@media (max-width: 700px) {
+    .book-column {
+        width: 82vw;
+    }
+
+    .purchase-slot {
+        min-height: 34px;
+        margin-bottom: 8px;
+    }
+
+    .mid-book-purchase {
+        margin: 0 !important;
+        padding: 8px 12px;
+    }
+
+    .page-number {
+        margin-top: 18px !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+/* ==================================================
+   LARGE PRINT PREVIEW MODAL
+   ================================================== */
+
+.print-visual-v2[data-print-preview],
+.product-link[data-print-preview] {
+    cursor: pointer;
+}
+
+.print-visual-v2[data-print-preview]:focus-visible {
+    outline: 1px dashed rgba(74, 71, 65, .75);
+    outline-offset: 8px;
+}
+
+.print-preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 28px;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity .28s ease, visibility .28s ease;
+}
+
+.print-preview-modal.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.print-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(243, 237, 226, .86);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    cursor: pointer;
+}
+
+.print-preview-dialog {
+    position: relative;
+    z-index: 1;
+
+    width: min(760px, 90vw);
+    max-height: 90vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 34px 34px 26px;
+
+    background: rgba(248, 246, 240, .96);
+    border: 1px solid rgba(74, 71, 65, .16);
+    box-shadow:
+        0 26px 60px rgba(55, 45, 35, .17),
+        0 5px 14px rgba(55, 45, 35, .08);
+}
+
+.print-preview-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    z-index: 3;
+
+    width: 36px;
+    height: 36px;
+
+    border: 0;
+    background: transparent;
+    color: #49433c;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.print-preview-image-wrap {
+    width: 100%;
+    min-height: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.print-preview-image-wrap img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 66vh;
+
+    object-fit: contain;
+
+    box-shadow:
+        0 20px 42px rgba(60, 48, 38, .17),
+        0 4px 10px rgba(60, 48, 38, .08);
+}
+
+.print-preview-info {
+    width: 100%;
+    max-width: 620px;
+
+    margin-top: 22px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.print-preview-title {
+    color: #302b26;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+}
+
+.print-preview-sizes {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.print-preview-next {
+    flex-shrink: 0;
+    color: #4d463f;
+    font-size: 9px;
+    letter-spacing: 1.3px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(77, 70, 63, .35);
+    padding-bottom: 3px;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.print-preview-next:hover {
+    opacity: .62;
+    transform: translateX(2px);
+}
+
+body.print-preview-open {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .print-preview-modal {
+        padding: 16px;
+    }
+
+    .print-preview-dialog {
+        width: 94vw;
+        max-height: 88vh;
+        padding: 42px 18px 20px;
+    }
+
+    .print-preview-image-wrap img {
+        max-height: 58vh;
+    }
+
+    .print-preview-info {
+        margin-top: 18px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .print-preview-next {
+        font-size: 8px;
+    }
+}
+
+/* ==================================================
+   PRINT PREVIEW — BOTTOM HAND-DRAWN CLOSE CUE
+   ================================================== */
+
+/* The old top-right X is no longer used. */
+.print-preview-close {
+    display: none !important;
+}
+
+/* Stack the preview card and the close cue vertically. */
+.print-preview-modal {
+    flex-direction: column;
+    gap: 14px;
+}
+
+.print-preview-dialog {
+    max-height: 82vh;
+}
+
+.print-preview-image-wrap img {
+    max-height: 59vh;
+}
+
+.print-preview-close-cue {
+    position: relative;
+    z-index: 2;
+
+    width: 74px;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    border: 0;
+    background: transparent;
+    color: #655e56;
+
+    cursor: pointer;
+
+    opacity: .72;
+    transition:
+        opacity .22s ease,
+        transform .22s ease;
+}
+
+.print-preview-close-cue:hover {
+    opacity: 1;
+    transform: translateY(2px);
+}
+
+.print-preview-close-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.print-preview-close-cue svg {
+    width: 52px;
+    height: 52px;
+    overflow: visible;
+}
+
+.preview-close-circle,
+.preview-close-x {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.preview-close-circle {
+    stroke-width: 1.45;
+}
+
+.preview-close-circle-one {
+    opacity: .82;
+}
+
+.preview-close-circle-two {
+    opacity: .28;
+}
+
+.preview-close-x {
+    stroke-width: 1.65;
+    opacity: .82;
+}
+
+.print-preview-close-cue:focus-visible {
+    outline: 1px dashed rgba(74, 71, 65, .7);
+    outline-offset: 5px;
+}
+
+@media (max-width: 700px) {
+    .print-preview-modal {
+        gap: 10px;
+    }
+
+    .print-preview-dialog {
+        max-height: 80vh;
+        padding-top: 20px;
+    }
+
+    .print-preview-image-wrap img {
+        max-height: 52vh;
+    }
+
+    .print-preview-close-cue svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+/* ==================================================
+   FINAL FINE TUNE — PURCHASE BUTTON POSITION
+   ================================================== */
+
+.purchase-slot {
+    transform: translateY(-10px);
+}
+
+@media (max-width: 700px) {
+    .purchase-slot {
+        transform: translateY(-6px);
+    }
+}
+
+/* ==================================================
+   WEARABLES — SINGLE TEE DISPLAY
+   Mirrors the print presentation, but smaller and quieter.
+   ================================================== */
+
+.wearables-section {
+    padding-top: 110px;
+    padding-bottom: 190px;
+}
+
+.wearables-section.is-empty {
+    display: none;
+}
+
+.wearable-gallery-v2 {
+    width: min(700px, 82vw);
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.wearable-stage-v2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wearable-visual-v2 {
+    width: min(340px, 46vw);
+    position: relative;
+    cursor: pointer;
+    transition: transform .35s ease, filter .35s ease;
+}
+
+.wearable-visual-v2 img {
+    width: 100%;
+    height: auto;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 24px 24px rgba(67, 56, 45, .18));
+}
+
+.wearable-visual-v2:hover {
+    transform: translateY(-7px) rotate(-.12deg);
+    filter: brightness(1.02);
+}
+
+.wearable-visual-v2:focus-visible {
+    outline: 1px dashed rgba(74, 71, 65, .7);
+    outline-offset: 10px;
+}
+
+.wearable-meta-v2 {
+    width: min(340px, 46vw);
+    margin-top: 24px;
+    text-align: left;
+}
+
+.wearable-shelf-v2 {
+    width: min(430px, 60vw);
+    height: 10px;
+    margin: 22px auto 0;
+    background: rgba(87, 78, 68, .08);
+    border: 1.2px solid rgba(76, 68, 59, .54);
+    border-radius: 2px;
+    transform: rotate(-.04deg);
+    box-shadow: 0 8px 12px rgba(67, 56, 45, .10);
+}
+
+/* ==================================================
+   TEE PREVIEW — FRONT + BACK SIDE BY SIDE
+   ================================================== */
+
+.tee-preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 28px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .28s ease, visibility .28s ease;
+}
+
+.tee-preview-modal.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.tee-preview-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(243, 237, 226, .86);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    cursor: pointer;
+}
+
+.tee-preview-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(920px, 92vw);
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 30px 24px;
+    background: rgba(248, 246, 240, .97);
+    border: 1px solid rgba(74, 71, 65, .16);
+    box-shadow:
+        0 26px 60px rgba(55, 45, 35, .17),
+        0 5px 14px rgba(55, 45, 35, .08);
+}
+
+.tee-preview-images {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: end;
+}
+
+.tee-preview-side {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tee-preview-side img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 56vh;
+    object-fit: contain;
+}
+
+.tee-preview-side figcaption {
+    margin-top: 10px;
+    color: #746b61;
+    font-size: 7px;
+    letter-spacing: 1.7px;
+}
+
+.tee-preview-info {
+    width: 100%;
+    max-width: 760px;
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.tee-preview-title {
+    color: #302b26;
+    font-size: 10px;
+    letter-spacing: 1.8px;
+}
+
+.tee-preview-project {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+.tee-preview-next {
+    flex-shrink: 0;
+    color: #4d463f;
+    font-size: 9px;
+    letter-spacing: 1.3px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(77, 70, 63, .35);
+    padding-bottom: 3px;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.tee-preview-next:hover {
+    opacity: .62;
+    transform: translateX(2px);
+}
+
+.tee-preview-close-cue {
+    position: relative;
+    z-index: 2;
+    width: 74px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    border: 0;
+    background: transparent;
+    color: #655e56;
+    cursor: pointer;
+    opacity: .72;
+    transition: opacity .22s ease, transform .22s ease;
+}
+
+.tee-preview-close-cue:hover {
+    opacity: 1;
+    transform: translateY(2px);
+}
+
+.tee-preview-close-label {
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.tee-preview-close-cue svg {
+    width: 52px;
+    height: 52px;
+    overflow: visible;
+}
+
+body.tee-preview-open {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .wearables-section {
+        padding-top: 76px;
+        padding-bottom: 135px;
+    }
+
+    .wearable-gallery-v2 {
+        width: 100%;
+    }
+
+    .wearable-visual-v2,
+    .wearable-meta-v2 {
+        width: min(62vw, 250px);
+    }
+
+    .wearable-shelf-v2 {
+        width: min(68vw, 285px);
+        height: 9px;
+        margin-top: 18px;
+    }
+
+    .tee-preview-modal {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .tee-preview-dialog {
+        width: 95vw;
+        max-height: 82vh;
+        padding: 18px 14px 18px;
+    }
+
+    .tee-preview-images {
+        gap: 10px;
+    }
+
+    .tee-preview-side img {
+        max-height: 44vh;
+    }
+
+    .tee-preview-info {
+        margin-top: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .tee-preview-next {
+        font-size: 8px;
+    }
+
+    .tee-preview-close-cue svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+
+/* ==================================================
+   WEARABLES — NUMBERED TWO-SHIRT DISPLAY
+   ================================================== */
+
+.wearable-gallery-v2 {
+    width: min(900px, 86vw);
+}
+
+.wearable-products-v2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(42px, 7vw, 92px);
+    align-items: end;
+}
+
+.wearable-item-v2 {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wearable-item-v2.is-missing {
+    display: none;
+}
+
+.wearable-visual-v2 {
+    width: min(300px, 31vw);
+}
+
+.wearable-meta-v2 {
+    width: min(300px, 31vw);
+    margin-top: 20px;
+}
+
+.wearable-shelf-v2 {
+    width: min(800px, 82vw);
+    margin-top: 24px;
+}
+
+@media (max-width: 700px) {
+    .wearable-gallery-v2 {
+        width: 92vw;
+    }
+
+    .wearable-products-v2 {
+        gap: 18px;
+    }
+
+    .wearable-visual-v2,
+    .wearable-meta-v2 {
+        width: min(40vw, 190px);
+    }
+
+    .wearable-meta-v2 {
+        margin-top: 14px;
+    }
+
+    .wearable-shelf-v2 {
+        width: 88vw;
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 700px) {
+    .about-book-block {
+        width: 84vw;
+        margin-bottom: 44px;
+    }
+
+    .about-book-label {
+        margin-bottom: 22px;
+    }
+
+    .about-book-copy {
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    .about-book-copy p {
+        margin-bottom: 18px;
+    }
+
+    .free-pdf-block {
+        width: 84vw;
+        margin-bottom: 105px;
+        padding-top: 24px;
+    }
+
+    .book-options {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .free-pdf-copy {
+        font-size: 11px;
+    }
+
+    .free-pdf-link,
+    .physical-book-link {
+        font-size: 8px;
+    }
+}
+
+
+/* ==================================================
+   SOMEWHERE TO BE — HOVER FLOAT + HANDMADE SHELVES
+   Hover behavior mirrors the homepage: the object lifts,
+   rotates slightly toward level, and gains a deeper shadow.
+   ================================================== */
+
+/* PRINTS */
+.print-visual-v2 {
+    transform-origin: center bottom;
+    transition:
+        transform .45s cubic-bezier(.22, .61, .36, 1),
+        filter .45s ease;
+    will-change: transform;
+}
+
+.print-visual-one-v2 {
+    transform: rotate(-.22deg);
+}
+
+.print-visual-two-v2 {
+    transform: rotate(.16deg);
+}
+
+.print-visual-three-v2 {
+    transform: rotate(-.15deg);
+}
+
+.print-visual-v2:hover,
+.print-visual-v2:focus-visible {
+    transform: translateY(-12px) rotate(0deg);
+    filter: brightness(1.015);
+}
+
+.print-visual-v2 img {
+    transition:
+        box-shadow .45s ease,
+        filter .45s ease;
+}
+
+.print-visual-v2:hover img,
+.print-visual-v2:focus-visible img {
+    box-shadow:
+        0 15px 18px rgba(67, 56, 45, .12),
+        0 36px 48px rgba(67, 56, 45, .20);
+}
+
+/* WEARABLES */
+.wearable-visual-v2 {
+    transform-origin: center bottom;
+    transition:
+        transform .45s cubic-bezier(.22, .61, .36, 1),
+        filter .45s ease;
+    will-change: transform;
+}
+
+.wearable-item-v2:nth-child(1) .wearable-visual-v2 {
+    transform: rotate(-.18deg);
+}
+
+.wearable-item-v2:nth-child(2) .wearable-visual-v2 {
+    transform: rotate(.18deg);
+}
+
+.wearable-visual-v2:hover,
+.wearable-visual-v2:focus-visible {
+    transform: translateY(-12px) rotate(0deg);
+}
+
+.wearable-visual-v2 img {
+    transition: filter .45s ease;
+}
+
+.wearable-visual-v2:hover img,
+.wearable-visual-v2:focus-visible img {
+    filter:
+        drop-shadow(0 15px 10px rgba(67, 56, 45, .12))
+        drop-shadow(0 30px 20px rgba(67, 56, 45, .14));
+}
+
+/* HANDMADE SHELVES */
+.print-shelf-v2,
+.wearable-shelf-v2 {
+    position: relative;
+    height: 14px;
+    background: #5d554c;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: .56;
+    transform: rotate(-.08deg);
+
+    -webkit-mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 24'%3E%3Cpath d='M4 9 C79 6 137 11 213 8 S345 7 421 10 S553 6 631 8 S766 11 840 8 S934 8 997 10' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 15 C96 12 154 16 232 13 S369 15 448 12 S581 16 661 13 S792 14 865 12 S950 15 992 13' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+
+    mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 24'%3E%3Cpath d='M4 9 C79 6 137 11 213 8 S345 7 421 10 S553 6 631 8 S766 11 840 8 S934 8 997 10' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 15 C96 12 154 16 232 13 S369 15 448 12 S581 16 661 13 S792 14 865 12 S950 15 992 13' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+}
+
+.print-shelf-v2 {
+    width: 92%;
+    margin-top: 34px;
+}
+
+.wearable-shelf-v2 {
+    width: min(760px, 78vw);
+    margin-top: 34px;
+}
+
+@media (max-width: 700px) {
+    /*
+      Phones don't have hover, so leave the objects stable there.
+      The existing tap-to-preview behavior remains unchanged.
+    */
+    .print-shelf-v2 {
+        width: 90%;
+        margin-top: 28px;
+    }
+
+    .wearable-shelf-v2 {
+        width: 84vw;
+        margin-top: 28px;
+    }
+}
+
+
+/* ==================================================
+   HOVER FLOAT REFINEMENT
+   Slight lean on lift + reliable wearable hover trigger.
+   ================================================== */
+
+/* PRINTS — lift with just a tiny lean instead of flattening completely. */
+.print-visual-one-v2:hover,
+.print-visual-one-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.55deg);
+}
+
+.print-visual-two-v2:hover,
+.print-visual-two-v2:focus-visible {
+    transform: translateY(-11px) rotate(.48deg);
+}
+
+.print-visual-three-v2:hover,
+.print-visual-three-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.45deg);
+}
+
+
+/*
+  WEARABLES — trigger the lift from the whole wearable item,
+  not only the transparent image area. This makes the hover
+  much more reliable with PNG shirt cutouts.
+*/
+.wearable-item-v2 {
+    cursor: pointer;
+}
+
+.wearable-item-v2:nth-child(1):hover .wearable-visual-v2,
+.wearable-item-v2:nth-child(1):focus-within .wearable-visual-v2,
+.wearable-item-v2:nth-child(1) .wearable-visual-v2:hover,
+.wearable-item-v2:nth-child(1) .wearable-visual-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.55deg);
+    filter: brightness(1.015);
+}
+
+.wearable-item-v2:nth-child(2):hover .wearable-visual-v2,
+.wearable-item-v2:nth-child(2):focus-within .wearable-visual-v2,
+.wearable-item-v2:nth-child(2) .wearable-visual-v2:hover,
+.wearable-item-v2:nth-child(2) .wearable-visual-v2:focus-visible {
+    transform: translateY(-11px) rotate(.55deg);
+    filter: brightness(1.015);
+}
+
+.wearable-item-v2:hover .summer-tee-main-image,
+.wearable-item-v2:focus-within .summer-tee-main-image {
+    filter:
+        drop-shadow(0 15px 10px rgba(67, 56, 45, .12))
+        drop-shadow(0 30px 20px rgba(67, 56, 45, .14));
+}
+
+@media (hover: none) {
+    .wearable-item-v2 {
+        cursor: default;
+    }
+}
+
+
+/* ==================================================
+   FOOTER PROJECT LINK
+   ================================================== */
+
+.footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+}
+
+.footer-project-link {
+    color: #5b534a;
+    text-decoration: none;
+    font-size: 9px;
+    letter-spacing: 2px;
+    opacity: .68;
+    transition:
+        opacity .25s ease,
+        transform .35s cubic-bezier(.22, .61, .36, 1);
+}
+
+.footer-project-link:hover {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+@media (max-width: 700px) {
+    .footer-actions {
+        gap: 22px;
+        flex-wrap: wrap;
+    }
+
+    .footer-project-link {
+        font-size: 8px;
+        letter-spacing: 1.55px;
+    }
+}
