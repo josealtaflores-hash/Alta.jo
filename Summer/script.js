@@ -32,8 +32,11 @@ const projectEditions = document.querySelector(".project-editions");
 let currentSpread = 0;
 let editionsUnlocked = false;
 
-/* Show the purchase button beginning with pages 11–12 (spread 6 of 11). */
-const purchaseRevealSpread = Math.floor(spreads.length / 2);
+/* Show GET A COPY beginning with pages 5–6. */
+const purchaseRevealSpread = 2;
+
+/* Unlock the SCROLL cue and the project/shop area beginning with pages 11–12. */
+const scrollRevealSpread = 5;
 
 if (purchaseButton) {
     purchaseButton.href = purchaseUrl;
@@ -74,6 +77,14 @@ function updateBook() {
     previousButton.disabled = currentSpread === 0;
 
     updatePurchaseButton();
+
+    /*
+      Once pages 11–12 are reached, make the lower project area available
+      and reveal the hand-drawn SCROLL cue. It stays available afterward.
+    */
+    if (currentSpread >= scrollRevealSpread) {
+        unlockProjectEditions();
+    }
 
     preloadSpread(currentSpread + 1);
     preloadSpread(currentSpread - 1);

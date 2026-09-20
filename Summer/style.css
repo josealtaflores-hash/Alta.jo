@@ -2261,3 +2261,191 @@ body.tee-preview-open {
         font-size: 8px;
     }
 }
+
+
+/* ==================================================
+   SOMEWHERE TO BE — HOVER FLOAT + HANDMADE SHELVES
+   Hover behavior mirrors the homepage: the object lifts,
+   rotates slightly toward level, and gains a deeper shadow.
+   ================================================== */
+
+/* PRINTS */
+.print-visual-v2 {
+    transform-origin: center bottom;
+    transition:
+        transform .45s cubic-bezier(.22, .61, .36, 1),
+        filter .45s ease;
+    will-change: transform;
+}
+
+.print-visual-one-v2 {
+    transform: rotate(-.22deg);
+}
+
+.print-visual-two-v2 {
+    transform: rotate(.16deg);
+}
+
+.print-visual-three-v2 {
+    transform: rotate(-.15deg);
+}
+
+.print-visual-v2:hover,
+.print-visual-v2:focus-visible {
+    transform: translateY(-12px) rotate(0deg);
+    filter: brightness(1.015);
+}
+
+.print-visual-v2 img {
+    transition:
+        box-shadow .45s ease,
+        filter .45s ease;
+}
+
+.print-visual-v2:hover img,
+.print-visual-v2:focus-visible img {
+    box-shadow:
+        0 15px 18px rgba(67, 56, 45, .12),
+        0 36px 48px rgba(67, 56, 45, .20);
+}
+
+/* WEARABLES */
+.wearable-visual-v2 {
+    transform-origin: center bottom;
+    transition:
+        transform .45s cubic-bezier(.22, .61, .36, 1),
+        filter .45s ease;
+    will-change: transform;
+}
+
+.wearable-item-v2:nth-child(1) .wearable-visual-v2 {
+    transform: rotate(-.18deg);
+}
+
+.wearable-item-v2:nth-child(2) .wearable-visual-v2 {
+    transform: rotate(.18deg);
+}
+
+.wearable-visual-v2:hover,
+.wearable-visual-v2:focus-visible {
+    transform: translateY(-12px) rotate(0deg);
+}
+
+.wearable-visual-v2 img {
+    transition: filter .45s ease;
+}
+
+.wearable-visual-v2:hover img,
+.wearable-visual-v2:focus-visible img {
+    filter:
+        drop-shadow(0 15px 10px rgba(67, 56, 45, .12))
+        drop-shadow(0 30px 20px rgba(67, 56, 45, .14));
+}
+
+/* HANDMADE SHELVES */
+.print-shelf-v2,
+.wearable-shelf-v2 {
+    position: relative;
+    height: 14px;
+    background: #5d554c;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: .56;
+    transform: rotate(-.08deg);
+
+    -webkit-mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 24'%3E%3Cpath d='M4 9 C79 6 137 11 213 8 S345 7 421 10 S553 6 631 8 S766 11 840 8 S934 8 997 10' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 15 C96 12 154 16 232 13 S369 15 448 12 S581 16 661 13 S792 14 865 12 S950 15 992 13' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+
+    mask:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 24'%3E%3Cpath d='M4 9 C79 6 137 11 213 8 S345 7 421 10 S553 6 631 8 S766 11 840 8 S934 8 997 10' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M10 15 C96 12 154 16 232 13 S369 15 448 12 S581 16 661 13 S792 14 865 12 S950 15 992 13' fill='none' stroke='black' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+}
+
+.print-shelf-v2 {
+    width: 92%;
+    margin-top: 34px;
+}
+
+.wearable-shelf-v2 {
+    width: min(760px, 78vw);
+    margin-top: 34px;
+}
+
+@media (max-width: 700px) {
+    /*
+      Phones don't have hover, so leave the objects stable there.
+      The existing tap-to-preview behavior remains unchanged.
+    */
+    .print-shelf-v2 {
+        width: 90%;
+        margin-top: 28px;
+    }
+
+    .wearable-shelf-v2 {
+        width: 84vw;
+        margin-top: 28px;
+    }
+}
+
+
+/* ==================================================
+   HOVER FLOAT REFINEMENT
+   Slight lean on lift + reliable wearable hover trigger.
+   ================================================== */
+
+/* PRINTS — lift with just a tiny lean instead of flattening completely. */
+.print-visual-one-v2:hover,
+.print-visual-one-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.55deg);
+}
+
+.print-visual-two-v2:hover,
+.print-visual-two-v2:focus-visible {
+    transform: translateY(-11px) rotate(.48deg);
+}
+
+.print-visual-three-v2:hover,
+.print-visual-three-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.45deg);
+}
+
+
+/*
+  WEARABLES — trigger the lift from the whole wearable item,
+  not only the transparent image area. This makes the hover
+  much more reliable with PNG shirt cutouts.
+*/
+.wearable-item-v2 {
+    cursor: pointer;
+}
+
+.wearable-item-v2:nth-child(1):hover .wearable-visual-v2,
+.wearable-item-v2:nth-child(1):focus-within .wearable-visual-v2,
+.wearable-item-v2:nth-child(1) .wearable-visual-v2:hover,
+.wearable-item-v2:nth-child(1) .wearable-visual-v2:focus-visible {
+    transform: translateY(-11px) rotate(-.55deg);
+    filter: brightness(1.015);
+}
+
+.wearable-item-v2:nth-child(2):hover .wearable-visual-v2,
+.wearable-item-v2:nth-child(2):focus-within .wearable-visual-v2,
+.wearable-item-v2:nth-child(2) .wearable-visual-v2:hover,
+.wearable-item-v2:nth-child(2) .wearable-visual-v2:focus-visible {
+    transform: translateY(-11px) rotate(.55deg);
+    filter: brightness(1.015);
+}
+
+.wearable-item-v2:hover .summer-tee-main-image,
+.wearable-item-v2:focus-within .summer-tee-main-image {
+    filter:
+        drop-shadow(0 15px 10px rgba(67, 56, 45, .12))
+        drop-shadow(0 30px 20px rgba(67, 56, 45, .14));
+}
+
+@media (hover: none) {
+    .wearable-item-v2 {
+        cursor: default;
+    }
+}
