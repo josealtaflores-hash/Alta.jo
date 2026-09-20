@@ -28,6 +28,17 @@ function setTheme(theme) {
 }
 
 
+function useFastSummerTransition() {
+  if (!mobileQuery.matches) return;
+
+  body.classList.add("fast-summer-transition");
+
+  window.setTimeout(() => {
+    body.classList.remove("fast-summer-transition");
+  }, 900);
+}
+
+
 function clearHoverStates() {
   projects.forEach((project) => {
     project.classList.remove(
@@ -242,6 +253,12 @@ function updateMobileTheme() {
     activeMobileProject =
       closest.project;
 
+    if (
+      activeMobileProject.dataset.theme === "summer"
+    ) {
+      useFastSummerTransition();
+    }
+
     setTheme(
       activeMobileProject.dataset.theme
     );
@@ -281,6 +298,12 @@ function updateMobileTheme() {
 
       activeMobileProject =
         closest.project;
+
+      if (
+        activeMobileProject.dataset.theme === "summer"
+      ) {
+        useFastSummerTransition();
+      }
 
       setTheme(
         activeMobileProject.dataset.theme

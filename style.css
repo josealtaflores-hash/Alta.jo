@@ -594,3 +594,13 @@ body.theme-light .book {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Faster mobile handoff from the neutral header into Somewhere to Be. */
+@media (max-width: 700px) {
+  body.fast-summer-transition {
+    transition:
+      background-color .78s cubic-bezier(.22, .61, .36, 1),
+      color .68s ease;
+  }
+}
