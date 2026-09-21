@@ -335,6 +335,7 @@ const summerWearablesSection = document.getElementById("wearables");
 const teePreviewFront = document.getElementById("tee-preview-front");
 const teePreviewBack = document.getElementById("tee-preview-back");
 const teePreviewTitle = document.getElementById("tee-preview-title");
+const teePreviewBuy = document.getElementById("tee-preview-buy");
 
 function setupSummerTeeAvailability() {
     if (!summerWearablesSection) return;
@@ -391,6 +392,7 @@ function openTeePreview(trigger) {
     const front = trigger?.dataset?.teeFront;
     const back = trigger?.dataset?.teeBack;
     const title = trigger?.dataset?.teeTitle || "PROJECT TEE";
+    const buyUrl = trigger?.dataset?.teeBuyUrl || "";
 
     if (front && teePreviewFront) {
         teePreviewFront.src = front;
@@ -403,6 +405,16 @@ function openTeePreview(trigger) {
     }
 
     if (teePreviewTitle) teePreviewTitle.textContent = title;
+
+    if (teePreviewBuy) {
+        if (buyUrl) {
+            teePreviewBuy.href = buyUrl;
+            teePreviewBuy.hidden = false;
+        } else {
+            teePreviewBuy.removeAttribute("href");
+            teePreviewBuy.hidden = true;
+        }
+    }
 
     teePreviewModal.classList.add("is-visible");
     teePreviewModal.setAttribute("aria-hidden", "false");
