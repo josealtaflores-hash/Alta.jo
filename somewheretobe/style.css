@@ -2489,3 +2489,15 @@ body.tee-preview-open {
         letter-spacing: 1.55px;
     }
 }
+
+/* Shirt visibility safeguard — Bluestone + Black */
+.wearable-products-v2 > .wearable-item-v2:not(.is-missing) {
+    display: flex;
+}
+
+@media (max-width: 520px) {
+    .wearable-products-v2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+}
