@@ -1696,6 +1696,17 @@ body.popup-open {
     letter-spacing: 1px;
 }
 
+.print-preview-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.print-preview-actions[hidden] {
+    display: none;
+}
+
 .print-preview-next {
     flex-shrink: 0;
     color: #4d463f;
@@ -1736,6 +1747,10 @@ body.print-preview-open {
         align-items: flex-start;
         flex-direction: column;
         gap: 16px;
+    }
+
+    .print-preview-actions {
+        align-items: flex-start;
     }
 
     .print-preview-next {
@@ -2499,5 +2514,399 @@ body.tee-preview-open {
     .wearable-products-v2 {
         grid-template-columns: 1fr 1fr;
         gap: 16px;
+    }
+}
+
+/* ==================================================
+   FINAL LAYOUT POLISH — 2026-09-22
+   Raise the book CTA, tighten vertical section spacing,
+   and give every print the same display size.
+   ================================================== */
+
+/* Raise GET A COPY just a little more above the book. */
+.purchase-slot {
+    transform: translateY(-18px);
+}
+
+/* Bring the lower project sections closer together. */
+.project-editions.is-unlocked {
+    padding-top: 5vh !important;
+}
+
+.free-pdf-block {
+    margin-bottom: 88px;
+}
+
+.prints-section {
+    padding-top: 32px !important;
+    padding-bottom: 118px !important;
+}
+
+.section-heading {
+    margin-bottom: 58px !important;
+}
+
+.wearables-section {
+    padding-top: 64px !important;
+    padding-bottom: 145px !important;
+}
+
+.objects-section {
+    padding-top: 64px !important;
+}
+
+/* Equal-size print presentation. All source photos are already ~3:2. */
+.print-visuals-v2,
+.print-meta-row-v2 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.print-visual-one-v2,
+.print-visual-two-v2,
+.print-visual-three-v2 {
+    width: min(275px, 100%);
+}
+
+.print-meta-v2 {
+    width: min(275px, 100%);
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+    .purchase-slot {
+        transform: translateY(-16px);
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 4.5vh !important;
+    }
+
+    .free-pdf-block {
+        margin-bottom: 78px;
+    }
+
+    .prints-section {
+        padding-top: 30px !important;
+        padding-bottom: 105px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 52px !important;
+    }
+
+    .wearables-section,
+    .objects-section {
+        padding-top: 58px !important;
+    }
+
+    .print-visual-one-v2,
+    .print-visual-two-v2,
+    .print-visual-three-v2,
+    .print-meta-v2 {
+        width: min(220px, 100%);
+    }
+}
+
+@media (max-width: 700px) {
+    .purchase-slot {
+        transform: translateY(-10px);
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 4vh !important;
+    }
+
+    .free-pdf-block {
+        margin-bottom: 70px;
+    }
+
+    .prints-section {
+        padding-top: 28px !important;
+        padding-bottom: 88px !important;
+    }
+
+    .section-heading {
+        margin-bottom: 46px !important;
+    }
+
+    .wearables-section,
+    .objects-section {
+        padding-top: 48px !important;
+    }
+
+    .print-stage-v2 {
+        width: 760px;
+    }
+
+    .print-visuals-v2,
+    .print-meta-row-v2 {
+        grid-template-columns: repeat(3, 210px);
+        gap: 34px;
+    }
+
+    .print-visual-one-v2,
+    .print-visual-two-v2,
+    .print-visual-three-v2,
+    .print-meta-v2 {
+        width: 210px;
+    }
+
+    .print-shelf-v2 {
+        width: 720px;
+    }
+}
+
+/* ==================================================
+   END-OF-BOOK SPACING POLISH — 2026-09-22
+   Tighten the transition from the final spread to the
+   scroll cue and About This Book without resizing the book.
+   ================================================== */
+
+@media (min-width: 701px) {
+    .book-area {
+        min-height: 78vh;
+        padding-bottom: 10px;
+    }
+
+    .outside-scroll-cue {
+        margin-bottom: 10px;
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 2.5vh !important;
+    }
+
+    .prints-section {
+        padding-top: 20px !important;
+    }
+}
+
+@media (max-width: 700px) {
+    .outside-scroll-cue {
+        margin-bottom: 12px;
+    }
+
+    .project-editions.is-unlocked {
+        padding-top: 2vh !important;
+    }
+
+    .prints-section {
+        padding-top: 18px !important;
+    }
+}
+
+
+/* ==================================================
+   PRINT REQUEST NOTE + FORM — 2026-09-22
+   ================================================== */
+
+.print-request-note {
+    width: min(680px, 84vw);
+    margin: 48px auto 0;
+    text-align: center;
+}
+
+.print-request-eyebrow {
+    margin: 0 0 12px;
+    color: #3f3933;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.print-request-copy {
+    max-width: 590px;
+    margin: 0 auto;
+    color: #6f665d;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.print-request-link {
+    margin-top: 18px;
+    padding: 0 0 3px;
+    border: 0;
+    border-bottom: 1px solid rgba(76, 68, 59, .45);
+    background: transparent;
+    color: #514a43;
+    font: inherit;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.print-request-link:hover {
+    opacity: .72;
+    transform: translateX(2px);
+}
+
+.print-request-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1600;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility .3s ease;
+}
+
+.print-request-modal.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.print-request-backdrop {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: rgba(38, 34, 30, .48);
+    cursor: pointer;
+}
+
+.print-request-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(540px, 92vw);
+    max-height: 88vh;
+    overflow: auto;
+    padding: 38px 40px 34px;
+    background: #f3ede1;
+    border: 1px solid rgba(82, 73, 64, .2);
+    box-shadow: 0 24px 70px rgba(39, 34, 29, .22);
+}
+
+.print-request-form-heading {
+    margin-bottom: 28px;
+}
+
+.print-request-form-kicker {
+    margin: 0 0 9px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.print-request-form-heading h2 {
+    margin: 0 0 12px;
+    color: #2e2924;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.print-request-form-heading > p:last-child {
+    margin: 0;
+    color: #685f56;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.print-request-form {
+    display: grid;
+    gap: 20px;
+}
+
+.print-request-form label {
+    display: grid;
+    gap: 8px;
+}
+
+.print-request-form label > span {
+    color: #655d54;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+}
+
+.print-request-form input,
+.print-request-form select,
+.print-request-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    border-bottom: 1px solid rgba(72, 64, 56, .34);
+    border-radius: 0;
+    padding: 10px 0;
+    background: transparent;
+    color: #312b26;
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+.print-request-form textarea {
+    resize: vertical;
+    min-height: 76px;
+}
+
+.print-request-form input:focus,
+.print-request-form select:focus,
+.print-request-form textarea:focus {
+    border-bottom-color: #4f473f;
+}
+
+.print-request-submit {
+    justify-self: start;
+    margin-top: 4px;
+    padding: 11px 15px;
+    border: 1px solid rgba(72, 64, 56, .45);
+    background: transparent;
+    color: #3f3832;
+    font: inherit;
+    font-size: 8px;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+}
+
+.print-request-status {
+    min-height: 1.4em;
+    margin: -8px 0 0;
+    color: #6d645b;
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+.print-request-close {
+    position: absolute;
+    z-index: 2;
+    top: max(20px, calc(50% - min(44vh, 420px)));
+    left: calc(50% + min(270px, 46vw) - 22px);
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    color: #504940;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+body.print-request-open {
+    overflow: hidden;
+}
+
+@media (max-width: 700px) {
+    .print-request-note {
+        width: min(88vw, 520px);
+        margin-top: 36px;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    .print-request-copy {
+        font-size: 13px;
+    }
+
+    .print-request-dialog {
+        padding: 30px 24px 26px;
+    }
+
+    .print-request-close {
+        top: 22px;
+        right: 22px;
+        left: auto;
+        color: #f5efe4;
     }
 }

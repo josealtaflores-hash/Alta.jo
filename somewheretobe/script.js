@@ -253,25 +253,34 @@ updateBook();
 const printPreviewModal = document.getElementById("print-preview-modal");
 const printPreviewImage = document.getElementById("print-preview-image");
 const printPreviewTitle = document.getElementById("print-preview-title");
-const printPreviewNext = document.getElementById("print-preview-next");
+const printPreviewSizes = document.getElementById("print-preview-sizes");
+const printPreviewActions = document.getElementById("print-preview-actions");
+const printPreviewBuySmall = document.getElementById("print-preview-buy-small");
+const printPreviewBuyLarge = document.getElementById("print-preview-buy-large");
 const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
 const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
 
 const printPreviews = [
     {
-        title: "PRINT 01",
+        title: "WANDERING MAN",
         image: "images/prints/print-01.jpg",
-        page: "prints/print-01.html"
+        sizes: "8 × 12 — $25 / 12 × 18 — $45",
+        buySmall: "https://buy.prints.io/p/a799d34006b6c9ba1bc6",
+        buyLarge: "https://buy.prints.io/p/ea98c70261ca7738bf37"
     },
     {
-        title: "PRINT 02",
+        title: "DOG WALK",
         image: "images/prints/print-02.jpg",
-        page: "prints/print-02.html"
+        sizes: "8 × 12 — $25 / 12 × 18 — $45",
+        buySmall: "https://buy.prints.io/p/da4bca2cf16caa475212",
+        buyLarge: "https://buy.prints.io/p/9c76e34110affd195c40"
     },
     {
-        title: "PRINT 03",
+        title: "SKATING",
         image: "images/prints/print-03.jpg",
-        page: "prints/print-03.html"
+        sizes: "8 × 12 — $25 / 12 × 18 — $45",
+        buySmall: "https://buy.prints.io/p/a803041ed7f8c289812c",
+        buyLarge: "https://buy.prints.io/p/0dd9b6d2db2af1220c60"
     }
 ];
 
@@ -284,7 +293,14 @@ function openPrintPreview(index) {
     printPreviewImage.src = print.image;
     printPreviewImage.alt = `${print.title} larger preview`;
     printPreviewTitle.textContent = print.title;
-    printPreviewNext.href = print.page;
+    if (printPreviewSizes) printPreviewSizes.textContent = print.sizes || "8 × 12 / 12 × 18";
+
+    const hasPurchaseLinks = Boolean(print.buySmall && print.buyLarge);
+    if (printPreviewActions) printPreviewActions.hidden = !hasPurchaseLinks;
+    if (hasPurchaseLinks) {
+        printPreviewBuySmall.href = print.buySmall;
+        printPreviewBuyLarge.href = print.buyLarge;
+    }
 
     printPreviewModal.classList.add("is-visible");
     printPreviewModal.setAttribute("aria-hidden", "false");
@@ -453,3 +469,88 @@ document.addEventListener("keydown", (event) => {
 });
 
 setupSummerTeeAvailability();
+
+
+/* ==================================================
+   PRINT REQUEST FORM
+   Static-site friendly: copy the request and open @alta.jo.
+   ================================================== */
+
+const printRequestOpen = document.getElementById("open-print-request");
+const printRequestModal = document.getElementById("print-request-modal");
+const printRequestForm = document.getElementById("print-request-form");
+const printRequestStatus = document.getElementById("print-request-status");
+const printRequestCloseButtons = document.querySelectorAll("[data-request-close]");
+
+function openPrintRequest() {
+    if (!printRequestModal) return;
+    printRequestModal.classList.add("is-visible");
+    printRequestModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-request-open");
+
+    const firstField = printRequestForm?.querySelector("input, select, textarea");
+    window.setTimeout(() => firstField?.focus(), 120);
+}
+
+function closePrintRequest() {
+    if (!printRequestModal) return;
+    printRequestModal.classList.remove("is-visible");
+    printRequestModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-request-open");
+}
+
+async function copyPrintRequest(message) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(message);
+        return;
+    }
+
+    const temp = document.createElement("textarea");
+    temp.value = message;
+    temp.setAttribute("readonly", "");
+    temp.style.position = "fixed";
+    temp.style.opacity = "0";
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+}
+
+printRequestOpen?.addEventListener("click", openPrintRequest);
+printRequestCloseButtons.forEach((button) => button.addEventListener("click", closePrintRequest));
+
+printRequestForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(printRequestForm);
+    const contact = String(data.get("contact") || "").trim();
+    const source = String(data.get("source") || "").trim();
+    const photo = String(data.get("photo") || "").trim();
+    const notes = String(data.get("notes") || "").trim();
+
+    const message = [
+        "PRINT REQUEST — SOMEWHERE TO BE",
+        `Name / handle: ${contact}`,
+        `Seen in: ${source}`,
+        `Page / photo: ${photo}`,
+        notes ? `Notes: ${notes}` : null
+    ].filter(Boolean).join("\n");
+
+    try {
+        await copyPrintRequest(message);
+        if (printRequestStatus) {
+            printRequestStatus.textContent = "Request copied — Instagram is opening. Paste it into a DM to @alta.jo.";
+        }
+        window.open("https://www.instagram.com/alta.jo/", "_blank", "noopener,noreferrer");
+    } catch (error) {
+        if (printRequestStatus) {
+            printRequestStatus.textContent = "Open @alta.jo on Instagram and send the page or photo you’d like printed.";
+        }
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && printRequestModal?.classList.contains("is-visible")) {
+        closePrintRequest();
+    }
+});

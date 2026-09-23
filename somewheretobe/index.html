@@ -98,35 +98,41 @@
 <div class="print-stage-v2">
 <div class="print-visuals-v2">
 <article class="print-visual-v2 print-visual-one-v2" data-print-preview="0" role="button" tabindex="0">
-<img alt="Somewhere to Be print 01" src="images/prints/print-01.jpg"/>
+<img alt="Wandering Man print" src="images/prints/print-01.jpg"/>
 </article>
 <article class="print-visual-v2 print-visual-two-v2" data-print-preview="1" role="button" tabindex="0">
-<img alt="Somewhere to Be print 02" src="images/prints/print-02.jpg"/>
+<img alt="Dog Walk print" src="images/prints/print-02.jpg"/>
 </article>
 <article class="print-visual-v2 print-visual-three-v2" data-print-preview="2" role="button" tabindex="0">
-<img alt="Somewhere to Be print 03" src="images/prints/print-03.jpg"/>
+<img alt="Skating print" src="images/prints/print-03.jpg"/>
 </article>
 </div>
 <!-- Details stay above the shelf. -->
 <div class="print-meta-row-v2">
 <div class="print-meta-v2">
-<p class="product-name">PRINT 01</p>
-<p class="product-details">8 × 12 / 11 × 14 / 12 × 18</p>
+<p class="product-name">WANDERING MAN</p>
+<p class="product-details">8 × 12 — $25 / 12 × 18 — $45</p>
 <button class="product-link" type="button" data-print-preview="0">VIEW PRINT →</button>
 </div>
 <div class="print-meta-v2">
-<p class="product-name">PRINT 02</p>
-<p class="product-details">8 × 12 / 11 × 14 / 12 × 18</p>
+<p class="product-name">DOG WALK</p>
+<p class="product-details">8 × 12 — $25 / 12 × 18 — $45</p>
 <button class="product-link" type="button" data-print-preview="1">VIEW PRINT →</button>
 </div>
 <div class="print-meta-v2">
-<p class="product-name">PRINT 03</p>
-<p class="product-details">8 × 12 / 11 × 14 / 12 × 18</p>
+<p class="product-name">SKATING</p>
+<p class="product-details">8 × 12 — $25 / 12 × 18 — $45</p>
 <button class="product-link" type="button" data-print-preview="2">VIEW PRINT →</button>
 </div>
 </div>
 <div aria-hidden="true" class="print-shelf-v2"></div>
 </div>
+</div>
+
+<div class="print-request-note" aria-label="Request another print">
+    <p class="print-request-eyebrow">MORE PRINT OPTIONS COMING SOON</p>
+    <p class="print-request-copy">See a photo in the preview or printed book you’d like as a print? Send a request and let me know which page or photo you’re interested in.</p>
+    <button class="print-request-link" type="button" id="open-print-request">REQUEST A PRINT →</button>
 </div>
 </section>
 <section class="shop-section wearables-section" id="wearables" aria-hidden="true">
@@ -229,6 +235,51 @@
 </footer>
 </section>
 
+<!-- PRINT REQUEST FORM -->
+<div class="print-request-modal" id="print-request-modal" aria-hidden="true">
+    <button class="print-request-backdrop" type="button" aria-label="Close print request form" data-request-close></button>
+
+    <div class="print-request-dialog" role="dialog" aria-modal="true" aria-labelledby="print-request-title">
+        <div class="print-request-form-heading">
+            <p class="print-request-form-kicker">PRINT REQUEST</p>
+            <h2 id="print-request-title">REQUEST A PHOTO</h2>
+            <p>If there’s an image from the preview or printed book you’d like to own, tell me which one and I’ll see what I can do.</p>
+        </div>
+
+        <form id="print-request-form" class="print-request-form">
+            <label>
+                <span>YOUR NAME / @HANDLE</span>
+                <input name="contact" type="text" autocomplete="name" required>
+            </label>
+
+            <label>
+                <span>WHERE DID YOU SEE IT?</span>
+                <select name="source" required>
+                    <option value="" selected disabled>CHOOSE ONE</option>
+                    <option>WEBSITE PREVIEW</option>
+                    <option>PRINTED BOOK</option>
+                    <option>FREE PDF</option>
+                </select>
+            </label>
+
+            <label>
+                <span>PAGE NUMBER OR PHOTO DESCRIPTION</span>
+                <input name="photo" type="text" placeholder="EX. PAGE 9 OR THE PHOTO BY THE WATER" required>
+            </label>
+
+            <label>
+                <span>ANYTHING ELSE?</span>
+                <textarea name="notes" rows="4" placeholder="OPTIONAL — SIZE, QUESTIONS, ETC."></textarea>
+            </label>
+
+            <button class="print-request-submit" type="submit">SEND REQUEST →</button>
+            <p class="print-request-status" id="print-request-status" aria-live="polite"></p>
+        </form>
+    </div>
+
+    <button class="print-request-close" type="button" aria-label="Close print request form" data-request-close>×</button>
+</div>
+
 <!-- LARGE PRINT PREVIEW -->
 <div class="print-preview-modal" id="print-preview-modal" aria-hidden="true">
     <button class="print-preview-backdrop" type="button" aria-label="Close print preview" data-print-close></button>
@@ -240,11 +291,14 @@
 
         <div class="print-preview-info">
             <div>
-                <p class="print-preview-title" id="print-preview-title">PRINT 01</p>
-                <p class="print-preview-sizes">8 × 12 / 11 × 14 / 12 × 18</p>
+                <p class="print-preview-title" id="print-preview-title">WANDERING MAN</p>
+                <p class="print-preview-sizes" id="print-preview-sizes">8 × 12 — $25 / 12 × 18 — $45</p>
             </div>
 
-            <a class="print-preview-next" id="print-preview-next" href="prints/print-01.html">VIEW PRINT PAGE →</a>
+            <div class="print-preview-actions" id="print-preview-actions">
+                <a class="print-preview-next" id="print-preview-buy-small" href="https://buy.prints.io/p/a799d34006b6c9ba1bc6" target="_blank" rel="noopener noreferrer">BUY 8 × 12 — $25 →</a>
+                <a class="print-preview-next" id="print-preview-buy-large" href="https://buy.prints.io/p/ea98c70261ca7738bf37" target="_blank" rel="noopener noreferrer">BUY 12 × 18 — $45 →</a>
+            </div>
         </div>
     </div>
 

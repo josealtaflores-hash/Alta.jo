@@ -108,6 +108,102 @@
 
   </main>
 
+  <section class="special-request" aria-labelledby="special-request-title">
+    <div class="special-request-inner">
+      <span class="special-request-number">03</span>
+
+      <div class="special-request-copy">
+        <h2 id="special-request-title">LOOKING FOR MORE?</h2>
+        <p>
+          See a photo on my Instagram that you’d like as a print?
+          Send me a screenshot and I can take a special print request.
+        </p>
+
+        <button
+          class="special-request-button"
+          id="open-special-request"
+          type="button"
+        >
+          SPECIAL REQUEST →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div
+    class="request-modal"
+    id="special-request-modal"
+    aria-hidden="true"
+  >
+    <div class="request-modal-backdrop" data-close-request></div>
+
+    <div
+      class="request-modal-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="request-modal-title"
+    >
+      <button
+        class="request-modal-close"
+        type="button"
+        aria-label="Close request form"
+        data-close-request
+      >
+        ×
+      </button>
+
+      <span class="request-modal-kicker">SPECIAL PRINT REQUEST</span>
+      <h2 id="request-modal-title">FOUND A PHOTO YOU LIKE?</h2>
+      <p class="request-modal-intro">
+        Tell me which photo you’re interested in. After you continue,
+        Instagram will open so you can paste the request and attach your screenshot.
+      </p>
+
+      <form id="special-request-form" class="request-form">
+        <label>
+          <span>NAME / INSTAGRAM HANDLE</span>
+          <input id="request-name" name="name" type="text" autocomplete="name">
+        </label>
+
+        <label>
+          <span>PHOTO / POST</span>
+          <textarea
+            id="request-photo"
+            name="photo"
+            rows="3"
+            placeholder="Describe the photo or paste the Instagram post link"
+            required
+          ></textarea>
+        </label>
+
+        <label>
+          <span>PREFERRED SIZE <em>OPTIONAL</em></span>
+          <input
+            id="request-size"
+            name="size"
+            type="text"
+            placeholder="Example: 8×12"
+          >
+        </label>
+
+        <label>
+          <span>NOTES <em>OPTIONAL</em></span>
+          <textarea id="request-notes" name="notes" rows="3"></textarea>
+        </label>
+
+        <p class="request-screenshot-note">
+          Attach the screenshot to your Instagram message after it opens.
+        </p>
+
+        <button class="request-submit" type="submit">
+          COPY REQUEST &amp; OPEN INSTAGRAM →
+        </button>
+
+        <p class="request-status" id="request-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <p>PHOTOGRAPHS, BOOKS, ZINES</p>
 

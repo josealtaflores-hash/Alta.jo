@@ -395,3 +395,138 @@ mobileQuery.addEventListener(
   "change",
   syncInteractionMode
 );
+
+
+/* ---------------------------------
+   SPECIAL PRINT REQUEST
+---------------------------------- */
+
+const specialRequestButton =
+  document.querySelector("#open-special-request");
+
+const specialRequestModal =
+  document.querySelector("#special-request-modal");
+
+const specialRequestForm =
+  document.querySelector("#special-request-form");
+
+const requestStatus =
+  document.querySelector("#request-status");
+
+let requestLastFocused = null;
+
+function openSpecialRequest() {
+  if (!specialRequestModal) return;
+
+  requestLastFocused = document.activeElement;
+  specialRequestModal.classList.add("is-open");
+  specialRequestModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("request-modal-open");
+
+  const firstInput =
+    specialRequestModal.querySelector("input, textarea");
+
+  window.setTimeout(() => {
+    firstInput?.focus();
+  }, 50);
+}
+
+function closeSpecialRequest() {
+  if (!specialRequestModal) return;
+
+  specialRequestModal.classList.remove("is-open");
+  specialRequestModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("request-modal-open");
+
+  if (requestStatus) {
+    requestStatus.textContent = "";
+  }
+
+  requestLastFocused?.focus();
+}
+
+async function copyRequestText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return true;
+  }
+
+  const helper = document.createElement("textarea");
+  helper.value = text;
+  helper.setAttribute("readonly", "");
+  helper.style.position = "fixed";
+  helper.style.opacity = "0";
+  document.body.appendChild(helper);
+  helper.select();
+
+  const copied = document.execCommand("copy");
+  helper.remove();
+  return copied;
+}
+
+specialRequestButton?.addEventListener("click", openSpecialRequest);
+
+specialRequestModal?.querySelectorAll("[data-close-request]")
+  .forEach((element) => {
+    element.addEventListener("click", closeSpecialRequest);
+  });
+
+document.addEventListener("keydown", (event) => {
+  if (
+    event.key === "Escape" &&
+    specialRequestModal?.classList.contains("is-open")
+  ) {
+    closeSpecialRequest();
+  }
+});
+
+specialRequestForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const name =
+    document.querySelector("#request-name")?.value.trim() || "";
+
+  const photo =
+    document.querySelector("#request-photo")?.value.trim() || "";
+
+  const size =
+    document.querySelector("#request-size")?.value.trim() || "";
+
+  const notes =
+    document.querySelector("#request-notes")?.value.trim() || "";
+
+  if (!photo) {
+    requestStatus.textContent =
+      "Please tell me which photo you’re interested in.";
+    return;
+  }
+
+  const lines = [
+    "Hi Jose, I’m interested in a special print request.",
+    name ? `Name / handle: ${name}` : null,
+    `Photo: ${photo}`,
+    size ? `Preferred size: ${size}` : null,
+    notes ? `Notes: ${notes}` : null,
+    "I’ll attach a screenshot of the photo here."
+  ].filter(Boolean);
+
+  const message = lines.join("\n");
+
+  let copied = false;
+
+  try {
+    copied = await copyRequestText(message);
+  } catch (error) {
+    copied = false;
+  }
+
+  requestStatus.textContent = copied
+    ? "Request copied — attach your screenshot in the Instagram DM."
+    : "Instagram is opening — attach your screenshot and send the details above.";
+
+  window.open(
+    "https://www.instagram.com/alta.jo/",
+    "_blank",
+    "noopener"
+  );
+});
