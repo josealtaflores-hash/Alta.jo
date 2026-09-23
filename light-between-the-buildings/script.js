@@ -3,7 +3,7 @@
    ================================================== */
 
 const TOTAL_PAGES = 14;
-const purchaseUrl = "downloads/the-light-between-the-buildings.pdf";
+const purchaseUrl = "downloads/the-light-between-the-buildings-screen-preview.pdf";
 
 function pageFile(number) {
     return number <= 9 ? `images/00${number}.jpg` : `images/00${number}.jpg`;
@@ -31,7 +31,8 @@ const zineDownload = document.querySelector(".zine-download");
 const printPreviewModal = document.getElementById("print-preview-modal");
 const printPreviewImage = document.getElementById("print-preview-image");
 const printPreviewTitle = document.getElementById("print-preview-title");
-const printPreviewNext = document.getElementById("print-preview-next");
+const printPreviewSizes = document.getElementById("print-preview-sizes");
+const printPreviewBuy = document.getElementById("print-preview-buy");
 const printPreviewTriggers = document.querySelectorAll("[data-print-preview]");
 const printPreviewCloseButtons = document.querySelectorAll("[data-print-close]");
 const teePreviewModal = document.getElementById("tee-preview-modal");
@@ -42,17 +43,20 @@ const printPreviews = [
     {
         title: "PRINT 01",
         image: "images/prints/print-01.jpg",
-        page: "prints/print-01.html"
+        sizes: "8 × 12 — $25",
+        buy: "https://buy.prints.io/p/d967479223b8e1f78cb2"
     },
     {
         title: "PRINT 02",
         image: "images/prints/print-02.jpg",
-        page: "prints/print-02.html"
+        sizes: "8 × 12 — $25",
+        buy: "https://buy.prints.io/p/c2fc48b8562a10be6c2b"
     },
     {
         title: "PRINT 03",
         image: "images/prints/print-03.jpg",
-        page: "prints/print-03.html"
+        sizes: "8 × 12 — $25",
+        buy: "https://buy.prints.io/p/365e993f0361c494edb4"
     }
 ];
 
@@ -280,7 +284,8 @@ function openPrintPreview(index) {
     printPreviewImage.src = print.image;
     printPreviewImage.alt = `${print.title} larger preview`;
     printPreviewTitle.textContent = print.title;
-    printPreviewNext.href = print.page;
+    if (printPreviewSizes) printPreviewSizes.textContent = print.sizes;
+    if (printPreviewBuy) printPreviewBuy.href = print.buy;
 
     printPreviewModal.classList.add("is-visible");
     printPreviewModal.setAttribute("aria-hidden", "false");
@@ -408,6 +413,90 @@ teePreviewTriggers.forEach((trigger) => {
 
 teePreviewCloseButtons.forEach((button) => {
     button.addEventListener("click", closeTeePreview);
+});
+
+/* ==================================================
+   PRINT REQUEST FORM — static-site friendly
+   Copies the request and opens @alta.jo on Instagram.
+   ================================================== */
+
+const printRequestOpen = document.getElementById("open-print-request");
+const printRequestModal = document.getElementById("print-request-modal");
+const printRequestForm = document.getElementById("print-request-form");
+const printRequestStatus = document.getElementById("print-request-status");
+const printRequestCloseButtons = document.querySelectorAll("[data-request-close]");
+
+function openPrintRequest() {
+    if (!printRequestModal) return;
+    printRequestModal.classList.add("is-visible");
+    printRequestModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("print-request-open");
+
+    const firstField = printRequestForm?.querySelector("input, select, textarea");
+    window.setTimeout(() => firstField?.focus(), 120);
+}
+
+function closePrintRequest() {
+    if (!printRequestModal) return;
+    printRequestModal.classList.remove("is-visible");
+    printRequestModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("print-request-open");
+}
+
+async function copyPrintRequest(message) {
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(message);
+        return;
+    }
+
+    const temp = document.createElement("textarea");
+    temp.value = message;
+    temp.setAttribute("readonly", "");
+    temp.style.position = "fixed";
+    temp.style.opacity = "0";
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+}
+
+printRequestOpen?.addEventListener("click", openPrintRequest);
+printRequestCloseButtons.forEach((button) => button.addEventListener("click", closePrintRequest));
+
+printRequestForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const data = new FormData(printRequestForm);
+    const contact = String(data.get("contact") || "").trim();
+    const source = String(data.get("source") || "").trim();
+    const photo = String(data.get("photo") || "").trim();
+    const notes = String(data.get("notes") || "").trim();
+
+    const message = [
+        "PRINT REQUEST — LIGHT BETWEEN THE BUILDINGS",
+        `Name / handle: ${contact}`,
+        `Seen in: ${source}`,
+        `Page / photo: ${photo}`,
+        notes ? `Notes: ${notes}` : null
+    ].filter(Boolean).join("\n");
+
+    try {
+        await copyPrintRequest(message);
+        if (printRequestStatus) {
+            printRequestStatus.textContent = "Request copied — Instagram is opening. Paste it into a DM to @alta.jo.";
+        }
+        window.open("https://www.instagram.com/alta.jo/", "_blank", "noopener,noreferrer");
+    } catch (error) {
+        if (printRequestStatus) {
+            printRequestStatus.textContent = "Open @alta.jo on Instagram and send the page or photo you’d like printed.";
+        }
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && printRequestModal?.classList.contains("is-visible")) {
+        closePrintRequest();
+    }
 });
 
 lockProjectEditions();
