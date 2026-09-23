@@ -2910,3 +2910,38 @@ body.print-request-open {
         color: #f5efe4;
     }
 }
+
+
+/* Made-to-order messaging — matches the Light Between the Buildings page */
+.made-to-order-label {
+    margin-top: 7px;
+    color: #746b61;
+    font-size: 8px;
+    letter-spacing: 1.35px;
+    line-height: 1.35;
+}
+
+.tee-preview-made-to-order {
+    flex: 1 1 auto;
+    max-width: 390px;
+    margin: 0 auto;
+    padding: 0 18px;
+    color: #746b61;
+    font-size: 9px;
+    line-height: 1.55;
+    letter-spacing: .2px;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .tee-preview-made-to-order {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        align-self: center;
+        font-size: 8px;
+        line-height: 1.5;
+    }
+}
