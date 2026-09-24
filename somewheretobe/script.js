@@ -2,8 +2,7 @@
    SOMEWHERE TO BE — BOOK VIEWER
    ================================================== */
 
-/* Mid-book CTA for the printed edition on Blurb. */
-const purchaseUrl = "https://www.blurb.com/bookstore/invited/11046856/078c89bf5e12986d4794da893e44dfa9be1e446a";
+/* Mid-book CTA jumps to the book purchase options below. */
 
 const spreads = [
     { left: "images/001.jpg", right: "images/002.jpg" },
@@ -39,12 +38,29 @@ const purchaseRevealSpread = 2;
 const scrollRevealSpread = 5;
 
 if (purchaseButton) {
-    purchaseButton.href = purchaseUrl;
+    purchaseButton.href = "#about-this-book";
 
-    if (purchaseUrl === "#") {
-        purchaseButton.setAttribute("aria-disabled", "true");
-        purchaseButton.addEventListener("click", (event) => event.preventDefault());
-    }
+    purchaseButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        unlockProjectEditions();
+
+        const aboutBook = document.getElementById("about-this-book");
+        if (aboutBook) {
+            requestAnimationFrame(() => {
+                const desktopOffset = 64;
+                const mobileOffset = 24;
+                const offset = window.matchMedia("(max-width: 700px)").matches
+                    ? mobileOffset
+                    : desktopOffset;
+                const targetTop = aboutBook.getBoundingClientRect().top + window.scrollY - offset;
+
+                window.scrollTo({
+                    top: Math.max(0, targetTop),
+                    behavior: "smooth"
+                });
+            });
+        }
+    });
 }
 
 function preloadSpread(index) {

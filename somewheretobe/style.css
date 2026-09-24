@@ -2945,3 +2945,115 @@ body.print-request-open {
         line-height: 1.5;
     }
 }
+
+
+/* ==================================================
+   THREE-OPTION BOOK PURCHASE ROW — 2026-09-24
+   Free digital / softcover / hardcover
+   ================================================== */
+@media (min-width: 701px) {
+    .free-pdf-block {
+        width: min(760px, 86vw);
+    }
+
+    .book-options {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 36px;
+    }
+}
+
+
+/* ==================================================
+   BOOK PURCHASE FOCUS — 2026-09-24
+   Make GET A COPY jump here and give the purchase choices
+   a more visible storefront presence without changing the
+   surrounding project aesthetic.
+   ================================================== */
+
+#get-the-book {
+    scroll-margin-top: 112px;
+}
+
+.free-pdf-block {
+    width: min(920px, 90vw) !important;
+    margin: 0 auto 104px !important;
+    padding: 46px 50px 50px !important;
+    border: 1px solid rgba(29, 29, 29, 0.16) !important;
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.free-pdf-label {
+    margin-bottom: 32px !important;
+    font-size: 10px !important;
+    letter-spacing: 2px !important;
+}
+
+.book-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 46px !important;
+}
+
+.book-option {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.book-option-title {
+    margin-bottom: 14px !important;
+    font-size: 10px !important;
+    letter-spacing: 1.45px !important;
+}
+
+.free-pdf-copy {
+    font-size: 12px !important;
+    line-height: 1.75 !important;
+}
+
+.free-pdf-link,
+.physical-book-link {
+    margin-top: auto !important;
+    padding-top: 24px;
+    font-size: 9px !important;
+    letter-spacing: 1.35px !important;
+}
+
+@media (max-width: 700px) {
+    #get-the-book {
+        scroll-margin-top: 64px;
+    }
+
+    .free-pdf-block {
+        width: min(92vw, 560px) !important;
+        padding: 32px 24px 36px !important;
+        margin-bottom: 76px !important;
+    }
+
+    .free-pdf-label {
+        margin-bottom: 26px !important;
+        font-size: 9px !important;
+    }
+
+    .book-options {
+        grid-template-columns: 1fr !important;
+        gap: 34px !important;
+    }
+
+    .book-option {
+        min-height: 0;
+        padding-bottom: 26px;
+        border-bottom: 1px solid rgba(29, 29, 29, 0.12);
+    }
+
+    .book-option:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .free-pdf-link,
+    .physical-book-link {
+        margin-top: 0 !important;
+        padding-top: 18px;
+    }
+}
