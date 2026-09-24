@@ -2263,3 +2263,97 @@ body.print-request-open {
         align-self: flex-start;
     }
 }
+
+
+/* ==================================================
+   MINI ZINE — 2 × 3 MADE TO ORDER
+   ================================================== */
+.zine-editions {
+    margin-top: 78px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(243, 240, 232, 0.16);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 38px;
+    align-items: start;
+}
+
+.mini-zine-order {
+    min-width: 0;
+}
+
+.mini-zine-kicker,
+.mini-zine-made-to-order {
+    margin: 0;
+    color: var(--muted-text);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.mini-zine-title {
+    margin: 12px 0 10px;
+    color: var(--text);
+    font-size: 21px;
+    font-weight: 400;
+    letter-spacing: 1.1px;
+}
+
+.mini-zine-copy {
+    margin: 0 0 10px;
+    max-width: 230px;
+    color: var(--muted-text);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.mini-zine-made-to-order {
+    margin: 0 0 24px;
+    letter-spacing: 1.45px;
+}
+
+.mini-zine-buy {
+    display: inline-block;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(243, 240, 232, 0.25);
+    color: rgba(243, 240, 232, 0.48);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* zine-download now shares the physical/digital edition row */
+.zine-editions .zine-download {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+}
+
+@media (max-width: 700px) {
+    .zine-editions {
+        margin-top: 58px;
+        padding-top: 26px;
+        grid-template-columns: 1fr;
+        gap: 44px;
+    }
+
+    .mini-zine-title {
+        font-size: 18px;
+    }
+
+    .mini-zine-copy {
+        max-width: 100%;
+        font-size: 11px;
+    }
+
+    .mini-zine-buy {
+        font-size: 8px;
+    }
+
+    .zine-editions .zine-download {
+        padding-top: 28px;
+        border-top: 1px solid rgba(243, 240, 232, 0.12);
+    }
+}
