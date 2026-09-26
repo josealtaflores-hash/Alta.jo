@@ -1,5 +1,5 @@
 /* ==================================================
-   LIGHT BETWEEN THE BUILDINGS — BOOK VIEWER
+   THE LIGHT BETWEEN THE BUILDINGS — BOOK VIEWER
    ================================================== */
 
 const TOTAL_PAGES = 14;
@@ -473,7 +473,7 @@ printRequestForm?.addEventListener("submit", async (event) => {
     const notes = String(data.get("notes") || "").trim();
 
     const message = [
-        "PRINT REQUEST — LIGHT BETWEEN THE BUILDINGS",
+        "PRINT REQUEST — THE LIGHT BETWEEN THE BUILDINGS",
         `Name / handle: ${contact}`,
         `Seen in: ${source}`,
         `Page / photo: ${photo}`,
