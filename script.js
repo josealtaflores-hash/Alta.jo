@@ -159,7 +159,7 @@ let mobileScrollTicking = false;
 const MOBILE_THEME_HANDOFF = 145;
 
 /*
-  Light Between the Building should take over later on mobile.
+  The Light Between the Buildings should take over later on mobile.
   Requiring a larger advantage before switching to the dark theme
   keeps the Somewhere to Be color on screen longer.
 */

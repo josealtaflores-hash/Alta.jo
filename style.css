@@ -793,7 +793,7 @@ body.theme-light .book {
   /*
     Mobile alignment:
     both books share the same left edge for a cleaner vertical rhythm.
-    Light Between the Buildings stays intentionally smaller.
+    The Light Between the Buildings stays intentionally smaller.
   */
   .book-wrap {
     width: min(68vw, 305px);
