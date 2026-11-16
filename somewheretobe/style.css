@@ -3057,3 +3057,150 @@ body.print-request-open {
         padding-top: 18px;
     }
 }
+
+/* ==================================================
+   LIMITED DIRECT BOOK RELEASE — 2026-11-16
+   Featured 8-copy direct batch above the ongoing editions.
+   ================================================== */
+.direct-edition-option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 42px;
+    margin: 0 0 42px;
+    padding: 27px 30px 29px;
+    border: 1px solid rgba(29, 29, 29, 0.26);
+    background: rgba(246, 241, 232, 0.52);
+}
+
+.direct-edition-copy {
+    max-width: 610px;
+}
+
+.direct-edition-kicker {
+    margin: 0 0 10px;
+    font-size: 8px;
+    line-height: 1.4;
+    letter-spacing: 1.8px;
+    font-weight: 600;
+}
+
+.direct-edition-title {
+    margin: 0 0 11px;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 1.45px;
+}
+
+.direct-edition-option .free-pdf-copy {
+    margin: 0;
+    max-width: 590px;
+}
+
+.direct-edition-link {
+    display: inline-block;
+    flex: 0 0 auto;
+    padding: 10px 0 4px;
+    border-bottom: 1px solid rgba(29, 29, 29, 0.55);
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 9px;
+    line-height: 1.4;
+    letter-spacing: 1.35px;
+}
+
+.direct-edition-link:hover,
+.direct-edition-link:focus-visible {
+    border-bottom-color: rgba(29, 29, 29, 1);
+}
+
+@media (max-width: 700px) {
+    .direct-edition-option {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 22px;
+        margin-bottom: 34px;
+        padding: 24px 22px 26px;
+    }
+
+    .direct-edition-link {
+        justify-self: start;
+    }
+}
+
+
+/* ==================================================
+   LIMITED DIRECT BOOK RELEASE — PRIMARY FOCUS
+   Keep the 8-copy direct batch visually dominant until sold.
+   ================================================== */
+.direct-edition-option {
+    min-height: 320px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 64px;
+    margin: 0 0 54px;
+    padding: 54px 52px 56px;
+    border: 1px solid rgba(29, 29, 29, 0.38);
+    background: rgba(246, 241, 232, 0.78);
+}
+
+.direct-edition-copy {
+    max-width: 650px;
+}
+
+.direct-edition-kicker {
+    margin-bottom: 18px;
+    font-size: 10px;
+    letter-spacing: 2.2px;
+}
+
+.direct-edition-title {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.35;
+    letter-spacing: 1.65px;
+}
+
+.direct-edition-option .free-pdf-copy {
+    max-width: 650px;
+    font-size: 14px !important;
+    line-height: 1.8 !important;
+}
+
+.direct-edition-link {
+    align-self: end;
+    margin-bottom: 8px;
+    padding: 12px 0 5px;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+}
+
+@media (max-width: 700px) {
+    .direct-edition-option {
+        min-height: 0;
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 30px;
+        margin-bottom: 42px;
+        padding: 38px 28px 40px;
+    }
+
+    .direct-edition-kicker {
+        font-size: 9px;
+        letter-spacing: 1.9px;
+    }
+
+    .direct-edition-title {
+        font-size: 14px;
+    }
+
+    .direct-edition-option .free-pdf-copy {
+        font-size: 13px !important;
+    }
+
+    .direct-edition-link {
+        align-self: start;
+        margin-bottom: 0;
+    }
+}
